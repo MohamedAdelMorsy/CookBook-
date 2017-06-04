@@ -1,31 +1,36 @@
-package com.scorpiomiku.cookbook.Recommend;
+package com.scorpiomiku.cookbook.recommend;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.DecorContentParent;
-import android.support.v7.widget.RecyclerView;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.scorpiomiku.cookbook.R;
+import com.scorpiomiku.cookbook.module.FragmentModule;
 
 /**
  * Created by Administrator on 2017/6/3.
  */
 
-public class RecommendFragment extends Fragment {
+public class RecommendFragment extends FragmentModule {
 
     private static final String TAG = "RecommendFragment";
     private FragmentManager fm;
+    private Fragment mNowFragment;
 
     private ImageButton mBreakFastImageButton;
     private ImageButton mLunchImageButton;
     private ImageButton mDinnerImageButton;
+    private Toolbar mToolbar;
 
 
     public static RecommendFragment newInstance() {
@@ -35,8 +40,13 @@ public class RecommendFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        fm = getFragmentManager();
-        changeFragment(BreakFastFragment.newInstance());
+        fm = getActivity().getSupportFragmentManager();
+        fm.beginTransaction()
+                .setCustomAnimations(android.R.anim.fade_in,
+                        android.R.anim.fade_out)
+                .add(R.id.recommend_container, BreakFastFragment.newInstance())
+                .commit();
+
     }
 
     @Nullable
@@ -51,23 +61,37 @@ public class RecommendFragment extends Fragment {
                 .recommend_tool_bar_dinner_iamge_button);
         mLunchImageButton = (ImageButton) v.findViewById(R.id
                 .recommend_tool_bar_lunch_iamge_button);
+        mToolbar = (Toolbar) v.findViewById(R.id.recommend_tool_bar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
+        setHasOptionsMenu(true);
         setListener();
         return v;
     }
 
-    /*-------------------------------------changeFragment--------------------------*/
-    private void changeFragment(Fragment fragment) {
-        Fragment fra = fm.findFragmentById(R.id.recommend_container);
-        if (!(fragment == fra)) {
-            fra = fragment;
-        }
-        fm.beginTransaction()
-                .replace(R.id.recommend_container, fra)
-                .commit();
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.recommend_menu, menu);
     }
 
+    /*------------------------------changeFragment-----------------------------*/
+    private void changeFragment(Fragment fragment) {
+        mNowFragment = fm.findFragmentById(R.id.recommend_container);
+        if (mNowFragment.getClass().getName().equals(fragment.getClass().getName())) {
+
+        } else {
+            fm.beginTransaction()
+                    .setCustomAnimations(android.R.anim.fade_in,
+                            android.R.anim.fade_out)
+                    .hide(mNowFragment)
+                    .add(R.id.recommend_container, fragment)
+                    .commit();
+        }
+    }
+
+
     /*-------------------------------------setListener--------------------------*/
-    private void setListener(){
+    private void setListener() {
         mBreakFastImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

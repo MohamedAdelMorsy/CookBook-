@@ -1,17 +1,19 @@
-package com.scorpiomiku.cookbook.Recommend;
+package com.scorpiomiku.cookbook.recommend;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.scorpiomiku.cookbook.R;
+import com.scorpiomiku.cookbook.module.FragmentModule;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +22,7 @@ import java.util.List;
  * Created by Administrator on 2017/6/3.
  */
 
-public class BreakFastFragment extends Fragment {
+public class BreakFastFragment extends FragmentModule {
 
     private RecyclerView mRecyclerView;
 
@@ -49,15 +51,16 @@ public class BreakFastFragment extends Fragment {
 
     /*-------------------------------------holder------------------------------*/
     private class holder extends RecyclerView.ViewHolder {
-        private TextView mTextView;
+        private ImageButton mImageButton;
 
         public holder(View itemView) {
             super(itemView);
-            mTextView = (TextView) itemView.findViewById(R.id.item_text);
+            mImageButton = (ImageButton) itemView.findViewById(R.id
+                    .recommend_recycler_view_item_image_button);
         }
 
-        private void bindView(String s){
-            mTextView.setText(s);
+        private void bindView(String s) {
+            mImageButton.setImageResource(R.drawable.ic_home_black_24dp);
         }
     }
 

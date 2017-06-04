@@ -1,4 +1,4 @@
-package com.scorpiomiku.cookbook.Activity;
+package com.scorpiomiku.cookbook.mainactivity;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,29 +8,36 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import com.scorpiomiku.cookbook.R;
-import com.scorpiomiku.cookbook.Recommend.RecommendFragment;
+import com.scorpiomiku.cookbook.combination.CombinationFragment;
+import com.scorpiomiku.cookbook.recommend.RecommendFragment;
 
 public class ContainActivity extends AppCompatActivity {
 
     private Toolbar mRecommendToolbar;
     private Toolbar mCombinationToolbar;
+    private Fragment fr;
+
+    public static Toolbar mToolbar;
 
     private static final String TAG = "ContainActivity";
     private FragmentManager fm = getSupportFragmentManager();
 
     /*----------------------------------CreateFragment---------------------------*/
-    private void createFagment(Fragment fragment) {
-        Fragment fr = fm.findFragmentById(R.id.fragment_container);
-        if (!(fragment == fr) || fr == null) {
-            fr = fragment;
+    private void createFragment(Fragment fragment) {
+        Fragment frag = fm.findFragmentById(R.id.fragment_container);
+        if (!(fragment == frag) || frag == null) {
+            frag = fragment;
             fm.beginTransaction()
-                    .replace(R.id.fragment_container, fr)
+                    .setCustomAnimations(android.R.anim.fade_in,
+                            android.R.anim.fade_out)
+                    .replace(R.id.fragment_container, frag)
                     .commit();
         }
     }
+
+
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -40,11 +47,10 @@ public class ContainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_recommend:
-                    createFagment(RecommendFragment.newInstance());
-                    setSupportActionBar(mRecommendToolbar);
+                    createFragment(RecommendFragment.newInstance());
                     return true;
                 case R.id.navigation_Combination:
-                    setSupportActionBar(mCombinationToolbar);
+                    createFragment(CombinationFragment.newInstance());
                     return true;
                 case R.id.navigation_takephoto:
 
@@ -65,10 +71,9 @@ public class ContainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contain);
-        mRecommendToolbar = (Toolbar) findViewById(R.id.recommend_tool_bar);
-        mCombinationToolbar = (Toolbar) findViewById(R.id.combination_tool_bar);
-
-        createFagment(RecommendFragment.newInstance());
+        fm.beginTransaction()
+                .add(R.id.fragment_container, RecommendFragment.newInstance())
+                .commit();
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }

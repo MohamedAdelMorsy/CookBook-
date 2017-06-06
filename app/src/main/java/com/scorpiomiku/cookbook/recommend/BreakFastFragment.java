@@ -2,15 +2,13 @@ package com.scorpiomiku.cookbook.recommend;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.scorpiomiku.cookbook.R;
 import com.scorpiomiku.cookbook.module.FragmentModule;
@@ -38,9 +36,10 @@ public class BreakFastFragment extends FragmentModule {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.breakfast_fragment_layout, container, false);
-        mRecyclerView = (RecyclerView) v.findViewById(R.id.breakfast_recycler_view);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        View v = inflater.inflate(R.layout.recommend_breakfast_fragment_layout, container, false);
+        mRecyclerView = (RecyclerView) v.findViewById(R.id.recommend_breakfast_recycler_view);
+        mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
+        mRecyclerView.setNestedScrollingEnabled(false);
         List<String> list = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
             list.add("1");
@@ -56,13 +55,14 @@ public class BreakFastFragment extends FragmentModule {
         public holder(View itemView) {
             super(itemView);
             mImageButton = (ImageButton) itemView.findViewById(R.id
-                    .recommend_recycler_view_item_image_button);
+                    .recommend_breakfast_item_iamge_button);
         }
 
-        private void bindView(String s) {
+        private void bindView(String s ) {
             mImageButton.setImageResource(R.drawable.ic_home_black_24dp);
         }
     }
+
 
     /*-----------------------------------------adapter--------------------------*/
     private class Adapter extends RecyclerView.Adapter<holder> {
@@ -75,7 +75,7 @@ public class BreakFastFragment extends FragmentModule {
         @Override
         public holder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-            View v = layoutInflater.inflate(R.layout.breakfast_recycler_view_item, parent, false);
+            View v = layoutInflater.inflate(R.layout.recommend_breakfast_recycler_view_item, parent, false);
             return new holder(v);
         }
 

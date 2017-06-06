@@ -44,7 +44,7 @@ public class RecommendFragment extends FragmentModule {
         fm.beginTransaction()
                 .setCustomAnimations(android.R.anim.fade_in,
                         android.R.anim.fade_out)
-                .add(R.id.recommend_container, BreakFastFragment.newInstance())
+                .add(R.id.recommend_container, RecommendDefultFragment.newInstance())
                 .commit();
 
     }

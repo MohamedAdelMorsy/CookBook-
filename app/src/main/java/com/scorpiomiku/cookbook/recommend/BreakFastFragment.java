@@ -59,7 +59,7 @@ public class BreakFastFragment extends FragmentModule {
         }
 
         private void bindView(String s ) {
-            mImageButton.setImageResource(R.drawable.ic_home_black_24dp);
+            mImageButton.setImageResource(R.drawable.ic_collection_black_24dp);
         }
     }
 

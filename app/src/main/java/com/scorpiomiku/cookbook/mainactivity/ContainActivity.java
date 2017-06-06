@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import com.scorpiomiku.cookbook.R;
 import com.scorpiomiku.cookbook.combination.CombinationFragment;
 import com.scorpiomiku.cookbook.recommend.RecommendFragment;
+import com.scorpiomiku.cookbook.takephoto.TakePhotoMainFragment;
 
 public class ContainActivity extends AppCompatActivity {
 
@@ -49,11 +50,11 @@ public class ContainActivity extends AppCompatActivity {
                 case R.id.navigation_recommend:
                     createFragment(RecommendFragment.newInstance());
                     return true;
-                case R.id.navigation_Combination:
+                case R.id.navigation_combination:
                     createFragment(CombinationFragment.newInstance());
                     return true;
                 case R.id.navigation_takephoto:
-
+                    createFragment(TakePhotoMainFragment.newInstance());
                     return true;
                 case R.id.navigation_collection:
 
@@ -72,10 +73,11 @@ public class ContainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contain);
         fm.beginTransaction()
-                .add(R.id.fragment_container, RecommendFragment.newInstance())
+                .add(R.id.fragment_container, TakePhotoMainFragment.newInstance())
                 .commit();
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        navigation.setSelectedItemId(R.id.navigation_takephoto);
     }
 
 }

@@ -1,10 +1,16 @@
 <resources>
     <string name="app_name">CookBook</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+
+    <string name="title_recommend">三餐推荐</string>
+    <string name="title_combination">智能组菜</string>
+    <string name="title_takephoto">拍照识别</string>
+    <string name="title_collection">收藏</string>
+    <string name="title_information">个人中心</string>
 
     <string name="recommend_toolbar_search_text">搜索</string>
     <string name="recommend_toolbar_title_text">三餐推荐</string>
+
+    <string name="takephoto_takephoto_button_text">拍照识菜</string>
+    <string name="takephoto_share_button_text">分享</string>
 
 </resources>

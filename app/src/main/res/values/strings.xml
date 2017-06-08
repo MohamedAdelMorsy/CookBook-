@@ -13,4 +13,7 @@
     <string name="takephoto_takephoto_button_text">拍照识菜</string>
     <string name="takephoto_share_button_text">分享</string>
 
+
+    <string name="collection_toolbar_title">收藏</string>
+
 </resources>

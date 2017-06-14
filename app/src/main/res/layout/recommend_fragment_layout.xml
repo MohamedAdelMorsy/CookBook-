@@ -37,7 +37,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:background="@color/colorBlack"/>
+                    android:background="@color/colorHolder"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -56,7 +56,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="0.01"
-                        android:background="@color/colorBlack"/>
+                        android:background="@color/colorHolder"/>
 
                     <ImageButton
                         android:id="@+id/recommend_tool_bar_lunch_iamge_button"
@@ -69,7 +69,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="0.009"
-                        android:background="@color/colorBlack"/>
+                        android:background="@color/colorHolder"/>
 
                     <ImageButton
                         android:id="@+id/recommend_tool_bar_dinner_iamge_button"

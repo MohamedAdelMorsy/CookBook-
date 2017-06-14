@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.scorpiomiku.cookbook.R;
+import com.scorpiomiku.cookbook.collection.CollectionFragment;
 import com.scorpiomiku.cookbook.combination.CombinationFragment;
 import com.scorpiomiku.cookbook.recommend.RecommendFragment;
 import com.scorpiomiku.cookbook.takephoto.TakePhotoMainFragment;
@@ -57,7 +58,7 @@ public class ContainActivity extends AppCompatActivity {
                     createFragment(TakePhotoMainFragment.newInstance());
                     return true;
                 case R.id.navigation_collection:
-
+                    createFragment(CollectionFragment.newInstance());
                     return true;
                 case R.id.navigation_information:
 

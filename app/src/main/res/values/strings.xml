@@ -15,6 +15,9 @@
 
 
     <string name="collection_toolbar_title">收藏</string>
+    <string name="collection_record">浏览菜谱查阅记录</string>
+
+
     <string name="title_activity_login">Sign in</string>
 
     <!-- Strings related to login -->

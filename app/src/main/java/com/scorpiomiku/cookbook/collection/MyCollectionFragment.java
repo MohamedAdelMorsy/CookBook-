@@ -1,5 +1,6 @@
 package com.scorpiomiku.cookbook.collection;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,6 +13,9 @@ import android.widget.TextView;
 
 import com.scorpiomiku.cookbook.R;
 import com.scorpiomiku.cookbook.module.FragmentModule;
+import com.yanzhenjie.recyclerview.swipe.SwipeMenu;
+import com.yanzhenjie.recyclerview.swipe.SwipeMenuCreator;
+import com.yanzhenjie.recyclerview.swipe.SwipeMenuItem;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
 
 import java.util.ArrayList;
@@ -34,7 +38,7 @@ public class MyCollectionFragment extends FragmentModule {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mStringList = new ArrayList<String>();
-        for(int i = 10 ; i < 10 ; i ++)
+        for(int i = 10 ; i < 20 ; i ++)
         {
             mStringList.add("我是菜品的描述2");
         }
@@ -50,6 +54,8 @@ public class MyCollectionFragment extends FragmentModule {
                 .collection_my_collection_swipe_recyclerview);
         mSwipeMenuRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mSwipeMenuRecyclerView.setAdapter(new Adapter(mStringList));
+
+        mSwipeMenuRecyclerView.setNestedScrollingEnabled(false);
         return v ;
     }
 
@@ -58,6 +64,7 @@ public class MyCollectionFragment extends FragmentModule {
 
         private ImageView mItemImageView ;
         private TextView mItemTextView ;
+
         public ItemHolder(View itemView) {
             super(itemView);
             mItemImageView = (ImageView) itemView.findViewById(R.id
@@ -68,7 +75,7 @@ public class MyCollectionFragment extends FragmentModule {
 
         private void bindView(String text){
             mItemTextView.setText(text);
-            mItemImageView.setImageResource(R.mipmap.ic_launcher_round);
+            mItemImageView.setImageResource(R.mipmap.ic_launcher);
         }
     }
 
@@ -99,4 +106,27 @@ public class MyCollectionFragment extends FragmentModule {
             return mList.size();
         }
     }
+
+    /*--------------------------------------MenuCreator----------------------*/
+    private SwipeMenuCreator mSwipeMenuCreator = new SwipeMenuCreator() {
+        @Override
+        public void onCreateMenu(SwipeMenu swipeLeftMenu, SwipeMenu swipeRightMenu, int viewType) {
+
+            int width = getResources().getDimensionPixelSize(R.dimen.collection_item_width);
+
+            int height = ViewGroup.LayoutParams.MATCH_PARENT;
+
+            SwipeMenuItem closeItem = new SwipeMenuItem(getContext())
+                    .setBackgroundDrawable(R.drawable.delete_color)
+                    .setImage(R.mipmap.ic_action_delete)
+                    .setText("删除")
+                    .setTextColor(Color.WHITE)
+                    .setWidth(width)
+                    .setHeight(height);
+            swipeRightMenu.addMenuItem(closeItem);
+
+        }
+    };
+
+
 }

@@ -6,4 +6,8 @@
     <color name="colorHolder">#c9c9c9</color>
     <color name="colorWhite">#ffffff</color>
     <color name="colorBlack">#000000</color>
+
+
+    <color name="colorRed">#fa1515</color>
+    <color name="colorPressedRed">#ef5555</color>
 </resources>

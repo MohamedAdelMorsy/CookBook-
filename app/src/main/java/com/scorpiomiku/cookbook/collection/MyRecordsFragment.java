@@ -13,7 +13,10 @@ import android.widget.TextView;
 
 import com.scorpiomiku.cookbook.R;
 import com.scorpiomiku.cookbook.module.FragmentModule;
+import com.yanzhenjie.recyclerview.swipe.Closeable;
+import com.yanzhenjie.recyclerview.swipe.OnSwipeMenuItemClickListener;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenu;
+import com.yanzhenjie.recyclerview.swipe.SwipeMenuAdapter;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuCreator;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuItem;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
@@ -29,6 +32,7 @@ public class MyRecordsFragment extends FragmentModule {
 
     private SwipeMenuRecyclerView mSwipeMenuRecyclerView;
     private List<String> mStringList;
+    private SwipeMenuAdapter mAdapter ;
 
     public static MyRecordsFragment newInstance() {
         return new MyRecordsFragment();
@@ -53,9 +57,11 @@ public class MyRecordsFragment extends FragmentModule {
                 .collection_my_records_swipe_recyclerview);
         mSwipeMenuRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mSwipeMenuRecyclerView.setSwipeMenuCreator(mSwipeMenuCreator);
-        mSwipeMenuRecyclerView.setAdapter(new Adapter(mStringList));
+        mAdapter = new Adapter(mStringList) ;
+        mSwipeMenuRecyclerView.setAdapter(mAdapter);
         mSwipeMenuRecyclerView.setSwipeMenuCreator(mSwipeMenuCreator);
         mSwipeMenuRecyclerView.setNestedScrollingEnabled(false);
+        mSwipeMenuRecyclerView.setSwipeMenuItemClickListener(menuItemClickLinstener);
         return v;
     }
 
@@ -81,7 +87,7 @@ public class MyRecordsFragment extends FragmentModule {
 
 
     /*--------------------------------Adapter-----------------------------*/
-    private class Adapter extends RecyclerView.Adapter<MyRecordsFragment.ItemHolder> {
+    private class Adapter extends SwipeMenuAdapter<ItemHolder> {
         private List<String> mList;
 
         public Adapter(List<String> list) {
@@ -89,11 +95,17 @@ public class MyRecordsFragment extends FragmentModule {
             mList = list;
         }
 
+
         @Override
-        public MyRecordsFragment.ItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public View onCreateContentView(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getContext());
             View v = layoutInflater.inflate(R.layout.collection_recycler_view_item, parent, false);
-            return new MyRecordsFragment.ItemHolder(v);
+            return v ;
+        }
+
+        @Override
+        public ItemHolder onCompatCreateViewHolder(View realContentView, int viewType) {
+            return new MyRecordsFragment.ItemHolder(realContentView);
         }
 
         @Override
@@ -120,10 +132,23 @@ public class MyRecordsFragment extends FragmentModule {
                    .setBackgroundDrawable(R.drawable.delete_color)
                    .setImage(R.mipmap.ic_action_delete)
                     .setText("删除")
-                    .setTextColor(Color.WHITE)
+                    .setTextColor(R.color.colorRed)
                     .setWidth(width)
                     .setHeight(height);
             swipeRightMenu.addMenuItem(closeItem);
         }
     };
+
+    /*--------------------------------------------menuItemClickLitener----------------------------*/
+    private OnSwipeMenuItemClickListener menuItemClickLinstener = new OnSwipeMenuItemClickListener() {
+        @Override
+        public void onItemClick(Closeable closeable, int adapterPosition, int menuPosition, int direction) {
+            closeable.smoothCloseMenu();
+            if(menuPosition == 0){
+                mStringList.remove(adapterPosition);
+                mAdapter.notifyItemRemoved(adapterPosition);
+            }
+        }
+    } ;
+
 }

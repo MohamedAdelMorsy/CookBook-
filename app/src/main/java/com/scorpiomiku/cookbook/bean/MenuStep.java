@@ -7,9 +7,19 @@ package com.scorpiomiku.cookbook.bean;
 public class MenuStep {
     private int mRank ;
     private String mStepText ;
+    private String mNutrition ;
 
-    public MenuStep(String s){
+    public void setNutrition(String nutrition) {
+        mNutrition = nutrition;
+    }
+
+    public String getNutrition() {
+        return mNutrition;
+    }
+
+    public MenuStep(String s , String nutrition){
         mStepText = s ;
+        mNutrition = nutrition ;
     }
 
     public int getRank() {

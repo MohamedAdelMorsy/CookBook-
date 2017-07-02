@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import com.scorpiomiku.cookbook.R;
 import com.scorpiomiku.cookbook.collection.CollectionFragment;
 import com.scorpiomiku.cookbook.combination.CombinationFragment;
+import com.scorpiomiku.cookbook.ownInformation.MyInformationFragment;
 import com.scorpiomiku.cookbook.recommend.RecommendFragment;
 import com.scorpiomiku.cookbook.takephoto.TakePhotoMainFragment;
 
@@ -61,7 +62,7 @@ public class ContainActivity extends AppCompatActivity {
                     createFragment(CollectionFragment.newInstance());
                     return true;
                 case R.id.navigation_information:
-
+                    createFragment(MyInformationFragment.newInstance());
                     return true;
             }
             return false;

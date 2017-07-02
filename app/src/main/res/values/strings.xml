@@ -40,4 +40,11 @@
     <string name="menu_defualt_fragment_nutrition_know">营养早知道:</string>
     <string name="menu_defualt_fragment_rank_first">第一步</string>
 
+
+
+
+    <string name="my_information_test_name">ScorpioMiku</string>
+    <string name="my_information_my_dynamic">我的动态</string>
+    <string name="my_information_dynamic_circle">动态圈</string>
+
 </resources>

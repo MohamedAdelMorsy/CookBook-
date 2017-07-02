@@ -32,11 +32,12 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
-    
-    
-    
-    <string name="menu_fragment_steps">制作步骤:</string>
-    <string name="menu_fragment_materials">材料:</string>
-    <string name="menu_fragment_look_more">查看全部>></string>
+
+
+    <string name="menu_defualt_fragment_steps">制作步骤:</string>
+    <string name="menu_defualt_fragment_materials">材料:</string>
+    <string name="menu_defualt_fragment_look_more">查看全部>></string>
+    <string name="menu_defualt_fragment_nutrition_know">营养早知道:</string>
+    <string name="menu_defualt_fragment_rank_first">第一步</string>
 
 </resources>

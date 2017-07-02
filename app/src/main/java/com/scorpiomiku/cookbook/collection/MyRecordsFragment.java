@@ -1,5 +1,6 @@
 package com.scorpiomiku.cookbook.collection;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.scorpiomiku.cookbook.R;
+import com.scorpiomiku.cookbook.menuActivity.MenuActivity;
 import com.scorpiomiku.cookbook.module.FragmentModule;
 import com.yanzhenjie.recyclerview.swipe.Closeable;
 import com.yanzhenjie.recyclerview.swipe.OnSwipeMenuItemClickListener;
@@ -66,7 +68,7 @@ public class MyRecordsFragment extends FragmentModule {
     }
 
     /*---------------------------------Holder------------------------------*/
-    private class ItemHolder extends RecyclerView.ViewHolder {
+    private class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private ImageView mItemImageView;
         private TextView mItemTextView;
@@ -82,6 +84,14 @@ public class MyRecordsFragment extends FragmentModule {
         private void bindView(String text) {
             mItemTextView.setText(text);
             mItemImageView.setImageResource(R.mipmap.ic_launcher_round);
+            mItemImageView.setOnClickListener(this);
+            mItemTextView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent i = new Intent(getActivity(), MenuActivity.class);
+            startActivity(i);
         }
     }
 

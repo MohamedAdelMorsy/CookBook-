@@ -1,5 +1,6 @@
 package com.scorpiomiku.cookbook.recommend;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.scorpiomiku.cookbook.R;
+import com.scorpiomiku.cookbook.menuActivity.MenuActivity;
 import com.scorpiomiku.cookbook.module.FragmentModule;
 
 import java.util.ArrayList;
@@ -47,7 +49,7 @@ public class LunchFragment extends FragmentModule {
     }
 
     /*-------------------------------------holder------------------------------*/
-    private class holder extends RecyclerView.ViewHolder {
+    private class holder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private ImageButton mImageButton;
 
         public holder(View itemView) {
@@ -58,6 +60,13 @@ public class LunchFragment extends FragmentModule {
 
         private void bindView(String s ) {
             mImageButton.setImageResource(R.drawable.ic_collection_black_24dp);
+            mImageButton.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent i = new Intent(getActivity(), MenuActivity.class);
+            startActivity(i);
         }
     }
 

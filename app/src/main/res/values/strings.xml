@@ -46,5 +46,14 @@
     <string name="my_information_test_name">ScorpioMiku</string>
     <string name="my_information_my_dynamic">我的动态</string>
     <string name="my_information_dynamic_circle">动态圈</string>
+    <string name="my_information_setting">帐号信息设置</string>
+    <string name="my_information_concrol">帐号管理</string>
+    <string name="my_information_draft">草稿箱</string>
+    <string name="my_information_basket">我的菜篮子</string>
+    <string name="my_information_help">帮助</string>
+
+
+
+    <string name="creater">></string>
 
 </resources>

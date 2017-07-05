@@ -1,4 +1,4 @@
-package com.scorpiomiku.cookbook.menuActivity;
+package com.scorpiomiku.cookbook.menuactivity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

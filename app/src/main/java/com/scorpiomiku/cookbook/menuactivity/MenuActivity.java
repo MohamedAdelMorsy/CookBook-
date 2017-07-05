@@ -1,11 +1,10 @@
-package com.scorpiomiku.cookbook.menuActivity;
+package com.scorpiomiku.cookbook.menuactivity;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -82,9 +81,14 @@ public class MenuActivity extends AppCompatActivity {
         mLookAllTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                changeFragment(MenuRecyclerStepsFragment.newInstance());
+                if(isFragmentFooter()){
+                    changeFragment(DefaultFragment.newInstance());
+                }else{
+                    changeFragment(MenuRecyclerStepsFragment.newInstance());
+                }
             }
         });
+
     }
 
     /*--------------------------------------Back----------------------*/

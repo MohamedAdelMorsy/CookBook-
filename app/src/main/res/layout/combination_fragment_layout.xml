@@ -1,9 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@mipmap/ic_launcher"
-    android:orientation="vertical">
 
-</LinearLayout>
+
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="#FFF">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:contentScrim="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#f1ecec"
+                android:orientation="vertical"
+                >
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/combination_tool_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    app:contentInsetStart="0dp"
+                    app:layout_collapseMode="pin">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="120dp"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/test"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="@string/combination_toolbar_title_text"
+                                android:textColor="@color/colorBlack"
+                                android:textSize="20sp"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/colorHolder"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="0.7"
+                                />
+
+                            <android.support.v7.widget.CardView
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1.5"
+                                app:cardCornerRadius="10dp">
+
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    >
+
+                                    <EditText
+                                        android:layout_width="200dp"
+                                        android:layout_height="match_parent"
+                                        android:hint="@string/combination_toolbar_search_text"
+                                        android:textColor="@color/colorBlack"
+                                        android:textSize="15dp"
+                                        android:background="@null">
+
+                                    </EditText>
+
+                                    <ImageView
+                                        android:id="@+id/combination_tool_bar_search_image_view"
+                                        android:layout_width="30dp"
+                                        android:layout_height="30dp"
+                                        app:srcCompat="@drawable/ic_search_black_24dp"
+                                        android:layout_alignParentRight="true"
+                                        android:layout_marginRight="5dp"
+                                        android:layout_marginTop="5dp"/>
+                                </RelativeLayout>
+                            </android.support.v7.widget.CardView>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="0.7"
+                                />
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                </android.support.v7.widget.Toolbar>
+
+
+            </LinearLayout>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <com.yyydjk.library.HorizontalDropDownMenu
+            android:id="@+id/combination_fragment_dropmenu"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:ddmenuTextSize="13sp"
+            app:ddmenuUnselectedIcon="@drawable/ic_unseleted_down_black_24dp"
+            app:ddtextSelectedColor="@color/drop_down_menu_selected_color"
+            app:ddtextUnselectedColor="@color/drop_down_menu_unselected_color"
+            app:dddividerColor="@color/gray"
+            app:ddunderlineColor="@color/gray"
+            app:ddmenuMenuHeightPercent="0.5"
+            app:ddmenuSelectedIcon="@drawable/ic_selected_arrow_up_black_24dp"
+            app:ddmaskColor="@color/mask_color"
+            app:ddmenuBackgroundColor="@color/white">
+
+        </com.yyydjk.library.HorizontalDropDownMenu>
+
+    </android.support.v4.widget.NestedScrollView>
+
+
+</android.support.design.widget.CoordinatorLayout>
+
+
+
+

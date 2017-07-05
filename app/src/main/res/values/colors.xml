@@ -10,4 +10,10 @@
 
     <color name="colorRed">#fa1515</color>
     <color name="colorPressedRed">#ef5555</color>
+
+
+    <color name="drop_down_menu_unselected_color">#080808</color>
+    <color name="drop_down_menu_selected_color">#52026b</color>
+    <color name="drop_down_menu_gray">#d1cdcd</color>
+    <color name="drop_down_menu_mask_color">#b6b1b1</color>
 </resources>

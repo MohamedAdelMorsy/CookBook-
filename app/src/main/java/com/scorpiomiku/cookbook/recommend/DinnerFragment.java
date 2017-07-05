@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.scorpiomiku.cookbook.R;
-import com.scorpiomiku.cookbook.menuActivity.MenuActivity;
+import com.scorpiomiku.cookbook.menuactivity.MenuActivity;
 import com.scorpiomiku.cookbook.module.FragmentModule;
 
 import java.util.ArrayList;

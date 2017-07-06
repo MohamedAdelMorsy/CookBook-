@@ -1,13 +1,17 @@
 package com.scorpiomiku.cookbook.combination;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -50,6 +54,7 @@ public class CombinationFragment extends FragmentModule {
         super.onCreate(savedInstanceState);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -61,18 +66,19 @@ public class CombinationFragment extends FragmentModule {
 
 
     /*-------------------------------------initView---------------------------------*/
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void initView() {
 
         /*----------------------------------------TastesView----------------------------------*/
         RecyclerView mTastesView = new RecyclerView(getContext());
-        mTastesAdapter = new TastesAdapter(Arrays.asList(mTastes), getContext());
+        mTastesAdapter = new TastesAdapter(Arrays.asList(mTastes));
         mTastesView.setAdapter(mTastesAdapter);
         mTastesView.setLayoutManager(new LinearLayoutManager(getContext()));
 
 
         /*----------------------------------------TimeView----------------------------------*/
         RecyclerView mTimeView = new RecyclerView(getContext());
-        mTimeAdapter = new TimeAdapter(Arrays.asList(mTimes), getContext());
+        mTimeAdapter = new TimeAdapter(Arrays.asList(mTimes));
         mTimeView.setAdapter(mTimeAdapter);
         mTimeView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -80,8 +86,9 @@ public class CombinationFragment extends FragmentModule {
         /*----------------------------------------MakeWayView----------------------------------*/
         RecyclerView mMakeWayView = new RecyclerView(getContext());
         mMakeWayAdapter = new MakeWayAdapter(Arrays.asList(mMakeWays));
-        mTimeView.setAdapter(mMakeWayAdapter);
-        mTimeView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mMakeWayView.setAdapter(mMakeWayAdapter);
+        mMakeWayView.setLayoutManager(new LinearLayoutManager(getContext()));
+
 
 
         /*-----------------initView-----------------*/
@@ -89,7 +96,16 @@ public class CombinationFragment extends FragmentModule {
         mPopupViews.add(mTimeView);
         mPopupViews.add(mMakeWayView);
 
+        /*-------------contextView-------------*/
+        RecyclerView mContextView = new RecyclerView(getContext());
+        mContextView.setLayoutParams(new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams
+                .MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
+
+
+        mHorizontalDropDownMenu.setDropDownMenu(Arrays.asList(mHeaders), mPopupViews, mContextView
+                , getResources().getDrawable(R.drawable.dropmenutest, getActivity().getTheme())
+                , getResources().getDrawable(R.drawable.backtest, getActivity().getTheme()));
     }
 
 
@@ -112,6 +128,8 @@ public class CombinationFragment extends FragmentModule {
             return new MakeWayHolder(v);
         }
 
+
+
         @Override
         public void onBindViewHolder(MakeWayHolder holder, int position) {
             holder.bindView(mStringlist.get(position), position);
@@ -125,21 +143,17 @@ public class CombinationFragment extends FragmentModule {
     }
 
     /*------------------------------------------TimeAdapter-------------------------------------*/
-    public class TimeAdapter extends RecyclerView.Adapter<TimeHolder> {
-
+    private class TimeAdapter extends RecyclerView.Adapter<TimeHolder> {
 
         private List<String> mStringList;
-        private Context mContext;
 
-
-        public TimeAdapter(List<String> list, Context c) {
+        public TimeAdapter(List<String> list) {
             mStringList = list;
-            mContext = c;
         }
 
         @Override
         public TimeHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater layoutInflater = LayoutInflater.from(mContext);
+            LayoutInflater layoutInflater = LayoutInflater.from(getContext());
             View v = layoutInflater.inflate(R.layout.combination_time_item, parent, false);
             return new TimeHolder(v);
         }
@@ -154,7 +168,6 @@ public class CombinationFragment extends FragmentModule {
             return mStringList.size();
         }
 
-
     }
 
 
@@ -162,17 +175,15 @@ public class CombinationFragment extends FragmentModule {
     private class TastesAdapter extends RecyclerView.Adapter<TasteHolder> {
 
         private List<String> mStringlist;
-        private Context mContext;
 
-        public TastesAdapter(List<String> list, Context c) {
+        public TastesAdapter(List<String> list) {
             super();
             mStringlist = list;
-            mContext = c;
         }
 
         @Override
         public TasteHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater layoutInflater = LayoutInflater.from(mContext);
+            LayoutInflater layoutInflater = LayoutInflater.from(getContext());
             View v = layoutInflater.inflate(R.layout.combination_tastes_item, parent, false);
             return new TasteHolder(v);
         }
@@ -197,7 +208,7 @@ public class CombinationFragment extends FragmentModule {
 
         public MakeWayHolder(View itemView) {
             super(itemView);
-            mTextView = (TextView) itemView.findViewById(R.id.combination_taste_item_test_view);
+            mTextView = (TextView) itemView.findViewById(R.id.combination_makeway_item_test_view);
         }
 
         private void bindView(String s, final int position) {

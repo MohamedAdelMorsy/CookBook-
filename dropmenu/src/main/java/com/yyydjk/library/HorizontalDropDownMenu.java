@@ -83,7 +83,7 @@ public class HorizontalDropDownMenu extends LinearLayout {
         menuTextSize = a.getDimensionPixelSize(R.styleable.HorizontalDropDownMenu_ddmenuTextSize, menuTextSize);
         menuSelectedIcon = a.getResourceId(R.styleable.HorizontalDropDownMenu_ddmenuSelectedIcon, menuSelectedIcon);
         menuUnselectedIcon = a.getResourceId(R.styleable.HorizontalDropDownMenu_ddmenuUnselectedIcon, menuUnselectedIcon);
-        menuHeighPercent = a.getFloat(R.styleable.HorizontalDropDownMenu_ddmenuMenuHeightPercent,menuHeighPercent);
+        menuHeighPercent = a.getFloat(R.styleable.HorizontalDropDownMenu_ddmenuMenuHeightPercent, menuHeighPercent);
         a.recycle();
 
 
@@ -163,7 +163,7 @@ public class HorizontalDropDownMenu extends LinearLayout {
         }
 
         for (int i = 0; i < tabTexts.size(); i++) {
-            addTab(tabTexts, i,tabDrawable);
+            addTab(tabTexts, i, tabDrawable);
         }
         containerView.addView(contentView, 0);
 
@@ -178,7 +178,7 @@ public class HorizontalDropDownMenu extends LinearLayout {
         });
         containerView.addView(maskView, 1);
         maskView.setVisibility(GONE);
-        if (containerView.getChildAt(2) != null){
+        if (containerView.getChildAt(2) != null) {
             containerView.removeViewAt(2);
         }
 
@@ -189,18 +189,19 @@ public class HorizontalDropDownMenu extends LinearLayout {
         containerView.addView(popupMenuViews, 2);
 
         for (int i = 0; i < popupViews.size(); i++) {
-            popupViews.get(i).setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            ViewGroup.LayoutParams v = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            popupViews.get(i).setLayoutParams(v);
             popupMenuViews.addView(popupViews.get(i), i);
         }
 
     }
 
-    private void addTab(@NonNull List<String> tabTexts, int i ) {
+    private void addTab(@NonNull List<String> tabTexts, int i) {
         final TextView tab = new TextView(getContext());
         tab.setSingleLine();
         tab.setEllipsize(TextUtils.TruncateAt.END);
         tab.setGravity(Gravity.CENTER);
-        tab.setTextSize(TypedValue.COMPLEX_UNIT_PX,menuTextSize);
+        tab.setTextSize(TypedValue.COMPLEX_UNIT_PX, menuTextSize);
         tab.setLayoutParams(new LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f));
         tab.setTextColor(textUnselectedColor);
         tab.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(menuUnselectedIcon), null);
@@ -222,13 +223,14 @@ public class HorizontalDropDownMenu extends LinearLayout {
             tabMenuView.addView(view);
         }
     }
+
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-    private void addTab(@NonNull List<String> tabTexts, int i , Drawable d) {
+    private void addTab(@NonNull List<String> tabTexts, int i, Drawable d) {
         final TextView tab = new TextView(getContext());
         tab.setSingleLine();
         tab.setEllipsize(TextUtils.TruncateAt.END);
         tab.setGravity(Gravity.CENTER);
-        tab.setTextSize(TypedValue.COMPLEX_UNIT_PX,menuTextSize);
+        tab.setTextSize(TypedValue.COMPLEX_UNIT_PX, menuTextSize);
         tab.setLayoutParams(new LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f));
         tab.setTextColor(textUnselectedColor);
         tab.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(menuUnselectedIcon), null);
@@ -269,8 +271,8 @@ public class HorizontalDropDownMenu extends LinearLayout {
         }
     }
 
-    public void setBackGround(Drawable d){
-        if(null != d){
+    public void setBackGround(Drawable d) {
+        if (null != d) {
 
         }
     }

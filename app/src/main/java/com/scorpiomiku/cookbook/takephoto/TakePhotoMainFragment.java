@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +20,7 @@ import com.scorpiomiku.cookbook.module.FragmentModule;
  */
 
 public class TakePhotoMainFragment extends FragmentModule {
-
+    private static final int REQUEST_CAMERA = 0;
     private Button mTakePhotoButton;
     private boolean canTakePhoto;
     private Intent mTakePhotoIntent;
@@ -30,7 +32,7 @@ public class TakePhotoMainFragment extends FragmentModule {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTakePhotoIntent = new Intent(getActivity(),CameraActivity.class);
+        mTakePhotoIntent = new Intent(getActivity(), CameraActivity.class);
         canTakePhoto = mTakePhotoIntent.resolveActivity(getActivity().getPackageManager()) != null;
     }
 
@@ -49,8 +51,22 @@ public class TakePhotoMainFragment extends FragmentModule {
         mTakePhotoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               startActivity(mTakePhotoIntent);
+                if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.CAMERA)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.CAMERA}, REQUEST_CAMERA);
+                } else {
+                    startActivity(mTakePhotoIntent);
+                }
             }
         });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_CAMERA) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startActivity(mTakePhotoIntent);
+            }
+        }
     }
 }

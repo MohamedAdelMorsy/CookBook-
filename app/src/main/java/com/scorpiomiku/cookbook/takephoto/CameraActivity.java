@@ -7,6 +7,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.os.Environment;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.hardware.*;
@@ -29,13 +31,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.jar.Manifest;
+
 import com.scorpiomiku.cookbook.takephoto.*;
 
 
 public class CameraActivity extends AppCompatActivity {
 
-    private static final String TAG = "CameraActivity";
 
+
+    private static final String TAG = "CameraActivity";
     private Camera mCamera;
     private CameraPreview mPreview;
     private FrameLayout mCameraLayout;
@@ -53,26 +58,29 @@ public class CameraActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         //注意：上面两个设置必须写在setContentView前面
         setContentView(R.layout.camera_activity_layout);
+
+
         if (!checkCameraHardware(this)) {
             Toast.makeText(CameraActivity.this, "相机不支持", Toast.LENGTH_SHORT).show();
         } else {
             openCamera();
-            mTakePictureButton = (ImageView) findViewById(R.id.button_capture);
-            mTakePictureButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mCamera.autoFocus(mAutoFocusCallback);
-                }
-            });
         }
+        mTakePictureButton = (ImageView) findViewById(R.id.button_capture);
+        mTakePictureButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCamera.autoFocus(mAutoFocusCallback);
+            }
+        });
         setCameraDisplayOrientation(this, mCameraId, mCamera);
     }
+
 
     private AutoFocusCallback mAutoFocusCallback = new AutoFocusCallback() {
         @Override
         public void onAutoFocus(boolean success, Camera camera) {
-            if(success){
-                mCamera.takePicture(null,null,mPictureCallback);
+            if (success) {
+                mCamera.takePicture(null, null, mPictureCallback);
             }
         }
     };
@@ -85,7 +93,6 @@ public class CameraActivity extends AppCompatActivity {
             return false;
         }
     }
-
 
     //获取相机
     public static Camera getCameraInstance() {
@@ -216,4 +223,6 @@ public class CameraActivity extends AppCompatActivity {
         }
         return returnBm;
     }
+
+
 }

@@ -2,6 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.scorpiomiku.cookbook">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false"/>
+
+    <uses-feature android:name="android.hardware.camera.autofocus"/>
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
     <uses-permission android:name="android.permission.READ_PROFILE"/>
@@ -26,6 +34,8 @@
         <activity android:name=".menuactivity.MenuActivity">
         </activity>
         <activity android:name=".basket.BasketActivity">
+        </activity>
+        <activity android:name=".takephoto.CameraActivity">
         </activity>
     </application>
 

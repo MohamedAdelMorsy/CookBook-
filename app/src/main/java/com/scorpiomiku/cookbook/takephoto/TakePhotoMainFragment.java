@@ -30,9 +30,8 @@ public class TakePhotoMainFragment extends FragmentModule {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTakePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        mTakePhotoIntent = new Intent(getActivity(),CameraActivity.class);
         canTakePhoto = mTakePhotoIntent.resolveActivity(getActivity().getPackageManager()) != null;
-
     }
 
     @Nullable

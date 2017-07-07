@@ -41,8 +41,6 @@
     <string name="menu_defualt_fragment_rank_first">第一步</string>
 
 
-
-
     <string name="my_information_test_name">ScorpioMiku</string>
     <string name="my_information_my_dynamic">我的动态</string>
     <string name="my_information_dynamic_circle">动态圈</string>
@@ -51,7 +49,6 @@
     <string name="my_information_draft">草稿箱</string>
     <string name="my_information_basket">我的菜篮子</string>
     <string name="my_information_help">帮助</string>
-
 
 
     <string name="combination_toolbar_title_text">智能组菜</string>

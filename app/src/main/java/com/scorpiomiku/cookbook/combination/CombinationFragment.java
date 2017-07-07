@@ -1,6 +1,7 @@
 package com.scorpiomiku.cookbook.combination;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,10 +13,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.scorpiomiku.cookbook.R;
+import com.scorpiomiku.cookbook.menuactivity.MenuActivity;
 import com.scorpiomiku.cookbook.module.FragmentModule;
 import com.yyydjk.library.HorizontalDropDownMenu;
 
@@ -44,6 +47,8 @@ public class CombinationFragment extends FragmentModule {
     private String mMakeWays[] = {"不限", "清蒸", "爆炒", "凉拌"};
     private List<View> mPopupViews = new ArrayList<>();
 
+    private List<String> testList = new ArrayList<>();
+
 
     public static CombinationFragment newInstance() {
         return new CombinationFragment();
@@ -52,6 +57,9 @@ public class CombinationFragment extends FragmentModule {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        for (int i = 0; i < 15; i++) {
+            testList.add("");
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -100,7 +108,9 @@ public class CombinationFragment extends FragmentModule {
         RecyclerView mContextView = new RecyclerView(getContext());
         mContextView.setLayoutParams(new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams
                 .MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-
+        mContextView.setAdapter(new MenuAdapter(testList));
+        mContextView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mContextView.setNestedScrollingEnabled(false);
 
 
         mHorizontalDropDownMenu.setDropDownMenu(Arrays.asList(mHeaders), mPopupViews, mContextView
@@ -129,7 +139,6 @@ public class CombinationFragment extends FragmentModule {
         }
 
 
-
         @Override
         public void onBindViewHolder(MakeWayHolder holder, int position) {
             holder.bindView(mStringlist.get(position), position);
@@ -141,6 +150,29 @@ public class CombinationFragment extends FragmentModule {
         }
 
     }
+
+    /*------------------------------------------------MakeWayholder------------------------------------*/
+    private class MakeWayHolder extends RecyclerView.ViewHolder {
+
+        private TextView mTextView;
+
+        public MakeWayHolder(View itemView) {
+            super(itemView);
+            mTextView = (TextView) itemView.findViewById(R.id.combination_makeway_item_test_view);
+        }
+
+        private void bindView(String s, final int position) {
+            mTextView.setText(s);
+            mTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mHorizontalDropDownMenu.setTabText(position == 0 ? mHeaders[0] : mMakeWays[position]);
+                    mHorizontalDropDownMenu.closeMenu();
+                }
+            });
+        }
+    }
+
 
     /*------------------------------------------TimeAdapter-------------------------------------*/
     private class TimeAdapter extends RecyclerView.Adapter<TimeHolder> {
@@ -168,6 +200,27 @@ public class CombinationFragment extends FragmentModule {
             return mStringList.size();
         }
 
+    }
+
+    /*-----------------------------------TimeHolder-------------------------*/
+    private class TimeHolder extends RecyclerView.ViewHolder {
+        private TextView mTextView;
+
+        public TimeHolder(View itemView) {
+            super(itemView);
+            mTextView = (TextView) itemView.findViewById(R.id.combination_time_item_test_view);
+        }
+
+        private void bindView(String s, final int position) {
+            mTextView.setText(s);
+            mTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mHorizontalDropDownMenu.setTabText(position == 0 ? mHeaders[0] : mTimes[position]);
+                    mHorizontalDropDownMenu.closeMenu();
+                }
+            });
+        }
     }
 
 
@@ -200,50 +253,6 @@ public class CombinationFragment extends FragmentModule {
 
     }
 
-
-    /*------------------------------------------------MakeWayholder------------------------------------*/
-    private class MakeWayHolder extends RecyclerView.ViewHolder {
-
-        private TextView mTextView;
-
-        public MakeWayHolder(View itemView) {
-            super(itemView);
-            mTextView = (TextView) itemView.findViewById(R.id.combination_makeway_item_test_view);
-        }
-
-        private void bindView(String s, final int position) {
-            mTextView.setText(s);
-            mTextView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mHorizontalDropDownMenu.setTabText(position == 0 ? mHeaders[0] : mMakeWays[position]);
-                    mHorizontalDropDownMenu.closeMenu();
-                }
-            });
-        }
-    }
-
-    /*-----------------------------------TimeHolder-------------------------*/
-    private class TimeHolder extends RecyclerView.ViewHolder {
-        private TextView mTextView;
-
-        public TimeHolder(View itemView) {
-            super(itemView);
-            mTextView = (TextView) itemView.findViewById(R.id.combination_time_item_test_view);
-        }
-
-        private void bindView(String s, final int position) {
-            mTextView.setText(s);
-            mTextView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mHorizontalDropDownMenu.setTabText(position == 0 ? mHeaders[0] : mTimes[position]);
-                    mHorizontalDropDownMenu.closeMenu();
-                }
-            });
-        }
-    }
-
     /*------------------------------------------Tasteholder------------------------*/
     private class TasteHolder extends RecyclerView.ViewHolder {
 
@@ -264,6 +273,53 @@ public class CombinationFragment extends FragmentModule {
                 }
             });
 
+        }
+    }
+
+
+    /*---------------------------------------MenuAdapter----------------------------*/
+    private class MenuAdapter extends RecyclerView.Adapter<MenuHolder> {
+
+        private List<String> mList;
+
+        public MenuAdapter(List<String> l) {
+            super();
+            mList = l;
+        }
+
+        @Override
+        public MenuHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+            View v = layoutInflater.inflate(R.layout.combination_menu_recycler_view_item, parent, false);
+            return new MenuHolder(v);
+        }
+
+        @Override
+        public void onBindViewHolder(MenuHolder holder, int position) {
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return mList.size();
+        }
+    }
+
+    /*----------------------------------------MenuHolder----------------------------*/
+    private class MenuHolder extends RecyclerView.ViewHolder {
+
+        private ImageButton mImageButton;
+
+        public MenuHolder(View itemView) {
+            super(itemView);
+            mImageButton = (ImageButton) itemView.findViewById(R.id.combination_menu_item_iamge_button);
+            mImageButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(getActivity(), MenuActivity.class);
+                    startActivity(i);
+                }
+            });
         }
     }
 }

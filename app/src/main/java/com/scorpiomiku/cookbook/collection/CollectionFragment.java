@@ -14,10 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.scorpiomiku.cookbook.R;
-import com.scorpiomiku.cookbook.TestFragment;
 import com.scorpiomiku.cookbook.module.FragmentModule;
-
-import junit.framework.Test;
 
 /**
  * Created by Administrator on 2017/6/14.

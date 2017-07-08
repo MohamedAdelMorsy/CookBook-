@@ -13,6 +13,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.hardware.*;
 import android.hardware.Camera.*;
+import android.util.Log;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
@@ -38,6 +40,7 @@ import com.scorpiomiku.cookbook.takephoto.*;
 
 public class CameraActivity extends AppCompatActivity {
 
+    private String mPicturePath;
 
 
     private static final String TAG = "CameraActivity";
@@ -95,13 +98,17 @@ public class CameraActivity extends AppCompatActivity {
     }
 
     //获取相机
-    public static Camera getCameraInstance() {
+    public  Camera getCameraInstance() {
         Camera c = null;
         try {
             c = Camera.open();
+            Camera.Parameters mParameters = c.getParameters();
+            mParameters.setPictureSize(1024,768);
+            c.setParameters(mParameters);
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return c;
     }
 
@@ -137,12 +144,12 @@ public class CameraActivity extends AppCompatActivity {
         @Override
         public void onPictureTaken(final byte[] data, Camera camera) {
 
-
             //开辟线程来处理图片
             final File pictureDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-            final String pictureName = new SimpleDateFormat().format(new Date(System.currentTimeMillis()))
-                    .toString() + ".png";
+            final String pictureName = System.currentTimeMillis() + ".jpg";
             final String picturePath = pictureDir + File.separator + pictureName;
+            mPicturePath = picturePath;
+            Log.d(TAG, picturePath);
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -151,6 +158,7 @@ public class CameraActivity extends AppCompatActivity {
                         Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
                         bitmap = rotateBitmapByDegree(bitmap, 90);
                         BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
                         bos.flush();
                         bos.close();
                         bitmap.recycle();
@@ -165,6 +173,12 @@ public class CameraActivity extends AppCompatActivity {
         }
     };
 
+    //设置分辨率
+    private void setResolution() {
+
+    }
+
+//    private void cropImage()
 
     //将相机设置成竖屏
     public static void setCameraDisplayOrientation(Activity activity, int cameraId, Camera camera) {

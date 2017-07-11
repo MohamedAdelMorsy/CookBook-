@@ -21,6 +21,7 @@
     <color name="toolbar_and_menu_color">#6e8dfd</color>
     <color name="stringsColor">#9c9a9a</color>
 
+    <color name="testColor">#fd7e7e</color>
 
     <color name="recommend_item_backcolor">#e6e3e3</color>
 </resources>

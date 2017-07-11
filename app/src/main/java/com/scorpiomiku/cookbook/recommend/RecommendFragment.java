@@ -6,13 +6,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.scorpiomiku.cookbook.R;
 import com.scorpiomiku.cookbook.module.FragmentModule;
@@ -27,9 +25,9 @@ public class RecommendFragment extends FragmentModule {
     private FragmentManager fm;
     private Fragment mNowFragment;
 
-    private ImageButton mBreakFastImageButton;
-    private ImageButton mLunchImageButton;
-    private ImageButton mDinnerImageButton;
+    private ImageView mBreakFastImageView;
+    private ImageView mLunchImageView;
+    private ImageView mDinnerImageView;
     private Toolbar mToolbar;
 
 
@@ -55,12 +53,12 @@ public class RecommendFragment extends FragmentModule {
                              @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.recommend_fragment_layout, container, false);
         /*----------------------------initView---------------------------------*/
-        mBreakFastImageButton = (ImageButton) v.findViewById(R.id
-                .recommend_tool_bar_breakfast_iamge_button);
-        mDinnerImageButton = (ImageButton) v.findViewById(R.id
-                .recommend_tool_bar_dinner_iamge_button);
-        mLunchImageButton = (ImageButton) v.findViewById(R.id
-                .recommend_tool_bar_lunch_iamge_button);
+        mBreakFastImageView = (ImageView) v.findViewById(R.id
+                .recommend_tool_bar_breakfast_iamge_view);
+        mDinnerImageView = (ImageView) v.findViewById(R.id
+                .recommend_tool_bar_dinner_iamge_view);
+        mLunchImageView = (ImageView) v.findViewById(R.id
+                .recommend_tool_bar_lunch_iamge_view);
         mToolbar = (Toolbar) v.findViewById(R.id.recommend_tool_bar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
         setListener();
@@ -86,19 +84,19 @@ public class RecommendFragment extends FragmentModule {
 
     /*-------------------------------------setListener--------------------------*/
     private void setListener() {
-        mBreakFastImageButton.setOnClickListener(new View.OnClickListener() {
+        mBreakFastImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 changeFragment(BreakFastFragment.newInstance());
             }
         });
-        mLunchImageButton.setOnClickListener(new View.OnClickListener() {
+        mLunchImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 changeFragment(LunchFragment.newInstance());
             }
         });
-        mDinnerImageButton.setOnClickListener(new View.OnClickListener() {
+        mDinnerImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 changeFragment(DinnerFragment.newInstance());

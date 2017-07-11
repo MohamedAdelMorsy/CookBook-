@@ -91,8 +91,8 @@ public class ContainActivity extends AppCompatActivity {
                 new int[]{-android.R.attr.state_checked},
                 new int[]{android.R.attr.state_checked}
         };
-        int[] colors = new int[]{getResources().getColor(R.color.colorWhite, getTheme()),
-                getResources().getColor(R.color.colorWhite, getTheme())
+        int[] colors = new int[]{getResources().getColor(R.color.toolbar_and_menu_color, getTheme()),
+                getResources().getColor(R.color.testColor, getTheme())
         };
         ColorStateList colorStateList = new ColorStateList(states, colors);
         navigation.setItemTextColor(colorStateList);

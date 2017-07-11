@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.scorpiomiku.cookbook.R;
 import com.scorpiomiku.cookbook.menuactivity.MenuActivity;
@@ -38,7 +40,7 @@ public class LunchFragment extends FragmentModule {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.recommend_lunch_fragment_layout, container, false);
         mRecyclerView = (RecyclerView) v.findViewById(R.id.recommend_lunch_recycler_view);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
+        mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         mRecyclerView.setNestedScrollingEnabled(false);
         List<String> list = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
@@ -49,18 +51,23 @@ public class LunchFragment extends FragmentModule {
     }
 
     /*-------------------------------------holder------------------------------*/
-    private class holder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        private ImageButton mImageButton;
+    private class holder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private ImageView mImageView;
+        private TextView mTextView;
 
         public holder(View itemView) {
             super(itemView);
-            mImageButton = (ImageButton) itemView.findViewById(R.id
-                    .recommend_lunch_item_iamge_button);
+            mImageView = (ImageView) itemView.findViewById(R.id
+                    .recommend_lunch_item_food_image_view);
+            mTextView = (TextView) itemView.findViewById(R.id
+                    .recommend_lunch_item_food_name_text_view);
+
         }
 
-        private void bindView(String s ) {
-            mImageButton.setImageResource(R.drawable.ic_collection_black_24dp);
-            mImageButton.setOnClickListener(this);
+        private void bindView(String s) {
+            mImageView.setImageResource(R.drawable.food_test_1);
+            itemView.setOnClickListener(this);
+            mTextView.setText("豌豆炒肉");
         }
 
         @Override

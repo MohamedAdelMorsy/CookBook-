@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.scorpiomiku.cookbook.R;
 import com.scorpiomiku.cookbook.menuactivity.MenuActivity;
@@ -50,17 +52,21 @@ public class DinnerFragment extends FragmentModule {
 
     /*-------------------------------------holder------------------------------*/
     private class holder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private ImageButton mImageButton;
+        private ImageView mImageView;
+        private TextView mTextView ;
 
         public holder(View itemView) {
             super(itemView);
-            mImageButton = (ImageButton) itemView.findViewById(R.id
-                    .recommend_dinner_item_iamge_button);
+            mImageView = (ImageView) itemView.findViewById(R.id
+                    .recommend_dinner_item_food_image_view);
+            mTextView= (TextView) itemView.findViewById(R.id
+                    .recommend_dinner_item_food_name_text_view);
         }
 
         private void bindView(String s ) {
-            mImageButton.setImageResource(R.drawable.ic_collection_black_24dp);
-            mImageButton.setOnClickListener(this);
+            mImageView.setImageResource(R.drawable.test_food);
+            itemView.setOnClickListener(this);
+            mTextView.setText("豌豆炒肉");
         }
 
         @Override

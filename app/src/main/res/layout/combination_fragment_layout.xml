@@ -84,9 +84,13 @@
                                         android:layout_width="200dp"
                                         android:layout_height="match_parent"
                                         android:hint="@string/combination_toolbar_search_text"
-                                        android:textColor="@color/colorBlack"
+                                        android:textColorHint="@color/colorHolder"
+                                        android:gravity="center"
+                                        android:ellipsize="middle"
+                                        android:textColor="@color/stringsColor"
                                         android:textSize="15dp"
-                                        android:background="@null">
+                                        android:background="@null"
+                                        android:cursorVisible="false">
 
                                     </EditText>
 

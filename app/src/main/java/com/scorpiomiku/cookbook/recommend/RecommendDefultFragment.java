@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.scorpiomiku.cookbook.R;
 import com.scorpiomiku.cookbook.menuactivity.MenuActivity;
@@ -50,18 +52,29 @@ public class RecommendDefultFragment extends FragmentModule {
     }
 
     /*-------------------------------------holder------------------------------*/
-    private class holder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        private ImageButton mImageButton;
+    private class holder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private ImageView mImageView;
+        private TextView mFoodNameTextView;
+        private TextView mFoodMatirialTextView;
+        private View mWholeView ;
 
         public holder(View itemView) {
             super(itemView);
-            mImageButton = (ImageButton) itemView.findViewById(R.id
+            mWholeView = itemView ;
+            mImageView = (ImageView) itemView.findViewById(R.id
                     .recommend_default_item_image_button);
+            mFoodMatirialTextView = (TextView) itemView.findViewById(R.id
+                    .recommend_default_item_food_matirial_text_view);
+            mFoodNameTextView = (TextView) itemView.findViewById(R.id
+                    .recommend_default_item_food_name_text_view);
         }
 
         private void bindView(String s) {
-            mImageButton.setImageResource(R.drawable.ic_collection_black_24dp);
-            mImageButton.setOnClickListener(this);
+            mImageView.setImageResource(R.drawable.test_food);
+            mFoodNameTextView.setText("豌豆炒肉");
+            mFoodMatirialTextView.setText("豌豆、豌豆、豌豆、豌豆、豌豆、豌豆、豌豆、豌豆、豌豆、豌豆、豌豆、豌豆、肉" +
+                    "豌豆、豌豆、豌豆、豌豆、豌豆、豌豆、豌豆、");
+            mWholeView.setOnClickListener(this);
         }
 
         @Override

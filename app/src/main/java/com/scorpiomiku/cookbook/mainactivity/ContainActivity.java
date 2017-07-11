@@ -1,7 +1,11 @@
 package com.scorpiomiku.cookbook.mainactivity;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -16,6 +20,7 @@ import com.scorpiomiku.cookbook.ownInformation.MyInformationFragment;
 import com.scorpiomiku.cookbook.recommend.RecommendFragment;
 import com.scorpiomiku.cookbook.takephoto.TakePhotoMainFragment;
 
+@RequiresApi(api = Build.VERSION_CODES.M)
 public class ContainActivity extends AppCompatActivity {
 
     private Toolbar mRecommendToolbar;
@@ -26,6 +31,8 @@ public class ContainActivity extends AppCompatActivity {
 
     private static final String TAG = "ContainActivity";
     private FragmentManager fm = getSupportFragmentManager();
+
+
 
     /*----------------------------------CreateFragment---------------------------*/
     private void createFragment(Fragment fragment) {
@@ -70,6 +77,8 @@ public class ContainActivity extends AppCompatActivity {
 
     };
 
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +89,16 @@ public class ContainActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navigation.setSelectedItemId(R.id.navigation_takephoto);
+       int [][] states = new int[][]{
+                new int[]{-android.R.attr.state_checked},
+                new int[]{android.R.attr.state_checked}
+        };
+        int []colors = new int[]{getResources().getColor(R.color.colorWhite,getTheme()),
+                getResources().getColor(R.color.colorWhite,getTheme())
+        };
+        ColorStateList colorStateList = new ColorStateList(states,colors);
+        navigation.setItemTextColor(colorStateList);
+        navigation.setItemIconTintList(colorStateList);
     }
 
 }

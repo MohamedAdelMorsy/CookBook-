@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/navigation_recommend"
-        android:icon="@drawable/ic_room_service_black_24dp"
+        android:icon="@drawable/recommend_menu_ico"
         android:title="@string/title_recommend"/>
 
     <item

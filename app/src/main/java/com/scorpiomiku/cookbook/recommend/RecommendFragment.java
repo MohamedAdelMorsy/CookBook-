@@ -63,16 +63,10 @@ public class RecommendFragment extends FragmentModule {
                 .recommend_tool_bar_lunch_iamge_button);
         mToolbar = (Toolbar) v.findViewById(R.id.recommend_tool_bar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
-        setHasOptionsMenu(true);
         setListener();
         return v;
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.recommend_menu, menu);
-    }
 
     /*------------------------------changeFragment-----------------------------*/
     private void changeFragment(Fragment fragment) {

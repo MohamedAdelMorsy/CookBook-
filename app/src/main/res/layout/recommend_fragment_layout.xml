@@ -20,7 +20,6 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <LinearLayout
-                android:background="#eac8c8"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
@@ -29,9 +28,80 @@
                 <android.support.v7.widget.Toolbar
                     android:id="@+id/recommend_tool_bar"
                     android:layout_width="match_parent"
-                    app:layout_collapseMode="pin"
-                    app:title="@string/recommend_toolbar_title_text"
-                    android:layout_height="?attr/actionBarSize">
+                    android:layout_height="50dp"
+                    android:background="@color/toolbar_and_menu_color"
+                    app:contentInsetStart="0dp"
+                    app:layout_collapseMode="pin">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="36dp"
+                            android:layout_weight="1"
+                            android:src="@drawable/recommend_toolbar_menu_ico"/>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.5"/>
+
+                        <android.support.v7.widget.CardView
+                            android:layout_width="0dp"
+                            android:layout_height="36dp"
+                            android:layout_weight="7"
+                            app:cardCornerRadius="20dp"
+                            >
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="0.5"/>
+
+
+                                <EditText
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="8"
+                                    android:background="@null"
+                                    android:ellipsize="middle"
+                                    android:gravity="center"
+                                    android:textColorHint="@color/colorHolder"
+                                    android:textColor="@color/stringsColor"
+                                    android:hint="@string/recommend_toolbar_search_text"
+                                    android:textSize="14sp"/>
+
+                                <ImageView
+                                    android:layout_width="0dp"
+                                    android:layout_height="20dp"
+                                    android:layout_weight="1"
+                                    android:src="@drawable/recommend_search_ico"/>
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="0.3"/>
+
+                            </LinearLayout>
+
+                        </android.support.v7.widget.CardView>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.5"/>
+
+                    </LinearLayout>
                 </android.support.v7.widget.Toolbar>
 
                 <TextView

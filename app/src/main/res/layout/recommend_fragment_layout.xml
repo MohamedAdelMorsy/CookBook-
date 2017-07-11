@@ -43,7 +43,7 @@
                             android:layout_width="0dp"
                             android:layout_height="36dp"
                             android:layout_weight="1"
-                            android:src="@drawable/recommend_toolbar_menu_ico"/>
+                            android:src="@drawable/ic_menu_black_24dp"/>
 
                         <TextView
                             android:layout_width="0dp"

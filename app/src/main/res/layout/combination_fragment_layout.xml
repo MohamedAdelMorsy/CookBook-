@@ -39,10 +39,10 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:background="@color/toolbar_and_menu_color"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="2.5"
+                            android:background="@color/toolbar_and_menu_color"
                             android:gravity="center"
                             android:text="@string/combination_toolbar_title_text"
                             android:textColor="@color/colorWhite"
@@ -59,6 +59,7 @@
                             android:layout_weight="0.7"
                             />
 
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
@@ -72,7 +73,7 @@
                             <android.support.v7.widget.CardView
                                 android:layout_width="310dp"
                                 android:layout_height="match_parent"
-                                app:cardCornerRadius="10dp"
+                                app:cardCornerRadius="17dp"
                                 >
 
 
@@ -117,6 +118,12 @@
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="0.7"
+                            />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_weight="0.01"
+                            android:background="@color/colorHolder"
                             />
 
                     </LinearLayout>

@@ -1,20 +1,18 @@
 package com.scorpiomiku.cookbook.combination;
 
-import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.scorpiomiku.cookbook.R;
@@ -25,8 +23,6 @@ import com.yyydjk.library.HorizontalDropDownMenu;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import butterknife.ButterKnife;
 
 
 /**
@@ -112,9 +108,13 @@ public class CombinationFragment extends FragmentModule {
         mContextView.setLayoutManager(new LinearLayoutManager(getContext()));
         mContextView.setNestedScrollingEnabled(false);
 
-
+        Drawable[] mDrawables = new Drawable[]{
+                getResources().getDrawable(R.drawable.combination_taste_ico, getActivity().getTheme()),
+                getResources().getDrawable(R.drawable.combination_time_ico_24dp, getActivity().getTheme()),
+                getResources().getDrawable(R.drawable.combination_makeway_ico, getActivity().getTheme())
+        };
         mHorizontalDropDownMenu.setDropDownMenu(Arrays.asList(mHeaders), mPopupViews, mContextView
-                , getResources().getDrawable(R.drawable.dropmenutest, getActivity().getTheme())
+                , mDrawables
                 , getResources().getDrawable(R.drawable.backtest, getActivity().getTheme()));
     }
 
@@ -296,7 +296,7 @@ public class CombinationFragment extends FragmentModule {
 
         @Override
         public void onBindViewHolder(MenuHolder holder, int position) {
-
+            holder.bindView();
         }
 
         @Override
@@ -308,18 +308,26 @@ public class CombinationFragment extends FragmentModule {
     /*----------------------------------------MenuHolder----------------------------*/
     private class MenuHolder extends RecyclerView.ViewHolder {
 
-        private ImageButton mImageButton;
+        private ImageView mImageView;
+        private TextView mNameTextView;
+        private TextView mMatirialTextView;
 
         public MenuHolder(View itemView) {
             super(itemView);
-            mImageButton = (ImageButton) itemView.findViewById(R.id.combination_menu_item_iamge_button);
-            mImageButton.setOnClickListener(new View.OnClickListener() {
+            mImageView = (ImageView) itemView.findViewById(R.id.combination_item_image_button);
+            mNameTextView = (TextView) itemView.findViewById(R.id.combination_item_food_name_text_view1);
+            mMatirialTextView = (TextView) itemView.findViewById(R.id.combination_item_food_matirial_text_view);
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(getActivity(), MenuActivity.class);
                     startActivity(i);
                 }
             });
+        }
+        private void bindView(){
+            mNameTextView.setText("豌豆炒肉");
+            mMatirialTextView.setText("豌豆。豌豆。豌豆。豌豆。豌豆。豌豆。豌豆。");
         }
     }
 }

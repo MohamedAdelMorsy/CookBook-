@@ -22,7 +22,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#f1ecec"
                 android:orientation="vertical"
                 >
 
@@ -33,64 +32,66 @@
                     app:contentInsetStart="0dp"
                     app:layout_collapseMode="pin">
 
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
-                        <ImageView
-                            android:layout_width="120dp"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/test"/>
+                        <TextView
+                            android:background="@color/toolbar_and_menu_color"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="2.5"
+                            android:gravity="center"
+                            android:text="@string/combination_toolbar_title_text"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="20sp"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/colorHolder"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="0.7"
+                            />
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical">
+                            android:layout_height="0dp"
+                            android:layout_weight="1.5"
+                            android:orientation="horizontal">
 
                             <TextView
-                                android:layout_width="match_parent"
-
-                                android:layout_height="0dp"
-                                android:layout_weight="1"
-                                android:gravity="center"
-                                android:text="@string/combination_toolbar_title_text"
-                                android:textColor="@color/colorBlack"
-                                android:textSize="20sp"/>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:background="@color/colorHolder"/>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="0.7"
-                                />
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent"/>
 
                             <android.support.v7.widget.CardView
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="1.5"
-                                app:cardCornerRadius="10dp">
+                                android:layout_width="310dp"
+                                android:layout_height="match_parent"
+                                app:cardCornerRadius="10dp"
+                                >
+
 
                                 <RelativeLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    >
+                                    android:background="@drawable/search_view_background">
 
                                     <EditText
-                                        android:layout_width="200dp"
+                                        android:layout_width="300dp"
                                         android:layout_height="match_parent"
-                                        android:hint="@string/combination_toolbar_search_text"
-                                        android:textColorHint="@color/colorHolder"
-                                        android:gravity="center"
-                                        android:ellipsize="middle"
-                                        android:textColor="@color/stringsColor"
-                                        android:textSize="15dp"
                                         android:background="@null"
-                                        android:cursorVisible="false">
+                                        android:cursorVisible="false"
+                                        android:ellipsize="middle"
+                                        android:gravity="center"
+                                        android:hint="@string/combination_toolbar_search_text"
+                                        android:textColor="@color/stringsColor"
+                                        android:textColorHint="@color/colorHolder"
+                                        android:textSize="15dp">
 
                                     </EditText>
 
@@ -98,23 +99,28 @@
                                         android:id="@+id/combination_tool_bar_search_image_view"
                                         android:layout_width="30dp"
                                         android:layout_height="30dp"
-                                        app:srcCompat="@drawable/ic_search_black_24dp"
                                         android:layout_alignParentRight="true"
                                         android:layout_marginRight="5dp"
-                                        android:layout_marginTop="5dp"/>
+                                        android:layout_marginTop="5dp"
+                                        app:srcCompat="@drawable/ic_search_black_24dp"/>
                                 </RelativeLayout>
+
                             </android.support.v7.widget.CardView>
 
                             <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="0.7"
-                                />
+                                android:layout_width="20dp"
+                                android:layout_height="match_parent"/>
 
                         </LinearLayout>
 
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="0.7"
+                            />
 
                     </LinearLayout>
+
 
                 </android.support.v7.widget.Toolbar>
 
@@ -135,16 +141,16 @@
             android:id="@+id/combination_fragment_dropmenu"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:dddividerColor="@color/gray"
+            app:ddmaskColor="@color/mask_color"
+            app:ddmenuBackgroundColor="@color/white"
+            app:ddmenuMenuHeightPercent="0.5"
+            app:ddmenuSelectedIcon="@drawable/ic_selected_arrow_up_black_24dp"
             app:ddmenuTextSize="13sp"
             app:ddmenuUnselectedIcon="@drawable/ic_unseleted_down_black_24dp"
             app:ddtextSelectedColor="@color/drop_down_menu_selected_color"
             app:ddtextUnselectedColor="@color/drop_down_menu_unselected_color"
-            app:dddividerColor="@color/gray"
-            app:ddunderlineColor="@color/gray"
-            app:ddmenuMenuHeightPercent="0.5"
-            app:ddmenuSelectedIcon="@drawable/ic_selected_arrow_up_black_24dp"
-            app:ddmaskColor="@color/mask_color"
-            app:ddmenuBackgroundColor="@color/white">
+            app:ddunderlineColor="@color/gray">
 
         </com.yyydjk.library.HorizontalDropDownMenu>
 

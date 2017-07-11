@@ -9,6 +9,7 @@ import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -89,9 +90,10 @@ public class HorizontalDropDownMenu extends LinearLayout {
 
         //初始化tabMenuView并添加到tabMenuView
         tabMenuView = new LinearLayout(context);
-        LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 230);
         tabMenuView.setOrientation(HORIZONTAL);
-        tabMenuView.setBackgroundColor(0xff00ffff);
+        tabMenuView.setGravity(Gravity.CENTER);
+        tabMenuView.setBackgroundColor(0xffffffff);
         tabMenuView.setLayoutParams(params);
         addView(tabMenuView, 0);
 
@@ -156,14 +158,14 @@ public class HorizontalDropDownMenu extends LinearLayout {
 
     }*/
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-    public void setDropDownMenu(@NonNull List<String> tabTexts, @NonNull List<View> popupViews, @NonNull View contentView, Drawable tabDrawable
+    public void setDropDownMenu(@NonNull List<String> tabTexts, @NonNull List<View> popupViews, @NonNull View contentView, Drawable[] tabDrawable
             , Drawable containerBackground) {
         if (tabTexts.size() != popupViews.size()) {
             throw new IllegalArgumentException("params not match, tabTexts.size() should be equal popupViews.size()");
         }
 
         for (int i = 0; i < tabTexts.size(); i++) {
-            addTab(tabTexts, i, tabDrawable);
+            addTab(tabTexts, i, tabDrawable[i]);
         }
         containerView.addView(contentView, 0);
 
@@ -231,12 +233,23 @@ public class HorizontalDropDownMenu extends LinearLayout {
         tab.setEllipsize(TextUtils.TruncateAt.END);
         tab.setGravity(Gravity.CENTER);
         tab.setTextSize(TypedValue.COMPLEX_UNIT_PX, menuTextSize);
-        tab.setLayoutParams(new LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f));
+        LayoutParams params =new LayoutParams(200,200);
+        if(0==i){
+            params.setMargins(20,10,80,10);
+        }
+        if(1==i){
+            params.setMargins(80,10,80,10);
+        }
+        if(2==i){
+            params.setMargins(80,10,20,10);
+        }
+        tab.setLayoutParams(params);
         tab.setTextColor(textUnselectedColor);
         tab.setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(menuUnselectedIcon), null);
         tab.setText(tabTexts.get(i));
         tab.setPadding(dpTpPx(5), dpTpPx(12), dpTpPx(5), dpTpPx(12));
         tab.setBackground(d);
+
         //添加点击事件
         tab.setOnClickListener(new OnClickListener() {
             @Override
@@ -244,7 +257,9 @@ public class HorizontalDropDownMenu extends LinearLayout {
                 switchMenu(tab);
             }
         });
+
         tabMenuView.addView(tab);
+
         //添加分割线
         if (i < tabTexts.size() - 1) {
             View view = new View(getContext());

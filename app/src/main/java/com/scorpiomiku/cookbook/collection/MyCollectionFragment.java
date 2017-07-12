@@ -31,11 +31,11 @@ import java.util.List;
 
 public class MyCollectionFragment extends FragmentModule {
 
-    private SwipeMenuRecyclerView mSwipeMenuRecyclerView ;
-    private List<String>mStringList ;
-    private SwipeMenuAdapter mAdapter ;
+    private SwipeMenuRecyclerView mSwipeMenuRecyclerView;
+    private List<String> mStringList;
+    private SwipeMenuAdapter mAdapter;
 
-    public static MyCollectionFragment newInstance(){
+    public static MyCollectionFragment newInstance() {
         return new MyCollectionFragment();
     }
 
@@ -43,8 +43,7 @@ public class MyCollectionFragment extends FragmentModule {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mStringList = new ArrayList<String>();
-        for(int i = 10 ; i < 20 ; i ++)
-        {
+        for (int i = 10; i < 20; i++) {
             mStringList.add("我是菜品的描述2");
         }
     }
@@ -54,7 +53,7 @@ public class MyCollectionFragment extends FragmentModule {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout
-                .colleciont_mycollections_swipe_recyclerview,container,false);
+                .colleciont_mycollections_swipe_recyclerview, container, false);
         mSwipeMenuRecyclerView = (SwipeMenuRecyclerView) v.findViewById(R.id
                 .collection_my_collection_swipe_recyclerview);
         mSwipeMenuRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -63,28 +62,31 @@ public class MyCollectionFragment extends FragmentModule {
         mSwipeMenuRecyclerView.setSwipeMenuCreator(mSwipeMenuCreator);
         mSwipeMenuRecyclerView.setNestedScrollingEnabled(false);
         mSwipeMenuRecyclerView.setSwipeMenuItemClickListener(menuItemClickLinstener);
-        return v ;
+        return v;
     }
 
     /*---------------------------------Holder------------------------------*/
-    private class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    private class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private ImageView mItemImageView ;
-        private TextView mItemTextView ;
+        private ImageView mItemImageView;
+        private TextView mItemNameTextView;
+        private TextView mItemMatirialTextView;
 
         public ItemHolder(View itemView) {
             super(itemView);
             mItemImageView = (ImageView) itemView.findViewById(R.id
-                    .collection_recycler_view_item_iamge_view);
-            mItemTextView = (TextView) itemView.findViewById(R.id
-                    .collection_recycler_view_item_text_view);
+                    .collection_item_image_view);
+            mItemNameTextView = (TextView) itemView.findViewById(R.id
+                    .collection_item_food_name_text_view);
+            mItemMatirialTextView = (TextView) itemView.findViewById(R.id
+                    .collection_item_food_matirial_text_view);
         }
 
-        private void bindView(String text){
-            mItemTextView.setText(text);
-            mItemImageView.setImageResource(R.mipmap.ic_launcher);
-            mItemImageView.setOnClickListener(this);
-            mItemTextView.setOnClickListener(this);
+        private void bindView(String text) {
+            mItemNameTextView.setText("豌豆炒肉");
+            mItemImageView.setImageResource(R.drawable.test_food);
+            mItemMatirialTextView.setText("豌豆、肉、豌豆、肉、豌豆、肉、豌豆、肉、豌豆、肉");
+            itemView.setOnClickListener(this);
         }
 
         @Override
@@ -97,23 +99,23 @@ public class MyCollectionFragment extends FragmentModule {
 
     /*--------------------------------Adapter-----------------------------*/
     private class Adapter extends SwipeMenuAdapter<ItemHolder> {
-        private List<String> mList ;
+        private List<String> mList;
 
-        public Adapter(List<String>list) {
+        public Adapter(List<String> list) {
             super();
-            mList = list ;
+            mList = list;
         }
 
         @Override
         public View onCreateContentView(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getContext());
-            View v = layoutInflater.inflate(R.layout.collection_recycler_view_item,parent,false);
-            return v ;
+            View v = layoutInflater.inflate(R.layout.collection_recycler_view_item, parent, false);
+            return v;
         }
 
         @Override
         public ItemHolder onCompatCreateViewHolder(View realContentView, int viewType) {
-            return new ItemHolder(realContentView) ;
+            return new ItemHolder(realContentView);
         }
 
         @Override
@@ -153,11 +155,11 @@ public class MyCollectionFragment extends FragmentModule {
         @Override
         public void onItemClick(Closeable closeable, int adapterPosition, int menuPosition, int direction) {
             closeable.smoothCloseMenu();
-            if(menuPosition == 0){
+            if (menuPosition == 0) {
                 mStringList.remove(adapterPosition);
                 mAdapter.notifyItemRemoved(adapterPosition);
             }
         }
-    } ;
+    };
 
 }

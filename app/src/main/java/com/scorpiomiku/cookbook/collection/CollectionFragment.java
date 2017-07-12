@@ -11,7 +11,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.scorpiomiku.cookbook.R;
 import com.scorpiomiku.cookbook.module.FragmentModule;
@@ -22,8 +22,9 @@ import com.scorpiomiku.cookbook.module.FragmentModule;
 
 public class CollectionFragment extends FragmentModule {
 
-    private ImageButton mCollectionImageButton;
-    private ImageButton mRecordsImageButton;
+    private ImageView mCollectionImageView;
+    private ImageView mRecordsImageView;
+
     private FragmentManager mFragmentManager ;
 
     public static CollectionFragment newInstance(){
@@ -46,32 +47,26 @@ public class CollectionFragment extends FragmentModule {
         View v = inflater.inflate(R.layout.collection_main_fragment_layout,container,false);
         Toolbar toolbar = (Toolbar)v.findViewById(R.id.collection_tool_bar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-        setHasOptionsMenu(true);
-        mCollectionImageButton = (ImageButton) v.findViewById(R.id
-                .collection_mycolletion_image_button);
-        mRecordsImageButton = (ImageButton) v.findViewById(R.id
-                .collection_myrecords_image_button);
+        mCollectionImageView = (ImageView) v.findViewById(R.id
+                .collection_mycolletion_image_view);
+        mRecordsImageView = (ImageView) v.findViewById(R.id
+                .collection_myrecords_image_view);
         setClickListener();
         return v ;
     }
 
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.recommend_menu, menu);
-    }
 
     /*------------------------------------------------clickListener---------------------------*/
     private void setClickListener(){
-        mCollectionImageButton.setOnClickListener(new View.OnClickListener() {
+        mCollectionImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 changeFragment(MyCollectionFragment.newInstance());
             }
         });
 
-        mRecordsImageButton.setOnClickListener(new View.OnClickListener() {
+        mRecordsImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 changeFragment(MyRecordsFragment.newInstance());

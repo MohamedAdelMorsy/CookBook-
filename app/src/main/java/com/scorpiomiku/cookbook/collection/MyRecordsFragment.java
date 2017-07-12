@@ -33,7 +33,7 @@ public class MyRecordsFragment extends FragmentModule {
 
     private SwipeMenuRecyclerView mSwipeMenuRecyclerView;
     private List<String> mStringList;
-    private SwipeMenuAdapter mAdapter ;
+    private SwipeMenuAdapter mAdapter;
 
     public static MyRecordsFragment newInstance() {
         return new MyRecordsFragment();
@@ -58,7 +58,7 @@ public class MyRecordsFragment extends FragmentModule {
                 .collection_my_records_swipe_recyclerview);
         mSwipeMenuRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mSwipeMenuRecyclerView.setSwipeMenuCreator(mSwipeMenuCreator);
-        mAdapter = new Adapter(mStringList) ;
+        mAdapter = new Adapter(mStringList);
         mSwipeMenuRecyclerView.setAdapter(mAdapter);
         mSwipeMenuRecyclerView.setSwipeMenuCreator(mSwipeMenuCreator);
         mSwipeMenuRecyclerView.setNestedScrollingEnabled(false);
@@ -67,24 +67,27 @@ public class MyRecordsFragment extends FragmentModule {
     }
 
     /*---------------------------------Holder------------------------------*/
-    private class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    private class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private ImageView mItemImageView;
-        private TextView mItemTextView;
+        private TextView mItemNameTextView;
+        private TextView mItemMatirialTextView;
 
         public ItemHolder(View itemView) {
             super(itemView);
             mItemImageView = (ImageView) itemView.findViewById(R.id
-                    .collection_recycler_view_item_iamge_view);
-            mItemTextView = (TextView) itemView.findViewById(R.id
-                    .collection_recycler_view_item_text_view);
+                    .collection_item_image_view);
+            mItemNameTextView = (TextView) itemView.findViewById(R.id
+                    .collection_item_food_name_text_view);
+            mItemMatirialTextView = (TextView) itemView.findViewById(R.id
+                    .collection_item_food_matirial_text_view);
         }
 
         private void bindView(String text) {
-            mItemTextView.setText(text);
-            mItemImageView.setImageResource(R.mipmap.ic_launcher_round);
-            mItemImageView.setOnClickListener(this);
-            mItemTextView.setOnClickListener(this);
+            mItemNameTextView.setText("青菜炒肉");
+            mItemImageView.setImageResource(R.drawable.food_test_1);
+            itemView.setOnClickListener(this);
+            mItemMatirialTextView.setText("青菜、肉、青菜、肉、青菜、肉、青菜、肉、青菜、肉");
         }
 
         @Override
@@ -109,7 +112,7 @@ public class MyRecordsFragment extends FragmentModule {
         public View onCreateContentView(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getContext());
             View v = layoutInflater.inflate(R.layout.collection_recycler_view_item, parent, false);
-            return v ;
+            return v;
         }
 
         @Override
@@ -138,8 +141,8 @@ public class MyRecordsFragment extends FragmentModule {
             int height = ViewGroup.LayoutParams.MATCH_PARENT;
 
             SwipeMenuItem closeItem = new SwipeMenuItem(getContext())
-                   .setBackgroundDrawable(R.drawable.delete_color)
-                   .setImage(R.mipmap.ic_action_delete)
+                    .setBackgroundDrawable(R.drawable.delete_color)
+                    .setImage(R.mipmap.ic_action_delete)
                     .setText("删除")
                     .setTextColor(R.color.colorRed)
                     .setWidth(width)
@@ -153,11 +156,11 @@ public class MyRecordsFragment extends FragmentModule {
         @Override
         public void onItemClick(Closeable closeable, int adapterPosition, int menuPosition, int direction) {
             closeable.smoothCloseMenu();
-            if(menuPosition == 0){
+            if (menuPosition == 0) {
                 mStringList.remove(adapterPosition);
                 mAdapter.notifyItemRemoved(adapterPosition);
             }
         }
-    } ;
+    };
 
 }

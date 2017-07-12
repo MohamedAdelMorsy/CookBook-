@@ -24,4 +24,6 @@
     <color name="testColor">#fd7e7e</color>
 
     <color name="recommend_item_backcolor">#e6e3e3</color>
+
+    <color name="dynamic_background_color">#f4f3f3</color>
 </resources>

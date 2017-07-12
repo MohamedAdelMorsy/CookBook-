@@ -88,6 +88,7 @@
                 android:orientation="vertical">
 
                 <ImageView
+                    android:id="@+id/my_information_basket_image_view"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:src="@drawable/basket_ico"/>
@@ -119,6 +120,7 @@
         android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/my_information_my_dynamic_text_view"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -133,6 +135,7 @@
             android:background="@color/colorHolder"/>
 
         <TextView
+            android:id="@+id/my_information_dynamic_text_view"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"

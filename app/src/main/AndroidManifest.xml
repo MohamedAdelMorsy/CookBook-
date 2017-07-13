@@ -38,6 +38,8 @@
         </activity>
         <activity android:name=".dynamic.DynamicActivity">
         </activity>
+        <activity android:name=".dynamic.MyDynamicActivity">
+        </activity>
     </application>
 
 </manifest>

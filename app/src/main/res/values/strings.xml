@@ -60,7 +60,6 @@
     <string name="recommend_matirial">配料：</string>
 
 
-
     <string name="dynamic_toolbar_title">动态圈</string>
-
+    <string name="my_dynamic_toolbar_title">我的动态</string>
 </resources>

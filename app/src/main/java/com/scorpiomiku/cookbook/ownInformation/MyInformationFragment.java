@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.scorpiomiku.cookbook.R;
 import com.scorpiomiku.cookbook.collection.MyCollectionFragment;
 import com.scorpiomiku.cookbook.dynamic.DynamicActivity;
+import com.scorpiomiku.cookbook.dynamic.MyDynamicActivity;
 import com.scorpiomiku.cookbook.module.FragmentModule;
 
 /**
@@ -51,6 +52,13 @@ public class MyInformationFragment extends FragmentModule {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), DynamicActivity.class);
+                startActivity(i);
+            }
+        });
+        mMyDynamicTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), MyDynamicActivity.class);
                 startActivity(i);
             }
         });

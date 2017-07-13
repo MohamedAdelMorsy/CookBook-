@@ -10,7 +10,7 @@ import com.scorpiomiku.cookbook.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DynamicActivity extends AppCompatActivity {
+public class MyDynamicActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
     private List<String> mList = new ArrayList<>();
@@ -18,15 +18,14 @@ public class DynamicActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dynamic);
-        mRecyclerView = (RecyclerView) findViewById(R.id.dynamic_recycler_view);
+        setContentView(R.layout.activity_my_dynamic);
+        mRecyclerView = (RecyclerView) findViewById(R.id.my_dynamic_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         for (int i = 0; i < 10; i++) {
             mList.add("1");
         }
-        DynamicAdapter dynamicAdapter = new DynamicAdapter(mList, this);
+        DynamicAdapter dynamicAdapter = new DynamicAdapter(mList,this);
         mRecyclerView.setAdapter(dynamicAdapter);
         mRecyclerView.setNestedScrollingEnabled(false);
     }
-
 }

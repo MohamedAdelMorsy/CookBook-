@@ -9,6 +9,7 @@ import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -21,7 +22,7 @@ import com.scorpiomiku.cookbook.recommend.RecommendDefultFragment;
 import com.scorpiomiku.cookbook.recommend.RecommendFragment;
 import com.scorpiomiku.cookbook.takephoto.TakePhotoMainFragment;
 
-@RequiresApi(api = Build.VERSION_CODES.M)
+
 public class ContainActivity extends AppCompatActivity {
 
     private Toolbar mRecommendToolbar;
@@ -91,8 +92,8 @@ public class ContainActivity extends AppCompatActivity {
                 new int[]{-android.R.attr.state_checked},
                 new int[]{android.R.attr.state_checked}
         };
-        int[] colors = new int[]{getResources().getColor(R.color.toolbar_and_menu_color, getTheme()),
-                getResources().getColor(R.color.testColor, getTheme())
+        int[] colors = new int[]{ContextCompat.getColor(this, R.color.toolbar_and_menu_color),
+                ContextCompat.getColor(this,R.color.testColor)
         };
         ColorStateList colorStateList = new ColorStateList(states, colors);
         navigation.setItemTextColor(colorStateList);
@@ -114,7 +115,7 @@ public class ContainActivity extends AppCompatActivity {
                         .add(R.id.recommend_container, RecommendDefultFragment.newInstance())
                         .commit();
             }
-        }else{
+        } else {
             super.onBackPressed();
         }
     }

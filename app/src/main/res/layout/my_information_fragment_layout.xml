@@ -243,10 +243,7 @@
             android:layout_height="50dp"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/colorHolder"/>
+
 
             <RelativeLayout
                 android:layout_width="match_parent"

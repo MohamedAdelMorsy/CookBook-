@@ -42,6 +42,8 @@
         </activity>
         <activity android:name=".ownInformation.InformationChangeActivity">
         </activity>
+        <activity android:name=".ownInformation.HelpActivity">
+        </activity>
     </application>
 
 </manifest>

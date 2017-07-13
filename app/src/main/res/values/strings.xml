@@ -72,4 +72,10 @@
 
     <string name="dynamic_toolbar_title">动态圈</string>
     <string name="my_dynamic_toolbar_title">我的动态</string>
+
+
+    <string name="help_title">帮助</string>
+    <string name="help_strings1">如有任何建议请发送信息至邮箱 wang1056992492@gmail.com </string>
+    <string name="help_strings2">APP由中北大学安卓实验室识菜帮小组制作，未经小组同意不得进行任何商业活动</string>
+    <string name="help_strings3">APP源码已上传github 地址为：https://github.com/wangtianrui/CookBook </string>
 </resources>

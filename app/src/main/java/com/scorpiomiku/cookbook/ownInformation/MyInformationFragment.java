@@ -28,7 +28,7 @@ public class MyInformationFragment extends FragmentModule {
     private TextView mMyDynamicTextView;
     private TextView mDynamicTextView;
     private TextView mAccountSetTextView;
-
+    private TextView mHelpTextView;
 
     public static MyInformationFragment newInstance() {
         return new MyInformationFragment();
@@ -49,7 +49,18 @@ public class MyInformationFragment extends FragmentModule {
         mMyDynamicTextView = (TextView) v.findViewById(R.id.my_information_my_dynamic_text_view);
         mDynamicTextView = (TextView) v.findViewById(R.id.my_information_dynamic_text_view);
         mAccountSetTextView = (TextView) v.findViewById(R.id.my_information_account_set_text_view);
+        mHelpTextView = (TextView) v.findViewById(R.id.my_information_help_text_view);
 
+
+        mHelpTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), HelpActivity.class);
+                startActivity(i);
+            }
+        });
+
+        mAccoutImageView.setImageResource(R.drawable.test);
 
         mDynamicTextView.setOnClickListener(new View.OnClickListener() {
             @Override

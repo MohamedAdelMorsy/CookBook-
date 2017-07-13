@@ -173,12 +173,12 @@
 
 
             <TextView
+                android:id="@+id/my_information_account_set_text_view"
                 android:layout_width="330dp"
                 android:layout_height="match_parent"
                 android:paddingTop="15dp"
                 android:text="@string/my_information_setting"
-                android:textStyle="bold"
-                android:id="@+id/my_information_account_set_text_view"/>
+                android:textStyle="bold"/>
 
 
             <ImageView
@@ -203,12 +203,12 @@
 
 
             <TextView
+                android:id="@+id/my_information_account_manage_text_view"
                 android:layout_width="330dp"
                 android:layout_height="match_parent"
                 android:paddingTop="15dp"
                 android:text="@string/my_information_concrol"
-                android:textStyle="bold"
-                android:id="@+id/my_information_account_manage_text_view"/>
+                android:textStyle="bold"/>
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -247,7 +247,6 @@
             android:orientation="vertical">
 
 
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -256,6 +255,7 @@
 
 
                 <TextView
+                    android:id="@+id/my_information_help_text_view"
                     android:layout_width="330dp"
                     android:layout_height="match_parent"
                     android:paddingTop="15dp"
@@ -266,7 +266,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
-                    android:id="@+id/my_information_help_text_view"
                     android:src="@drawable/ic_action_creator_right"
                     />
 

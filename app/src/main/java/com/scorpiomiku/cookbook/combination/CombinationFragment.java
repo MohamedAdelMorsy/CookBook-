@@ -325,6 +325,7 @@ public class CombinationFragment extends FragmentModule {
             });
         }
         private void bindView(){
+            mImageView.setImageResource(R.drawable.food_test_1);
             mNameTextView.setText("豌豆炒肉");
             mMatirialTextView.setText("豌豆。豌豆。豌豆。豌豆。豌豆。豌豆。豌豆。");
         }

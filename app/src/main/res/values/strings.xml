@@ -52,6 +52,16 @@
     <string name="my_information_help">帮助</string>
 
 
+    <string name="change_information_image">头像</string>
+    <string name="change_information_sex">性别</string>
+    <string name="change_information_account">帐号</string>
+    <string name="change_information_name">昵称</string>
+    <string name="change_information_birthday">生日</string>
+    <string name="change_information_place">所在地</string>
+    <string name="change_information_tool_bar_title">帐号信息设置</string>
+    <string name="change_information_button">修改</string>
+
+
     <string name="combination_toolbar_title_text">智能组菜</string>
     <string name="combination_toolbar_search_text">输入菜名</string>
     <string name="combination_tastes">口味</string>

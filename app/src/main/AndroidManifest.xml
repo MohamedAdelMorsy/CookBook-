@@ -40,6 +40,8 @@
         </activity>
         <activity android:name=".dynamic.MyDynamicActivity">
         </activity>
+        <activity android:name=".ownInformation.InformationChangeActivity">
+        </activity>
     </application>
 
 </manifest>

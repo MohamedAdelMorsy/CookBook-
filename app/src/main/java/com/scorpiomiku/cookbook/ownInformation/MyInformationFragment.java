@@ -27,6 +27,7 @@ public class MyInformationFragment extends FragmentModule {
     private ImageView mBasketImageView;
     private TextView mMyDynamicTextView;
     private TextView mDynamicTextView;
+    private TextView mAccountSetTextView;
 
 
     public static MyInformationFragment newInstance() {
@@ -47,6 +48,8 @@ public class MyInformationFragment extends FragmentModule {
         mBasketImageView = (ImageView) v.findViewById(R.id.my_information_basket_image_view);
         mMyDynamicTextView = (TextView) v.findViewById(R.id.my_information_my_dynamic_text_view);
         mDynamicTextView = (TextView) v.findViewById(R.id.my_information_dynamic_text_view);
+        mAccountSetTextView = (TextView) v.findViewById(R.id.my_information_account_set_text_view);
+
 
         mDynamicTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,6 +62,14 @@ public class MyInformationFragment extends FragmentModule {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), MyDynamicActivity.class);
+                startActivity(i);
+            }
+        });
+
+        mAccountSetTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), InformationChangeActivity.class);
                 startActivity(i);
             }
         });

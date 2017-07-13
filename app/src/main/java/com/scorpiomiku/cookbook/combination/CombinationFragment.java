@@ -11,7 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -314,7 +313,7 @@ public class CombinationFragment extends FragmentModule {
 
         public MenuHolder(View itemView) {
             super(itemView);
-            mImageView = (ImageView) itemView.findViewById(R.id.combination_item_image_button);
+            mImageView = (ImageView) itemView.findViewById(R.id.combination_item_image_view);
             mNameTextView = (TextView) itemView.findViewById(R.id.combination_item_food_name_text_view1);
             mMatirialTextView = (TextView) itemView.findViewById(R.id.combination_item_food_matirial_text_view);
             itemView.setOnClickListener(new View.OnClickListener() {

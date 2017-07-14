@@ -35,7 +35,7 @@ public class RecommendMenuFragment extends FragmentModule {
 
     private ImageView mBackImageView;
 
-    private FragmentManager fm ;
+    private FragmentManager fm;
 
 
     private String[] mTastes = {"酸", "甜", "辣", "酸辣", "酸甜", "微苦"};
@@ -49,7 +49,7 @@ public class RecommendMenuFragment extends FragmentModule {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        fm =  getFragmentManager();
+        fm = getFragmentManager();
 
     }
 
@@ -58,10 +58,6 @@ public class RecommendMenuFragment extends FragmentModule {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
         View v = layoutInflater.inflate(R.layout.recommend_menu_fragment, container, false);
-        mTasteRecyclerView = (RecyclerView) v.findViewById(R.id.recommend_menu_taste_recycler_view);
-        mTasteAdapter = new MenuAdapter(Arrays.asList(mTastes), getContext());
-        mTasteRecyclerView.setAdapter(mTasteAdapter);
-        mTasteRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
         mBackImageView = (ImageView) v.findViewById(R.id.recommend_tool_bar_back_image_view);
         mBackImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,6 +69,22 @@ public class RecommendMenuFragment extends FragmentModule {
                         .commit();
             }
         });
+
+        mTasteRecyclerView = (RecyclerView) v.findViewById(R.id.recommend_menu_taste_recycler_view);
+        mTasteAdapter = new MenuAdapter(Arrays.asList(mTastes), getContext());
+        mTasteRecyclerView.setAdapter(mTasteAdapter);
+        mTasteRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+
+        mKindRecyclerView = (RecyclerView) v.findViewById(R.id.recommend_menu_kind_recycler_view);
+        mKindAdapter = new MenuAdapter(Arrays.asList(mKinds), getContext());
+        mKindRecyclerView.setAdapter(mKindAdapter);
+        mKindRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),3));
+
+        mPlaceRecyclerView = (RecyclerView) v.findViewById(R.id.recommend_menu_place_recycler_view);
+        mPlaceAdapter = new MenuAdapter(Arrays.asList(mPlaces), getContext());
+        mPlaceRecyclerView.setAdapter(mPlaceAdapter);
+        mPlaceRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),3));
+
         return v;
     }
 }

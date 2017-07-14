@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.scorpiomiku.cookbook.R;
+import com.scorpiomiku.cookbook.basket.BasketActivity;
 import com.scorpiomiku.cookbook.collection.MyCollectionFragment;
 import com.scorpiomiku.cookbook.dynamic.DynamicActivity;
 import com.scorpiomiku.cookbook.dynamic.MyDynamicActivity;
@@ -52,6 +53,13 @@ public class MyInformationFragment extends FragmentModule {
         mHelpTextView = (TextView) v.findViewById(R.id.my_information_help_text_view);
 
 
+        mBasketImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), BasketActivity.class);
+                startActivity(i);
+            }
+        });
         mHelpTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

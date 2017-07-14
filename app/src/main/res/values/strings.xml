@@ -85,4 +85,11 @@
     <string name="create_basket_text_hint">输入内容</string>
     <string name="create_basket_cancel_button">取消</string>
     <string name="create_basket_save_button">保存</string>
+
+
+
+    <string name="recommend_menu_fragment_title">菜谱分类</string>
+    <string name="recommend_menu_text_taste">口味</string>
+    <string name="recommend_menu_text_kind">菜系</string>
+    <string name="recommend_menu_text_place">场景</string>
 </resources>

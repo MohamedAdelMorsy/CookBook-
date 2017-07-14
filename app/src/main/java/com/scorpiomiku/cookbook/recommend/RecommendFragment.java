@@ -1,5 +1,7 @@
 package com.scorpiomiku.cookbook.recommend;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,6 +16,7 @@ import android.widget.ImageView;
 
 import com.scorpiomiku.cookbook.R;
 import com.scorpiomiku.cookbook.module.FragmentModule;
+import com.scorpiomiku.cookbook.recommendmenufragment.RecommendMenuFragment;
 
 /**
  * Created by Administrator on 2017/6/3.
@@ -29,6 +32,8 @@ public class RecommendFragment extends FragmentModule {
     private ImageView mLunchImageView;
     private ImageView mDinnerImageView;
     private Toolbar mToolbar;
+
+    private ImageView mMenuImageView;
 
 
     public static RecommendFragment newInstance() {
@@ -59,6 +64,25 @@ public class RecommendFragment extends FragmentModule {
                 .recommend_tool_bar_dinner_iamge_view);
         mLunchImageView = (ImageView) v.findViewById(R.id
                 .recommend_tool_bar_lunch_iamge_view);
+        mMenuImageView = (ImageView) v.findViewById(R.id.recommend_tool_bar_menu_image_view);
+        mMenuImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ObjectAnimator scaleX = ObjectAnimator.ofFloat(mMenuImageView, "scaleX", 1.2f).setDuration(100);
+                ObjectAnimator scaleY = ObjectAnimator.ofFloat(mMenuImageView, "scaleY", 1.2f).setDuration(100);
+                ObjectAnimator lowX = ObjectAnimator.ofFloat(mMenuImageView, "scaleX", 1f).setDuration(100);
+                ObjectAnimator lowY = ObjectAnimator.ofFloat(mMenuImageView, "scaleY", 1f).setDuration(100);
+                AnimatorSet anis = new AnimatorSet();
+                anis.play(scaleX).with(scaleY).before(lowX).before(lowY);
+                anis.start();
+                Fragment nowFragment = fm.findFragmentById(R.id.fragment_container);
+                fm.beginTransaction()
+                        .setCustomAnimations(android.R.anim.fade_in,
+                                android.R.anim.fade_out)
+                        .replace(R.id.fragment_container, RecommendMenuFragment.newInstance())
+                        .commit();
+            }
+        });
         mToolbar = (Toolbar) v.findViewById(R.id.recommend_tool_bar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
         setListener();
@@ -103,7 +127,6 @@ public class RecommendFragment extends FragmentModule {
             }
         });
     }
-
 
 
 }

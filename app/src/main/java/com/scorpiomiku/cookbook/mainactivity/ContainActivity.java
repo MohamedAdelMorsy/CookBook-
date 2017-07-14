@@ -20,6 +20,7 @@ import com.scorpiomiku.cookbook.combination.CombinationFragment;
 import com.scorpiomiku.cookbook.ownInformation.MyInformationFragment;
 import com.scorpiomiku.cookbook.recommend.RecommendDefultFragment;
 import com.scorpiomiku.cookbook.recommend.RecommendFragment;
+import com.scorpiomiku.cookbook.recommendmenufragment.RecommendMenuFragment;
 import com.scorpiomiku.cookbook.takephoto.TakePhotoMainFragment;
 
 
@@ -102,7 +103,6 @@ public class ContainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
         if (fm.findFragmentById(R.id.fragment_container).getClass().getName()
                 .equals(RecommendFragment.class.getName())) {
             if (!fm.findFragmentById(R.id.recommend_container).getClass().getName()
@@ -114,9 +114,20 @@ public class ContainActivity extends AppCompatActivity {
                         .hide(mNowFragment)
                         .add(R.id.recommend_container, RecommendDefultFragment.newInstance())
                         .commit();
+            }else {
+                super.onBackPressed();
             }
         } else {
-            super.onBackPressed();
+            if(fm.findFragmentById(R.id.fragment_container).getClass().getName()
+                    .equals(RecommendMenuFragment.class.getName())){
+                fm.beginTransaction()
+                        .setCustomAnimations(android.R.anim.fade_in,
+                                android.R.anim.fade_out)
+                        .replace(R.id.fragment_container, RecommendFragment.newInstance())
+                        .commit();
+            }else {
+                super.onBackPressed();
+            }
         }
     }
 }

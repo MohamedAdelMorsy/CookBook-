@@ -13,7 +13,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
-        android:background="@drawable/recommend_menu_item_circle"
+        android:background="@drawable/recommend_menu_item_circle_unclicked"
         android:gravity="center"/>
 
 </LinearLayout>

@@ -44,6 +44,8 @@
         </activity>
         <activity android:name=".ownInformation.HelpActivity">
         </activity>
+        <activity android:name=".basket.CreateNewBasketActivity">
+        </activity>
     </application>
 
 </manifest>

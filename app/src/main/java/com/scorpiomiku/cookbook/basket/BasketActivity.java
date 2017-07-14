@@ -1,5 +1,7 @@
 package com.scorpiomiku.cookbook.basket;
 
+import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,7 +28,8 @@ public class BasketActivity extends AppCompatActivity {
 
     private SwipeMenuRecyclerView mSwipeMenuRecyclerView;
     private List<String> mList = new ArrayList<>();
-    private BasketAdapter mAdapter ;
+    private BasketAdapter mAdapter;
+    private FloatingActionButton mFloatingActionButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,7 @@ public class BasketActivity extends AppCompatActivity {
         setContentView(R.layout.activity_basket);
         mSwipeMenuRecyclerView = (SwipeMenuRecyclerView) findViewById(R.id.basket_swipe_menu_recycler_view);
         mSwipeMenuRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mFloatingActionButton = (FloatingActionButton) findViewById(R.id.basket_floating_action_button);
         for (int i = 0; i < 10; i++) {
             mList.add("1");
         }
@@ -42,6 +46,13 @@ public class BasketActivity extends AppCompatActivity {
         mSwipeMenuRecyclerView.setSwipeMenuCreator(mSwipeMenuCreator);
         mSwipeMenuRecyclerView.setNestedScrollingEnabled(false);
         mSwipeMenuRecyclerView.setSwipeMenuItemClickListener(menuItemClickLinstener);
+        mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(BasketActivity.this, CreateNewBasketActivity.class);
+                startActivity(i);
+            }
+        });
     }
 
 

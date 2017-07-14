@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#4c66f5</color>
     <color name="colorPrimaryDark">#5b7dec</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#48ffda</color>
     <color name="colorHolder">#c9c9c9</color>
     <color name="colorWhite">#ffffff</color>
     <color name="colorBlack">#000000</color>
@@ -26,4 +26,6 @@
     <color name="recommend_item_backcolor">#e6e3e3</color>
 
     <color name="dynamic_background_color">#f4f3f3</color>
+
+    <color name="saveButton">#50efa2</color>
 </resources>

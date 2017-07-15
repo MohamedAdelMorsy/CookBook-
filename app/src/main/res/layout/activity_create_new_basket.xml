@@ -82,13 +82,14 @@
                 android:background="@color/colorWhite">
 
                 <EditText
+                    android:id="@+id/create_basket_material_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="10dp"
-                    android:gravity="top"
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="10dp"
                     android:background="@null"
+                    android:gravity="top"
                     android:hint="@string/create_basket_text_hint"
                     android:textSize="15sp"/>
 
@@ -115,12 +116,14 @@
         android:padding="20dp">
 
         <Button
+            android:id="@+id/create_basket_cancel_button"
             android:layout_width="100dp"
             android:layout_height="45dp"
             android:background="@color/colorHolder"
             android:text="@string/create_basket_cancel_button"/>
 
         <Button
+            android:id="@+id/create_basket_save_button"
             android:layout_width="100dp"
             android:layout_height="45dp"
             android:layout_alignParentEnd="true"

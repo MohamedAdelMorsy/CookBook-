@@ -1,7 +1,9 @@
 package com.scorpiomiku.cookbook.recommendmenufragment;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -53,6 +55,7 @@ public class RecommendMenuFragment extends FragmentModule {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -71,17 +74,17 @@ public class RecommendMenuFragment extends FragmentModule {
         });
 
         mTasteRecyclerView = (RecyclerView) v.findViewById(R.id.recommend_menu_taste_recycler_view);
-        mTasteAdapter = new MenuAdapter(Arrays.asList(mTastes), getContext());
+        mTasteAdapter = new MenuAdapter(Arrays.asList(mTastes), getContext(),fm);
         mTasteRecyclerView.setAdapter(mTasteAdapter);
         mTasteRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
 
         mKindRecyclerView = (RecyclerView) v.findViewById(R.id.recommend_menu_kind_recycler_view);
-        mKindAdapter = new MenuAdapter(Arrays.asList(mKinds), getContext());
+        mKindAdapter = new MenuAdapter(Arrays.asList(mKinds), getContext(),fm);
         mKindRecyclerView.setAdapter(mKindAdapter);
         mKindRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),3));
 
         mPlaceRecyclerView = (RecyclerView) v.findViewById(R.id.recommend_menu_place_recycler_view);
-        mPlaceAdapter = new MenuAdapter(Arrays.asList(mPlaces), getContext());
+        mPlaceAdapter = new MenuAdapter(Arrays.asList(mPlaces), getContext(),fm);
         mPlaceRecyclerView.setAdapter(mPlaceAdapter);
         mPlaceRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),3));
 

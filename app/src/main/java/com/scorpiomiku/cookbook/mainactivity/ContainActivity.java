@@ -21,6 +21,7 @@ import com.scorpiomiku.cookbook.ownInformation.MyInformationFragment;
 import com.scorpiomiku.cookbook.recommend.RecommendDefultFragment;
 import com.scorpiomiku.cookbook.recommend.RecommendFragment;
 import com.scorpiomiku.cookbook.recommendmenufragment.RecommendMenuFragment;
+import com.scorpiomiku.cookbook.recommendmenufragment.RecommendMenuItemClickFragment;
 import com.scorpiomiku.cookbook.takephoto.TakePhotoMainFragment;
 
 
@@ -94,7 +95,7 @@ public class ContainActivity extends AppCompatActivity {
                 new int[]{android.R.attr.state_checked}
         };
         int[] colors = new int[]{ContextCompat.getColor(this, R.color.toolbar_and_menu_color),
-                ContextCompat.getColor(this,R.color.testColor)
+                ContextCompat.getColor(this, R.color.testColor)
         };
         ColorStateList colorStateList = new ColorStateList(states, colors);
         navigation.setItemTextColor(colorStateList);
@@ -114,19 +115,28 @@ public class ContainActivity extends AppCompatActivity {
                         .hide(mNowFragment)
                         .add(R.id.recommend_container, RecommendDefultFragment.newInstance())
                         .commit();
-            }else {
+            } else {
                 super.onBackPressed();
             }
         } else {
-            if(fm.findFragmentById(R.id.fragment_container).getClass().getName()
-                    .equals(RecommendMenuFragment.class.getName())){
+            if (fm.findFragmentById(R.id.fragment_container).getClass().getName()
+                    .equals(RecommendMenuFragment.class.getName())) {
                 fm.beginTransaction()
                         .setCustomAnimations(android.R.anim.fade_in,
                                 android.R.anim.fade_out)
                         .replace(R.id.fragment_container, RecommendFragment.newInstance())
                         .commit();
-            }else {
-                super.onBackPressed();
+            } else {
+                if (fm.findFragmentById(R.id.fragment_container).getClass().getName()
+                        .equals(RecommendMenuItemClickFragment.class.getName())) {
+                    fm.beginTransaction()
+                            .setCustomAnimations(android.R.anim.fade_in,
+                                    android.R.anim.fade_out)
+                            .replace(R.id.fragment_container, RecommendMenuFragment.newInstance())
+                            .commit();
+                }else{
+                    super.onBackPressed();
+                }
             }
         }
     }

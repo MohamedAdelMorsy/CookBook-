@@ -6,8 +6,8 @@
     android:background="@color/dynamic_background_color"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/recommend_menu_text_view"
+    <Button
+        android:id="@+id/recommend_menu_button"
         android:layout_width="100dp"
         android:layout_height="35dp"
         android:layout_marginLeft="10dp"

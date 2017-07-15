@@ -82,7 +82,7 @@
 
     <string name="create_basket_title">添加额外需要购买的菜</string>
     <string name="create_basket_search_hint">输入菜名或备注</string>
-    <string name="create_basket_text_hint">输入内容</string>
+    <string name="create_basket_text_hint">输入内容（不同材料名请换行输入）</string>
     <string name="create_basket_cancel_button">取消</string>
     <string name="create_basket_save_button">保存</string>
 

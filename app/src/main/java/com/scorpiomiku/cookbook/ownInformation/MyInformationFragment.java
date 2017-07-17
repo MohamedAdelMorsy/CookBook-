@@ -15,6 +15,7 @@ import com.scorpiomiku.cookbook.collection.MyCollectionFragment;
 import com.scorpiomiku.cookbook.dynamic.DynamicActivity;
 import com.scorpiomiku.cookbook.dynamic.MyDynamicActivity;
 import com.scorpiomiku.cookbook.module.FragmentModule;
+import com.scorpiomiku.cookbook.sign.SignInActivity;
 
 /**
  * Created by Administrator on 2017/7/2.
@@ -30,6 +31,7 @@ public class MyInformationFragment extends FragmentModule {
     private TextView mDynamicTextView;
     private TextView mAccountSetTextView;
     private TextView mHelpTextView;
+    private TextView mAccountManagerTextView;
 
     public static MyInformationFragment newInstance() {
         return new MyInformationFragment();
@@ -51,6 +53,15 @@ public class MyInformationFragment extends FragmentModule {
         mDynamicTextView = (TextView) v.findViewById(R.id.my_information_dynamic_text_view);
         mAccountSetTextView = (TextView) v.findViewById(R.id.my_information_account_set_text_view);
         mHelpTextView = (TextView) v.findViewById(R.id.my_information_help_text_view);
+        mAccountManagerTextView = (TextView) v.findViewById(R.id.my_information_account_manage_text_view);
+
+        mAccountManagerTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), SignInActivity.class);
+                startActivity(i);
+            }
+        });
 
 
         mBasketImageView.setOnClickListener(new View.OnClickListener() {

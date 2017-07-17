@@ -24,11 +24,6 @@
         <activity
             android:name=".mainactivity.ContainActivity"
             android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
         <activity android:name=".menuactivity.MenuActivity">
         </activity>
@@ -45,6 +40,15 @@
         <activity android:name=".ownInformation.HelpActivity">
         </activity>
         <activity android:name=".basket.CreateNewBasketActivity">
+        </activity>
+        <activity android:name=".sign.SignInActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".sign.SignUpActivity">
         </activity>
     </application>
 

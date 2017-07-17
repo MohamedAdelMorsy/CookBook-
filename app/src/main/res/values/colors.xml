@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#4c66f5</color>
-    <color name="colorPrimaryDark">#5b7dec</color>
+    <color name="colorPrimary">#5b7dec</color>
+    <color name="colorPrimaryDark">#6385f5</color>
     <color name="colorAccent">#48ffda</color>
     <color name="colorHolder">#c9c9c9</color>
     <color name="colorWhite">#ffffff</color>
@@ -28,4 +28,8 @@
     <color name="dynamic_background_color">#f4f3f3</color>
 
     <color name="saveButton">#50efa2</color>
+
+
+
+    <color name="sign_up_text_color">#6d7eff</color>
 </resources>

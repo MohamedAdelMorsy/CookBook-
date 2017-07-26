@@ -7,6 +7,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <FrameLayout
+            android:id="@+id/recommend_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </FrameLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="100dp"
@@ -75,7 +89,7 @@
                                     android:layout_height="match_parent"
                                     android:layout_weight="8"
                                     android:background="@null"
-                                    android:cursorVisible="false"
+
                                     android:ellipsize="middle"
                                     android:gravity="center"
                                     android:hint="@string/recommend_toolbar_search_text"
@@ -87,7 +101,7 @@
                                     android:layout_width="0dp"
                                     android:layout_height="20dp"
                                     android:layout_weight="1"
-                                    android:src="@drawable/recommend_search_ico"/>
+                                    app:srcCompat="@drawable/ic_search_black_24dp"/>
 
                                 <TextView
                                     android:layout_width="0dp"
@@ -157,20 +171,6 @@
         </android.support.design.widget.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>
-
-    <android.support.v4.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <FrameLayout
-            android:id="@+id/recommend_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </FrameLayout>
-
-    </android.support.v4.widget.NestedScrollView>
 
 
 </android.support.design.widget.CoordinatorLayout>

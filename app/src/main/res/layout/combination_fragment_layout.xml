@@ -86,7 +86,6 @@
                                         android:layout_width="300dp"
                                         android:layout_height="match_parent"
                                         android:background="@null"
-                                        android:cursorVisible="false"
                                         android:ellipsize="middle"
                                         android:gravity="center"
                                         android:hint="@string/combination_toolbar_search_text"

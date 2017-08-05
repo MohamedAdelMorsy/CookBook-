@@ -11,7 +11,7 @@
         android:layout_marginLeft="6dp"
         android:layout_marginRight="6dp"
         android:layout_marginTop="6dp"
-        android:background="#89e705"
+        android:background="@drawable/lunch_image"
         android:orientation="horizontal">
     </LinearLayout>
 

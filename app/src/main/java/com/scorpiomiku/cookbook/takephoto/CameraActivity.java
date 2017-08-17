@@ -33,9 +33,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.jar.Manifest;
 
 import com.scorpiomiku.cookbook.takephoto.*;
+import com.scorpiomiku.cookbook.tensorflow.Classifier;
+import com.scorpiomiku.cookbook.tensorflow.TensorFlowClassifier;
 
 
 public class CameraActivity extends AppCompatActivity {
@@ -50,8 +55,20 @@ public class CameraActivity extends AppCompatActivity {
     private ImageView mTakePictureButton;
     private int mCameraId = CameraInfo.CAMERA_FACING_BACK;
 
+    private static final int INPUT_SIZE = 224;
+    private static final int IMAGE_MEAN = 117;
+    private static final float IMAGE_STD = 1;
+    private static final String INPUT_NAME = "input";
+    private static final String OUTPUT_NAME = "output";
 
 
+    private static final String MODEL_FILE = "file:///android_asset/tensorflow_inception_graph.pb";
+    private static final String LABEL_FILE =
+            "file:///android_asset/imagenet_comp_graph_label_strings.txt";
+
+    private Classifier mClassifier;
+    private Executor mExecutor = Executors.newSingleThreadExecutor();
+    private String mResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +96,8 @@ public class CameraActivity extends AppCompatActivity {
             }
         });
         setCameraDisplayOrientation(this, mCameraId, mCamera);
+
+        initTensorFlowAndLoadModel();
     }
 
 
@@ -101,12 +120,12 @@ public class CameraActivity extends AppCompatActivity {
     }
 
     //获取相机
-    public  Camera getCameraInstance() {
+    public Camera getCameraInstance() {
         Camera c = null;
         try {
             c = Camera.open();
             Camera.Parameters mParameters = c.getParameters();
-            mParameters.setPictureSize(1024,768);
+            mParameters.setPictureSize(1024, 768);
             c.setParameters(mParameters);
         } catch (Exception e) {
             e.printStackTrace();
@@ -160,6 +179,10 @@ public class CameraActivity extends AppCompatActivity {
                     try {
                         Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
                         bitmap = rotateBitmapByDegree(bitmap, 90);
+                        //缩放
+                        bitmap = Bitmap.createScaledBitmap(bitmap, INPUT_SIZE, INPUT_SIZE, false);
+                        final List<Classifier.Recognition> results = mClassifier.recognizeImage(bitmap);
+                        Toast.makeText(CameraActivity.this,results.toString(),Toast.LENGTH_LONG).show();
                         BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
                         bos.flush();
@@ -241,5 +264,26 @@ public class CameraActivity extends AppCompatActivity {
         return returnBm;
     }
 
+    private void initTensorFlowAndLoadModel() {
+        mExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mClassifier = TensorFlowClassifier.create(
+                            getAssets(),
+                            MODEL_FILE,
+                            LABEL_FILE,
+                            INPUT_SIZE,
+                            IMAGE_MEAN,
+                            IMAGE_STD,
+                            INPUT_NAME,
+                            OUTPUT_NAME);
+                    Toast.makeText(CameraActivity.this,"Tensorflow加载成功",Toast.LENGTH_LONG).show();
+                } catch (final Exception e) {
+                    throw new RuntimeException("Error initializing TensorFlow!", e);
+                }
+            }
+        });
+    }
 
 }

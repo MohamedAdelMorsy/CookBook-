@@ -7,14 +7,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.os.Environment;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
+
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.hardware.*;
 import android.hardware.Camera.*;
 import android.util.Log;
-import android.view.Display;
+
 import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
@@ -31,14 +31,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import java.util.jar.Manifest;
 
-import com.scorpiomiku.cookbook.takephoto.*;
+
 import com.scorpiomiku.cookbook.tensorflow.Classifier;
 import com.scorpiomiku.cookbook.tensorflow.TensorFlowClassifier;
 
@@ -182,7 +180,7 @@ public class CameraActivity extends AppCompatActivity {
                         //缩放
                         bitmap = Bitmap.createScaledBitmap(bitmap, INPUT_SIZE, INPUT_SIZE, false);
                         final List<Classifier.Recognition> results = mClassifier.recognizeImage(bitmap);
-                        Toast.makeText(CameraActivity.this,results.toString(),Toast.LENGTH_LONG).show();
+                        Log.d(TAG, "run: "+results.toString());
                         BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
                         bos.flush();
@@ -278,8 +276,9 @@ public class CameraActivity extends AppCompatActivity {
                             IMAGE_STD,
                             INPUT_NAME,
                             OUTPUT_NAME);
-                    Toast.makeText(CameraActivity.this,"Tensorflow加载成功",Toast.LENGTH_LONG).show();
+
                 } catch (final Exception e) {
+                    Log.e(TAG, "run: ",e );
                     throw new RuntimeException("Error initializing TensorFlow!", e);
                 }
             }

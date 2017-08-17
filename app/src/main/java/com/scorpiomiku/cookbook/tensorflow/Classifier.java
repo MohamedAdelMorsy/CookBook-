@@ -9,7 +9,7 @@ import java.util.List;
  * Created by Administrator on 2017/8/1.
  */
 
-public interface Classifiar {
+public interface Classifier {
     public class Recognition {
         private final String id;
         private final String title;

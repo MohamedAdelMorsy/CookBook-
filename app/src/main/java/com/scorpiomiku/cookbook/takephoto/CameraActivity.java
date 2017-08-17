@@ -50,6 +50,9 @@ public class CameraActivity extends AppCompatActivity {
     private ImageView mTakePictureButton;
     private int mCameraId = CameraInfo.CAMERA_FACING_BACK;
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

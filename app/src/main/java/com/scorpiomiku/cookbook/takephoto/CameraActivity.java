@@ -286,4 +286,26 @@ public class CameraActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+
+    @Override
+    protected void onPause() {
+
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                mClassifier.close();
+            }
+        });
+    }
 }

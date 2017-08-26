@@ -10,6 +10,8 @@ import android.graphics.Matrix;
 import android.os.Environment;
 
 
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.hardware.*;
@@ -38,6 +40,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 
+import com.scorpiomiku.cookbook.classifierresult.ClassifierResultFragment;
 import com.scorpiomiku.cookbook.tensorflow.Classifier;
 import com.scorpiomiku.cookbook.tensorflow.TensorFlowClassifier;
 
@@ -48,7 +51,7 @@ public class CameraActivity extends AppCompatActivity {
 
     private String mPictureResult;
 
-
+    private FragmentManager mFragmentManager;
 
     private static final String TAG = "CameraActivity";
     private Camera mCamera;
@@ -70,8 +73,6 @@ public class CameraActivity extends AppCompatActivity {
 
     private Classifier mClassifier;
     private Executor mExecutor = Executors.newSingleThreadExecutor();
-
-
 
 
     @Override
@@ -101,6 +102,7 @@ public class CameraActivity extends AppCompatActivity {
         });
         setCameraDisplayOrientation(this, mCameraId, mCamera);
         initTensorFlowAndLoadModel();
+        mFragmentManager = getSupportFragmentManager();
     }
 
 
@@ -185,7 +187,7 @@ public class CameraActivity extends AppCompatActivity {
                         //缩放
                         bitmap = Bitmap.createScaledBitmap(bitmap, INPUT_SIZE, INPUT_SIZE, false);
                         final List<Classifier.Recognition> results = mClassifier.recognizeImage(bitmap);
-                        Log.d(TAG, "run: "+results.toString());
+                        Log.d(TAG, "run: " + results.toString());
                         BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
                         bos.flush();
@@ -284,7 +286,7 @@ public class CameraActivity extends AppCompatActivity {
                             OUTPUT_NAME);
 
                 } catch (final Exception e) {
-                    Log.e(TAG, "run: ",e );
+                    Log.e(TAG, "run: ", e);
                     throw new RuntimeException("Error initializing TensorFlow!", e);
                 }
             }
@@ -313,6 +315,11 @@ public class CameraActivity extends AppCompatActivity {
             }
         });
         Log.d(TAG, "onDestroy: ");
-        Intent i = new Intent()
+        mFragmentManager.beginTransaction()
+                .setCustomAnimations(android.R.anim.fade_in,
+                        android.R.anim.fade_out)
+                .replace(R.id.fragment_container, ClassifierResultFragment
+                        .newInstance(mPictureResult,mPicturePath))
+                .commit();
     }
 }

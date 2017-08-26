@@ -90,6 +90,19 @@
             android:layout_height="wrap_content"
             android:background="@drawable/textview_background_2">
 
+            <TextView
+                android:id="@+id/nutrition_know_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="top"/>
         </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="@string/classifier_result_recommend"
+            android:textSize="18sp"
+            />
+
     </ScrollView>
 </LinearLayout>

@@ -1,6 +1,8 @@
 package com.scorpiomiku.cookbook.classifierresultactivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +13,10 @@ import android.widget.TextView;
 import com.scorpiomiku.cookbook.R;
 
 public class ClassifierResultActivity extends AppCompatActivity {
+
+    private ImageView mTestImageView;
+
+
     private String mPicturePath;
     private String mPictureResult;
 
@@ -33,10 +39,19 @@ public class ClassifierResultActivity extends AppCompatActivity {
         mDescribeTextView = (TextView) findViewById(R.id.classifier_result_describe_textview);
         mNutritionTextView = (TextView) findViewById(R.id.nutrition_know_text_view);
         mFoodNameTextView = (TextView) findViewById(R.id.classifier_result_food_name);
+
+
+        mTestImageView = (ImageView) findViewById(R.id.test_iamge_view_result);
+        Bitmap bitmap = BitmapFactory.decodeFile(mPicturePath);
+        mTestImageView.setImageBitmap(bitmap);
+
+
         initView();
+
         Log.d(TAG, "onCreate: " + mPicturePath + "    " + mPictureResult);
     }
-    private void initView(){
+
+    private void initView() {
         mImageView.setImageResource(R.drawable.potetotest);
         mFoodNameTextView.setText(mPictureResult);
         mDescribeTextView.setText("   今天需要在TextView上面添加一个边框，但是TextView本身不支持边框，" +
@@ -47,5 +62,6 @@ public class ClassifierResultActivity extends AppCompatActivity {
                 "方法是在该Activity即将被销毁前调用，来保存Activity数据的，如果在保存玩状态后再给它添加Fragment就会出错" +
                 "。解决办法就\n" +
                 "是把commit（）方法替换成 commitAllowingStateLoss()就行了，其效果是一样的。\n");
+
     }
 }

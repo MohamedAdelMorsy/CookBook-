@@ -115,6 +115,11 @@
                 android:text="@string/classifier_result_recommend"
                 android:textSize="18sp"
                 />
+            <ImageView
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:padding="2dp"
+                android:id="@+id/test_iamge_view_result"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

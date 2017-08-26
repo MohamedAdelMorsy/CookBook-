@@ -2,6 +2,7 @@ package com.scorpiomiku.cookbook.takephoto;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -45,6 +46,9 @@ public class CameraActivity extends AppCompatActivity {
 
     private String mPicturePath;
 
+    private String mPictureResult;
+
+
 
     private static final String TAG = "CameraActivity";
     private Camera mCamera;
@@ -66,7 +70,9 @@ public class CameraActivity extends AppCompatActivity {
 
     private Classifier mClassifier;
     private Executor mExecutor = Executors.newSingleThreadExecutor();
-    private String mResult;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +100,6 @@ public class CameraActivity extends AppCompatActivity {
             }
         });
         setCameraDisplayOrientation(this, mCameraId, mCamera);
-
         initTensorFlowAndLoadModel();
     }
 
@@ -123,7 +128,7 @@ public class CameraActivity extends AppCompatActivity {
         try {
             c = Camera.open();
             Camera.Parameters mParameters = c.getParameters();
-            mParameters.setPictureSize(1024, 768);
+            mParameters.setPictureSize(224, 224);
             c.setParameters(mParameters);
         } catch (Exception e) {
             e.printStackTrace();
@@ -169,7 +174,7 @@ public class CameraActivity extends AppCompatActivity {
             final String pictureName = System.currentTimeMillis() + ".jpg";
             final String picturePath = pictureDir + File.separator + pictureName;
             mPicturePath = picturePath;
-            Log.d(TAG, picturePath);
+            Log.d(TAG, mPicturePath);
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -191,6 +196,7 @@ public class CameraActivity extends AppCompatActivity {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                    finish();
                 }
             }).start();
             mCamera.startPreview();
@@ -306,5 +312,7 @@ public class CameraActivity extends AppCompatActivity {
                 mClassifier.close();
             }
         });
+        Log.d(TAG, "onDestroy: ");
+        Intent i = new Intent()
     }
 }

@@ -296,12 +296,17 @@ public class CameraActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
+        
     }
 
     @Override
     protected void onPause() {
-
+        mFragmentManager.beginTransaction()
+                .setCustomAnimations(android.R.anim.fade_in,
+                        android.R.anim.fade_out)
+                .replace(R.id.fragment_container, ClassifierResultFragment
+                        .newInstance(mPictureResult,mPicturePath))
+                .commit();
         super.onPause();
     }
 
@@ -315,11 +320,12 @@ public class CameraActivity extends AppCompatActivity {
             }
         });
         Log.d(TAG, "onDestroy: ");
-        mFragmentManager.beginTransaction()
-                .setCustomAnimations(android.R.anim.fade_in,
-                        android.R.anim.fade_out)
-                .replace(R.id.fragment_container, ClassifierResultFragment
-                        .newInstance(mPictureResult,mPicturePath))
-                .commit();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop: ");
+
     }
 }

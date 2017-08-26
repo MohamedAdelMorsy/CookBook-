@@ -2,6 +2,7 @@ package com.scorpiomiku.cookbook.classifierresult;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ public class ClassifierResultFragment extends FragmentModule {
     private String mFoodName;
     private String mPicturePath;
 
+    private static final String TAG = "ClassifierResultFragment";
     public static ClassifierResultFragment newInstance(String foodname, String picturePath) {
         ClassifierResultFragment mClassifierResultFragment = new ClassifierResultFragment();
         mClassifierResultFragment.mFoodName = foodname;
@@ -30,6 +32,7 @@ public class ClassifierResultFragment extends FragmentModule {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate: "+mFoodName+"     "+mPicturePath);
     }
 
     @Nullable

@@ -47,9 +47,10 @@
         <activity android:name=".basket.CreateNewBasketActivity">
         </activity>
         <activity android:name=".sign.SignInActivity">
-
         </activity>
         <activity android:name=".sign.SignUpActivity">
+        </activity>
+        <activity android:name=".classifierresultactivity.ClassifierResultActivity">
         </activity>
     </application>
 

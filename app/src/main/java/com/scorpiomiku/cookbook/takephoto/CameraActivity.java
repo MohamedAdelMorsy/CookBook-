@@ -40,7 +40,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 
-import com.scorpiomiku.cookbook.classifierresult.ClassifierResultFragment;
+import com.scorpiomiku.cookbook.classifierresultactivity.ClassifierResultActivity;
 import com.scorpiomiku.cookbook.tensorflow.Classifier;
 import com.scorpiomiku.cookbook.tensorflow.TensorFlowClassifier;
 
@@ -51,7 +51,6 @@ public class CameraActivity extends AppCompatActivity {
 
     private String mPictureResult;
 
-    private FragmentManager mFragmentManager;
 
     private static final String TAG = "CameraActivity";
     private Camera mCamera;
@@ -102,7 +101,8 @@ public class CameraActivity extends AppCompatActivity {
         });
         setCameraDisplayOrientation(this, mCameraId, mCamera);
         initTensorFlowAndLoadModel();
-        mFragmentManager = getSupportFragmentManager();
+
+
     }
 
 
@@ -188,6 +188,7 @@ public class CameraActivity extends AppCompatActivity {
                         bitmap = Bitmap.createScaledBitmap(bitmap, INPUT_SIZE, INPUT_SIZE, false);
                         final List<Classifier.Recognition> results = mClassifier.recognizeImage(bitmap);
                         Log.d(TAG, "run: " + results.toString());
+                        mPictureResult = results.toString();
                         BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
                         bos.flush();
@@ -296,17 +297,15 @@ public class CameraActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        
+
     }
 
     @Override
     protected void onPause() {
-        mFragmentManager.beginTransaction()
-                .setCustomAnimations(android.R.anim.fade_in,
-                        android.R.anim.fade_out)
-                .replace(R.id.fragment_container, ClassifierResultFragment
-                        .newInstance(mPictureResult,mPicturePath))
-                .commit();
+        Intent i = new Intent(CameraActivity.this, ClassifierResultActivity.class);
+        i.putExtra("picturePath", mPicturePath);
+        i.putExtra("pictureResult", mPictureResult);
+        startActivity(i);
         super.onPause();
     }
 

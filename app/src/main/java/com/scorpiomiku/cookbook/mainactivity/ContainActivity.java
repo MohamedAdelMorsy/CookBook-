@@ -24,6 +24,8 @@ import com.scorpiomiku.cookbook.recommendmenufragment.RecommendMenuFragment;
 import com.scorpiomiku.cookbook.recommendmenufragment.RecommendMenuItemClickFragment;
 import com.scorpiomiku.cookbook.takephoto.TakePhotoMainFragment;
 
+import cn.bmob.v3.Bmob;
+
 
 public class ContainActivity extends AppCompatActivity {
 
@@ -100,6 +102,7 @@ public class ContainActivity extends AppCompatActivity {
         ColorStateList colorStateList = new ColorStateList(states, colors);
         navigation.setItemTextColor(colorStateList);
         navigation.setItemIconTintList(colorStateList);
+        Bmob.initialize(this, "4719972bcf2771316e92505a854a484b");
     }
 
     @Override

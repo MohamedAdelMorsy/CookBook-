@@ -43,6 +43,7 @@
             android:orientation="vertical">
 
             <EditText
+                android:id="@+id/sign_in_email_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="@string/sign_in_account_text"
@@ -56,6 +57,7 @@
             android:orientation="vertical">
 
             <EditText
+                android:id="@+id/sign_in_pass_word_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="@string/sign_in_password_text"
@@ -66,6 +68,7 @@
                 android:layout_height="50dp"/>
 
             <Button
+                android:id="@+id/sign_in_ok_button"
                 android:layout_width="270dp"
                 android:layout_height="50dp"
                 android:text="@string/sign_in_title"/>
@@ -76,6 +79,7 @@
 
 
                 <CheckBox
+                    android:id="@+id/sign_in_remember_checkbox"
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
                     android:layout_centerVertical="true"
@@ -83,6 +87,7 @@
                     android:textColor="@color/stringsColor"/>
 
                 <TextView
+                    android:id="@+id/sign_in_forget_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_alignParentRight="true"

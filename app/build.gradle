@@ -46,4 +46,5 @@ dependencies {
     compile 'com.github.arimorty:floatingsearchview:2.1.1'
     compile 'com.flurgle:camerakit:0.9.13'
     testCompile 'junit:junit:4.12'
+    compile 'com.google.android.gms:play-services-appindexing:8.4.0'
 }

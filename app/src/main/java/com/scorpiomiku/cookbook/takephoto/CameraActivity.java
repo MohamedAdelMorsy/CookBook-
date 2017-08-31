@@ -59,7 +59,7 @@ public class CameraActivity extends AppCompatActivity {
     private ImageView mTakePictureButton;
     private int mCameraId = CameraInfo.CAMERA_FACING_BACK;
 
-    private static final int INPUT_SIZE = 224;
+    private static final int INPUT_SIZE = 32;
     private static final int IMAGE_MEAN = 117;
     private static final float IMAGE_STD = 1;
     private static final String INPUT_NAME = "input";

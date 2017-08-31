@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -139,6 +140,7 @@ public class SignInActivity extends AppCompatActivity {
                                                 values.clear();
                                             }
                                             finish();
+                                            Log.d("SignIn", "done: ");
                                         }
                                     } catch (Exception k) {
                                         toast("请在你的邮箱中认证");
@@ -152,6 +154,12 @@ public class SignInActivity extends AppCompatActivity {
                 } else {
                     toast("邮箱账号不能为空");
                 }
+            }
+        });
+        mForgetTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
     }

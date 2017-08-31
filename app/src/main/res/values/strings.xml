@@ -89,6 +89,7 @@
     <string name="sign_up_password">密码</string>
     <string name="sign_up_password_again">再次输入密码</string>
     <string name="sign_up_ok">完成注册</string>
+    <string name="forget_text">请输入你的邮箱</string>
 
     <string name="classifier_result_describe_text">详细介绍:</string>
     <string name="classifier_result_nutrition_text">营养早知道:</string>

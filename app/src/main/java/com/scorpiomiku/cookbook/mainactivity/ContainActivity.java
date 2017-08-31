@@ -1,7 +1,6 @@
 package com.scorpiomiku.cookbook.mainactivity;
 
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,11 +11,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.scorpiomiku.cookbook.R;
 import com.scorpiomiku.cookbook.collection.CollectionFragment;
 import com.scorpiomiku.cookbook.combination.CombinationFragment;
+import com.scorpiomiku.cookbook.module.FragmentModule;
 import com.scorpiomiku.cookbook.ownInformation.MyInformationFragment;
 import com.scorpiomiku.cookbook.recommend.RecommendDefultFragment;
 import com.scorpiomiku.cookbook.recommend.RecommendFragment;
@@ -33,6 +34,10 @@ public class ContainActivity extends AppCompatActivity {
     private Toolbar mCombinationToolbar;
     private Fragment fr;
 
+    private int nowFragmentNum;
+    private int newFragmentNum;
+    private BottomNavigationView navigation;
+
     public static Toolbar mToolbar;
 
     private static final String TAG = "ContainActivity";
@@ -40,15 +45,35 @@ public class ContainActivity extends AppCompatActivity {
 
 
     /*----------------------------------CreateFragment---------------------------*/
-    private void createFragment(Fragment fragment) {
+    private void createFragmentLeft(Fragment fragment) {
         Fragment frag = fm.findFragmentById(R.id.fragment_container);
         if (!(fragment == frag) || frag == null) {
             frag = fragment;
             fm.beginTransaction()
-                    .setCustomAnimations(android.R.anim.fade_in,
-                            android.R.anim.fade_out)
+                    .setCustomAnimations(android.R.anim.slide_in_left,
+                            android.R.anim.slide_out_right)
                     .replace(R.id.fragment_container, frag)
                     .commit();
+        }
+    }
+
+    private void createFragmentRight(Fragment fragment) {
+        Fragment frag = fm.findFragmentById(R.id.fragment_container);
+        if (!(fragment == frag) || frag == null) {
+            frag = fragment;
+            fm.beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in_right,
+                            R.anim.slide_out_left)
+                    .replace(R.id.fragment_container, frag)
+                    .commit();
+        }
+    }
+
+    private void howToCreateFragment(int nowFragment, int newFragment, Fragment f) {
+        if (nowFragment < newFragment) {
+            createFragmentRight(f);
+        } else {
+            createFragmentLeft(f);
         }
     }
 
@@ -60,19 +85,25 @@ public class ContainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_recommend:
-                    createFragment(RecommendFragment.newInstance());
+                    howToCreateFragment(navigation.getSelectedItemId(), 2131558721,
+                            RecommendFragment.newInstance());
                     return true;
                 case R.id.navigation_combination:
-                    createFragment(CombinationFragment.newInstance());
+                    howToCreateFragment(navigation.getSelectedItemId(), 2131558722,
+                            CombinationFragment.newInstance());
                     return true;
                 case R.id.navigation_takephoto:
-                    createFragment(TakePhotoMainFragment.newInstance());
+
+                    howToCreateFragment(navigation.getSelectedItemId(), 2131558723,
+                            TakePhotoMainFragment.newInstance());
                     return true;
                 case R.id.navigation_collection:
-                    createFragment(CollectionFragment.newInstance());
+                    howToCreateFragment(navigation.getSelectedItemId(), 2131558724,
+                            CollectionFragment.newInstance());
                     return true;
                 case R.id.navigation_information:
-                    createFragment(MyInformationFragment.newInstance());
+                    howToCreateFragment(navigation.getSelectedItemId(), 2131558725,
+                            MyInformationFragment.newInstance());
                     return true;
             }
             return false;
@@ -87,9 +118,10 @@ public class ContainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contain);
         fm.beginTransaction()
+                .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
                 .add(R.id.fragment_container, TakePhotoMainFragment.newInstance())
                 .commit();
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navigation.setSelectedItemId(R.id.navigation_takephoto);
         int[][] states = new int[][]{
@@ -137,7 +169,7 @@ public class ContainActivity extends AppCompatActivity {
                                     android.R.anim.fade_out)
                             .replace(R.id.fragment_container, RecommendMenuFragment.newInstance())
                             .commit();
-                }else{
+                } else {
                     super.onBackPressed();
                 }
             }

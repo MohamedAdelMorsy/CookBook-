@@ -134,9 +134,9 @@ public class SignInActivity extends AppCompatActivity {
                                             if (mRememberCheckBox.isChecked()) {
                                                 SQLiteDatabase db = mUserDataHelper.getWritableDatabase();
                                                 ContentValues values = new ContentValues();
-                                                values.put("email",useremail);
-                                                values.put("passwords",userpassword);
-                                                db.insert("User",null,values);
+                                                values.put("email", useremail);
+                                                values.put("passwords", userpassword);
+                                                db.insert("User", null, values);
                                                 values.clear();
                                             }
                                             finish();
@@ -159,7 +159,8 @@ public class SignInActivity extends AppCompatActivity {
         mForgetTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent i = new Intent(SignInActivity.this, ForgetActivity.class);
+                startActivity(i);
             }
         });
     }

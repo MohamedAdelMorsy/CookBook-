@@ -47,7 +47,8 @@ public class ContainActivity extends AppCompatActivity {
     /*----------------------------------CreateFragment---------------------------*/
     private void createFragmentLeft(Fragment fragment) {
         Fragment frag = fm.findFragmentById(R.id.fragment_container);
-        if (!(fragment == frag) || frag == null) {
+        Log.d(TAG, "createFragmentLeft: "+fragment.getClass().getName()+"    "+frag.getClass().getName());
+        if (!(fragment.getClass().getName().equals(frag.getClass().getName()))|| frag == null) {
             frag = fragment;
             fm.beginTransaction()
                     .setCustomAnimations(android.R.anim.slide_in_left,
@@ -59,7 +60,7 @@ public class ContainActivity extends AppCompatActivity {
 
     private void createFragmentRight(Fragment fragment) {
         Fragment frag = fm.findFragmentById(R.id.fragment_container);
-        if (!(fragment == frag) || frag == null) {
+        if (!(fragment.getClass().getName().equals(frag.getClass().getName())) || frag == null) {
             frag = fragment;
             fm.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_right,

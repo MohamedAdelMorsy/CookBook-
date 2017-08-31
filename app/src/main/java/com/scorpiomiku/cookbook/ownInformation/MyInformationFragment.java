@@ -33,6 +33,7 @@ public class MyInformationFragment extends FragmentModule {
     private TextView mAccountSetTextView;
     private TextView mHelpTextView;
     private TextView mAccountManagerTextView;
+    private TextView mCleanTextView;
 
     public static MyInformationFragment newInstance() {
         return new MyInformationFragment();
@@ -55,6 +56,7 @@ public class MyInformationFragment extends FragmentModule {
         mAccountSetTextView = (TextView) v.findViewById(R.id.my_information_account_set_text_view);
         mHelpTextView = (TextView) v.findViewById(R.id.my_information_help_text_view);
         mAccountManagerTextView = (TextView) v.findViewById(R.id.my_information_account_manage_text_view);
+        mCleanTextView = (TextView) v.findViewById(R.id.my_information_clean_text_view);
 
         mAccountManagerTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,6 +66,12 @@ public class MyInformationFragment extends FragmentModule {
             }
         });
 
+        mCleanTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         mBasketImageView.setOnClickListener(new View.OnClickListener() {
             @Override

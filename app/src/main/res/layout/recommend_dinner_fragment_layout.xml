@@ -11,7 +11,7 @@
         android:layout_marginTop="6dp"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:background="#d4b6d9"
+        android:background="@drawable/recommend_dinner_large_image"
         android:orientation="horizontal">
     </LinearLayout>
 

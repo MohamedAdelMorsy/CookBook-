@@ -305,6 +305,7 @@ public class CameraActivity extends AppCompatActivity {
         Intent i = new Intent(CameraActivity.this, ClassifierResultActivity.class);
         i.putExtra("picturePath", mPicturePath);
         i.putExtra("pictureResult", mPictureResult);
+        i.putExtra("FragmentSendMessage", "CameraActivity");
         startActivity(i);
         super.onPause();
     }

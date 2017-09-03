@@ -47,8 +47,17 @@ public class ContainActivity extends AppCompatActivity {
     /*----------------------------------CreateFragment---------------------------*/
     private void createFragmentLeft(Fragment fragment) {
         Fragment frag = fm.findFragmentById(R.id.fragment_container);
-        Log.d(TAG, "createFragmentLeft: "+fragment.getClass().getName()+"    "+frag.getClass().getName());
-        if (!(fragment.getClass().getName().equals(frag.getClass().getName()))|| frag == null) {
+        //Log.d(TAG, "createFragmentLeft: "+fragment.getClass().getName()+"    "+frag.getClass().getName());
+        if (frag != null) {
+            if (!(fragment.getClass().getName().equals(frag.getClass().getName()))) {
+                frag = fragment;
+                fm.beginTransaction()
+                        .setCustomAnimations(android.R.anim.slide_in_left,
+                                android.R.anim.slide_out_right)
+                        .replace(R.id.fragment_container, frag)
+                        .commit();
+            }
+        } else {
             frag = fragment;
             fm.beginTransaction()
                     .setCustomAnimations(android.R.anim.slide_in_left,
@@ -94,7 +103,6 @@ public class ContainActivity extends AppCompatActivity {
                             CombinationFragment.newInstance());
                     return true;
                 case R.id.navigation_takephoto:
-
                     howToCreateFragment(navigation.getSelectedItemId(), 2131558723,
                             TakePhotoMainFragment.newInstance());
                     return true;

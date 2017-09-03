@@ -191,7 +191,7 @@ public class ContainActivity extends AppCompatActivity {
                     .equals(RecommendMenuFragment.class.getName())) {
                 fm.beginTransaction()
                         .setCustomAnimations(android.R.anim.fade_in,
-                                android.R.anim.fade_out)
+                                R.anim.slide_out_top)
                         .replace(R.id.fragment_container, RecommendFragment.newInstance())
                         .commit();
             } else {

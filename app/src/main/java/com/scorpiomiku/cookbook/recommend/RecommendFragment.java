@@ -128,7 +128,7 @@ public class RecommendFragment extends FragmentModule {
                 anis.start();
                 Fragment nowFragment = fm.findFragmentById(R.id.fragment_container);
                 fm.beginTransaction()
-                        .setCustomAnimations(android.R.anim.fade_in,
+                        .setCustomAnimations(R.anim.slide_in_top,
                                 android.R.anim.fade_out)
                         .replace(R.id.fragment_container, RecommendMenuFragment.newInstance())
                         .commit();

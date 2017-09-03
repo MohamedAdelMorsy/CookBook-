@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.scorpiomiku.cookbook.R;
 import com.scorpiomiku.cookbook.module.FragmentModule;
@@ -21,8 +22,13 @@ import com.scorpiomiku.cookbook.module.FragmentModule;
 
 public class CollectionFragment extends FragmentModule {
 
-    private LinearLayout mCollectionImageView;
-    private LinearLayout mRecordsImageView;
+    private LinearLayout mCollectionLinearLayout;
+    private LinearLayout mRecordsLinearLayout;
+
+    private ImageView mCollectionImage;
+    private ImageView mRecordImage;
+    private TextView mCollectionTextView;
+    private TextView mRecordTextView;
 
     private FragmentManager mFragmentManager;
 
@@ -47,28 +53,48 @@ public class CollectionFragment extends FragmentModule {
         View v = inflater.inflate(R.layout.collection_main_fragment_layout, container, false);
         Toolbar toolbar = (Toolbar) v.findViewById(R.id.collection_tool_bar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        mCollectionImageView = (LinearLayout) v.findViewById(R.id
+        mCollectionLinearLayout = (LinearLayout) v.findViewById(R.id
                 .collection_mycolletion);
-        mRecordsImageView = (LinearLayout) v.findViewById(R.id
+        mRecordsLinearLayout = (LinearLayout) v.findViewById(R.id
                 .collection_myrecords);
+        mCollectionImage = (ImageView) v.findViewById(R.id.collection_collection_iamge_view);
+        mCollectionTextView = (TextView) v.findViewById(R.id.collection_collection_text_view);
+        mRecordImage = (ImageView) v.findViewById(R.id.collection_record_iamge_view);
+        mRecordTextView = (TextView) v.findViewById(R.id.collection_record_text_view);
         setClickListener();
         return v;
     }
 
+    /*------------------------------------changeViewColor---------------------------*/
+    private void changeViewColorToCollection() {
+        mCollectionImage.setImageResource(R.drawable.collection_image_red);
+        mRecordImage.setImageResource(R.drawable.collection_record_image_white);
+        mCollectionTextView.setTextColor(getResources().getColor(R.color.colorRed));
+        mRecordTextView.setTextColor(getResources().getColor(R.color.colorWhite));
+    }
+
+    private void changeViewColorToRecord() {
+        mCollectionImage.setImageResource(R.drawable.collection_image_white);
+        mRecordImage.setImageResource(R.drawable.collection_record_image_red);
+        mCollectionTextView.setTextColor(getResources().getColor(R.color.colorWhite));
+        mRecordTextView.setTextColor(getResources().getColor(R.color.colorRed));
+    }
 
     /*------------------------------------------------clickListener---------------------------*/
     private void setClickListener() {
-        mCollectionImageView.setOnClickListener(new View.OnClickListener() {
+        mCollectionLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 changeFragment(MyCollectionFragment.newInstance());
+                changeViewColorToCollection();
             }
         });
 
-        mRecordsImageView.setOnClickListener(new View.OnClickListener() {
+        mRecordsLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 changeFragment(MyRecordsFragment.newInstance());
+                changeViewColorToRecord();
             }
         });
     }

@@ -50,11 +50,11 @@
                                 android:layout_height="match_parent"/>
 
                             <ImageView
-
+                                android:id="@+id/collection_collection_iamge_view"
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
                                 android:layout_gravity="center"
-                                android:background="@drawable/collection_image_white"
+                                android:background="@drawable/collection_image_red"
                                 android:textColor="@color/colorWhite"
                                 android:textSize="20sp"/>
 
@@ -63,6 +63,8 @@
                                 android:layout_height="match_parent"/>
 
                             <TextView
+                                android:textColor="@color/colorRed"
+                                android:id="@+id/collection_collection_text_view"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:layout_gravity="center"
@@ -89,6 +91,7 @@
                                 android:layout_height="match_parent"/>
 
                             <ImageView
+                                android:id="@+id/collection_record_iamge_view"
                                 android:layout_width="25dp"
                                 android:layout_height="25dp"
                                 android:layout_gravity="center"
@@ -101,6 +104,7 @@
                                 android:layout_height="match_parent"/>
 
                             <TextView
+                                android:id="@+id/collection_record_text_view"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:layout_gravity="center"

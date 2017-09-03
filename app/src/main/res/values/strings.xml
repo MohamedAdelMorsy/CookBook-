@@ -16,7 +16,8 @@
 
 
     <string name="collection_toolbar_title">收藏</string>
-    <string name="collection_record">浏览菜谱查阅记录</string>
+    <string name="collection_record">浏览记录</string>
+    <string name="collection_collection">我的收藏</string>
 
 
     <string name="menu_defualt_fragment_steps">制作步骤:</string>

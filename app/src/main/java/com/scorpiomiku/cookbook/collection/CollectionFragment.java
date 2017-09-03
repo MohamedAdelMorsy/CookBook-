@@ -7,11 +7,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.scorpiomiku.cookbook.R;
 import com.scorpiomiku.cookbook.module.FragmentModule;
@@ -22,12 +21,13 @@ import com.scorpiomiku.cookbook.module.FragmentModule;
 
 public class CollectionFragment extends FragmentModule {
 
-    private ImageView mCollectionImageView;
-    private ImageView mRecordsImageView;
+    private LinearLayout mCollectionImageView;
+    private LinearLayout mRecordsImageView;
 
-    private FragmentManager mFragmentManager ;
+    private FragmentManager mFragmentManager;
 
-    public static CollectionFragment newInstance(){
+
+    public static CollectionFragment newInstance() {
         return new CollectionFragment();
     }
 
@@ -36,7 +36,7 @@ public class CollectionFragment extends FragmentModule {
         super.onCreate(savedInstanceState);
         mFragmentManager = getFragmentManager();
         mFragmentManager.beginTransaction()
-                .add(R.id.collection_container,MyCollectionFragment.newInstance())
+                .add(R.id.collection_container, MyCollectionFragment.newInstance())
                 .commit();
     }
 
@@ -44,21 +44,20 @@ public class CollectionFragment extends FragmentModule {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.collection_main_fragment_layout,container,false);
-        Toolbar toolbar = (Toolbar)v.findViewById(R.id.collection_tool_bar);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-        mCollectionImageView = (ImageView) v.findViewById(R.id
-                .collection_mycolletion_image_view);
-        mRecordsImageView = (ImageView) v.findViewById(R.id
-                .collection_myrecords_image_view);
+        View v = inflater.inflate(R.layout.collection_main_fragment_layout, container, false);
+        Toolbar toolbar = (Toolbar) v.findViewById(R.id.collection_tool_bar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        mCollectionImageView = (LinearLayout) v.findViewById(R.id
+                .collection_mycolletion);
+        mRecordsImageView = (LinearLayout) v.findViewById(R.id
+                .collection_myrecords);
         setClickListener();
-        return v ;
+        return v;
     }
 
 
-
     /*------------------------------------------------clickListener---------------------------*/
-    private void setClickListener(){
+    private void setClickListener() {
         mCollectionImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,11 +74,11 @@ public class CollectionFragment extends FragmentModule {
     }
 
     /*-----------------------------------changeFragment--------------------------*/
-    private void changeFragment(Fragment fragment){
+    private void changeFragment(Fragment fragment) {
         Fragment nowFragment = mFragmentManager.findFragmentById(R.id.collection_container);
-        if(nowFragment.getClass().getName().equals(fragment.getClass().getName())){
+        if (nowFragment.getClass().getName().equals(fragment.getClass().getName())) {
 
-        }else{
+        } else {
             mFragmentManager.beginTransaction()
                     .setCustomAnimations(android.R.anim.fade_in,
                             android.R.anim.fade_out)

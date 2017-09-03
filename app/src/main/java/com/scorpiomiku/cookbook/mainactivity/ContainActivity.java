@@ -183,6 +183,7 @@ public class ContainActivity extends AppCompatActivity {
                         .hide(mNowFragment)
                         .add(R.id.recommend_container, RecommendDefultFragment.newInstance())
                         .commit();
+                RecommendFragment.chooseDefault();
             } else {
                 super.onBackPressed();
             }

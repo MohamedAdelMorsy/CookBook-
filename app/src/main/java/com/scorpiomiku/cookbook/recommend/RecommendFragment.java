@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.scorpiomiku.cookbook.R;
 import com.scorpiomiku.cookbook.classifierresultactivity.ClassifierResultActivity;
@@ -41,6 +42,12 @@ public class RecommendFragment extends FragmentModule {
     private EditText mSearchEditText;
     private ImageView mSearchImageView;
 
+    public static TextView mBreakfastChoose;
+    public static TextView mDinnerChoose;
+    public static TextView mLunchChoose;
+
+    public static boolean isDefault ;
+
 
     public static RecommendFragment newInstance() {
         return new RecommendFragment();
@@ -55,7 +62,6 @@ public class RecommendFragment extends FragmentModule {
                         android.R.anim.fade_out)
                 .add(R.id.recommend_container, RecommendDefultFragment.newInstance())
                 .commit();
-
     }
 
     @Nullable
@@ -70,6 +76,10 @@ public class RecommendFragment extends FragmentModule {
                 .recommend_tool_bar_dinner_iamge_view);
         mLunchImageView = (ImageView) v.findViewById(R.id
                 .recommend_tool_bar_lunch_iamge_view);
+        mBreakfastChoose = (TextView) v.findViewById(R.id.recommend_choose_breakfast_text_view);
+        mLunchChoose = (TextView) v.findViewById(R.id.recommend_choose_lunch_text_view);
+        mDinnerChoose = (TextView) v.findViewById(R.id.recommend_choose_dinner_text_view);
+
         mMenuImageView = (ImageView) v.findViewById(R.id.recommend_tool_bar_menu_image_view);
         mSearchEditText = (EditText) v.findViewById(R.id.recommend_search_edit_view);
         mSearchImageView = (ImageView) v.findViewById(R.id.recommend_search_image_view);
@@ -95,6 +105,12 @@ public class RecommendFragment extends FragmentModule {
         }
     }
 
+    /*-------------------------------chooseDefault-----------------------------*/
+    public static void chooseDefault(){
+        mBreakfastChoose.setVisibility(View.INVISIBLE);
+        mLunchChoose.setVisibility(View.INVISIBLE);
+        mDinnerChoose.setVisibility(View.INVISIBLE);
+    }
 
     /*-------------------------------------setListener--------------------------*/
     private void setListener() {
@@ -102,20 +118,30 @@ public class RecommendFragment extends FragmentModule {
             @Override
             public void onClick(View v) {
                 changeFragment(BreakFastFragment.newInstance());
+                mBreakfastChoose.setVisibility(View.VISIBLE);
+                mLunchChoose.setVisibility(View.INVISIBLE);
+                mDinnerChoose.setVisibility(View.INVISIBLE);
             }
         });
         mLunchImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 changeFragment(LunchFragment.newInstance());
+                mLunchChoose.setVisibility(View.VISIBLE);
+                mBreakfastChoose.setVisibility(View.INVISIBLE);
+                mDinnerChoose.setVisibility(View.INVISIBLE);
             }
         });
         mDinnerImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 changeFragment(DinnerFragment.newInstance());
+                mDinnerChoose.setVisibility(View.VISIBLE);
+                mBreakfastChoose.setVisibility(View.INVISIBLE);
+                mLunchChoose.setVisibility(View.INVISIBLE);
             }
         });
+
         mMenuImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,6 +172,4 @@ public class RecommendFragment extends FragmentModule {
             }
         });
     }
-
-
 }

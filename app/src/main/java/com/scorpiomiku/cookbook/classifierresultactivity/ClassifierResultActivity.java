@@ -42,8 +42,9 @@ public class ClassifierResultActivity extends AppCompatActivity {
         mFoodNameTextView = (TextView) findViewById(R.id.classifier_result_food_name);
         mTestImageView = (ImageView) findViewById(R.id.test_iamge_view_result);
 
+        /*CameraActivity  RecommendFragment  CombinationFragment*/
         chooseInit();
-        Log.d(TAG, "onCreate: " + mPicturePath + "    " + mFoodName);
+        //Log.d(TAG, "onCreate: " + mPicturePath + "    " + mFoodName);
     }
 
     /*---------------------------RecommendFragment-----------------------------*/
@@ -62,10 +63,15 @@ public class ClassifierResultActivity extends AppCompatActivity {
     /*---------------------------whichFragmentSendMassege------------------------*/
     private void chooseInit() {
         if (mFragmentSendMessage.equals("RecommendFragment")) {
+            Log.d(TAG, "chooseInit: RecommendFragment");
             recommendInitView();
         }
         if (mFragmentSendMessage.equals("CameraActivity")) {
+            Log.d(TAG, "chooseInit: CameraActivity");
             cameraInitView();
+        }
+        if(mFragmentSendMessage.equals("CombinationFragment")){
+            Log.d(TAG, "chooseInit: CombinationFragment");
         }
     }
     /*---------------------------initUrlView--------------------------*/

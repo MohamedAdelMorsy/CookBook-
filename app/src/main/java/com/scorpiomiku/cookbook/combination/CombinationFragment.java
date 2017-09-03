@@ -11,10 +11,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.scorpiomiku.cookbook.R;
+import com.scorpiomiku.cookbook.classifierresultactivity.ClassifierResultActivity;
 import com.scorpiomiku.cookbook.menuactivity.MenuActivity;
 import com.scorpiomiku.cookbook.module.FragmentModule;
 import com.yyydjk.library.HorizontalDropDownMenu;
@@ -34,6 +36,11 @@ public class CombinationFragment extends FragmentModule {
     private TastesAdapter mTastesAdapter;
     private TimeAdapter mTimeAdapter;
     private MakeWayAdapter mMakeWayAdapter;
+
+    private EditText mSearchEditView;
+    private ImageView mSearchImageView;
+
+    private String mFoodName;
 
 
     private String mHeaders[] = {"口味", "时段", "做法"};
@@ -63,6 +70,8 @@ public class CombinationFragment extends FragmentModule {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.combination_fragment_layout, container, false);
         mHorizontalDropDownMenu = (HorizontalDropDownMenu) v.findViewById(R.id.combination_fragment_dropmenu);
+        mSearchEditView = (EditText) v.findViewById(R.id.combination_search_edit_view);
+        mSearchImageView = (ImageView) v.findViewById(R.id.combination_tool_bar_search_image_view);
         initView();
         return v;
     }
@@ -115,6 +124,20 @@ public class CombinationFragment extends FragmentModule {
         mHorizontalDropDownMenu.setDropDownMenu(Arrays.asList(mHeaders), mPopupViews, mContextView
                 , mDrawables
                 , getResources().getDrawable(R.drawable.backtest, getActivity().getTheme()));
+
+
+        mSearchImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mFoodName = mSearchEditView.getText().toString();
+                Intent i = new Intent(getActivity(), ClassifierResultActivity.class);
+                i.putExtra("FragmentSendMessage", "CombinationFragment");
+                i.putExtra("foodname", mFoodName);
+                mSearchEditView.setText("");
+                startActivity(i);
+
+            }
+        });
     }
 
 
@@ -324,7 +347,8 @@ public class CombinationFragment extends FragmentModule {
                 }
             });
         }
-        private void bindView(){
+
+        private void bindView() {
             mImageView.setImageResource(R.drawable.food_test_1);
             mNameTextView.setText("豌豆炒肉");
             mMatirialTextView.setText("豌豆。豌豆。豌豆。豌豆。豌豆。豌豆。豌豆。");

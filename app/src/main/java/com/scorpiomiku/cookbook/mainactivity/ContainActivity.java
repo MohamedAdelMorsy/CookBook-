@@ -111,28 +111,27 @@ public class ContainActivity extends AppCompatActivity {
                 case R.id.navigation_recommend:
                     howToCreateFragment(navigation.getSelectedItemId(), mNo1Fragment,
                             RecommendFragment.newInstance());
-                    Log.d(TAG, "onNavigationItemSelected: " + navigation.getSelectedItemId());
+                    //Log.d(TAG, "onNavigationItemSelected: " + navigation.getSelectedItemId());
                     return true;
                 case R.id.navigation_combination:
                     howToCreateFragment(navigation.getSelectedItemId(), mNo2Fragment,
                             CombinationFragment.newInstance());
-                    Log.d(TAG, "onNavigationItemSelected: " + navigation.getSelectedItemId());
+                    //Log.d(TAG, "onNavigationItemSelected: " + navigation.getSelectedItemId());
                     return true;
                 case R.id.navigation_takephoto:
                     howToCreateFragment(navigation.getSelectedItemId(), mNo3Fragment,
                             TakePhotoMainFragment.newInstance());
-                    Log.d(TAG, "onNavigationItemSelected: " + navigation.getSelectedItemId());
+                    //Log.d(TAG, "onNavigationItemSelected: " + navigation.getSelectedItemId());
                     return true;
                 case R.id.navigation_collection:
                     howToCreateFragment(navigation.getSelectedItemId(), mNo4Fragment,
                             CollectionFragment.newInstance());
-                    Log.d(TAG, "onNavigationItemSelected: " + navigation.getSelectedItemId());
+                    //Log.d(TAG, "onNavigationItemSelected: " + navigation.getSelectedItemId());
                     return true;
                 case R.id.navigation_information:
                     howToCreateFragment(navigation.getSelectedItemId(), mNo5Fragment,
                             MyInformationFragment.newInstance());
-                    Log.d(TAG, "onNavigationItemSelected: " + navigation.getSelectedItemId());
-
+                    //Log.d(TAG, "onNavigationItemSelected: " + navigation.getSelectedItemId());
                     return true;
             }
             return false;

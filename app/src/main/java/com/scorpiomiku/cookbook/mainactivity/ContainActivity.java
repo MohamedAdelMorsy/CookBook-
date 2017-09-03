@@ -17,7 +17,6 @@ import android.view.MenuItem;
 import com.scorpiomiku.cookbook.R;
 import com.scorpiomiku.cookbook.collection.CollectionFragment;
 import com.scorpiomiku.cookbook.combination.CombinationFragment;
-import com.scorpiomiku.cookbook.module.FragmentModule;
 import com.scorpiomiku.cookbook.ownInformation.MyInformationFragment;
 import com.scorpiomiku.cookbook.recommend.RecommendDefultFragment;
 import com.scorpiomiku.cookbook.recommend.RecommendFragment;
@@ -42,6 +41,12 @@ public class ContainActivity extends AppCompatActivity {
 
     private static final String TAG = "ContainActivity";
     private FragmentManager fm = getSupportFragmentManager();
+
+    private int mNo1Fragment;
+    private int mNo2Fragment;
+    private int mNo3Fragment;
+    private int mNo4Fragment;
+    private int mNo5Fragment;
 
 
     /*----------------------------------CreateFragment---------------------------*/
@@ -69,7 +74,16 @@ public class ContainActivity extends AppCompatActivity {
 
     private void createFragmentRight(Fragment fragment) {
         Fragment frag = fm.findFragmentById(R.id.fragment_container);
-        if (!(fragment.getClass().getName().equals(frag.getClass().getName())) || frag == null) {
+        if (frag != null) {
+            if (!(fragment.getClass().getName().equals(frag.getClass().getName()))) {
+                frag = fragment;
+                fm.beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right,
+                                R.anim.slide_out_left)
+                        .replace(R.id.fragment_container, frag)
+                        .commit();
+            }
+        }else{
             frag = fragment;
             fm.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_right,
@@ -95,24 +109,30 @@ public class ContainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_recommend:
-                    howToCreateFragment(navigation.getSelectedItemId(), 2131558721,
+                    howToCreateFragment(navigation.getSelectedItemId(), mNo1Fragment,
                             RecommendFragment.newInstance());
+                    Log.d(TAG, "onNavigationItemSelected: " + navigation.getSelectedItemId());
                     return true;
                 case R.id.navigation_combination:
-                    howToCreateFragment(navigation.getSelectedItemId(), 2131558722,
+                    howToCreateFragment(navigation.getSelectedItemId(), mNo2Fragment,
                             CombinationFragment.newInstance());
+                    Log.d(TAG, "onNavigationItemSelected: " + navigation.getSelectedItemId());
                     return true;
                 case R.id.navigation_takephoto:
-                    howToCreateFragment(navigation.getSelectedItemId(), 2131558723,
+                    howToCreateFragment(navigation.getSelectedItemId(), mNo3Fragment,
                             TakePhotoMainFragment.newInstance());
+                    Log.d(TAG, "onNavigationItemSelected: " + navigation.getSelectedItemId());
                     return true;
                 case R.id.navigation_collection:
-                    howToCreateFragment(navigation.getSelectedItemId(), 2131558724,
+                    howToCreateFragment(navigation.getSelectedItemId(), mNo4Fragment,
                             CollectionFragment.newInstance());
+                    Log.d(TAG, "onNavigationItemSelected: " + navigation.getSelectedItemId());
                     return true;
                 case R.id.navigation_information:
-                    howToCreateFragment(navigation.getSelectedItemId(), 2131558725,
+                    howToCreateFragment(navigation.getSelectedItemId(), mNo5Fragment,
                             MyInformationFragment.newInstance());
+                    Log.d(TAG, "onNavigationItemSelected: " + navigation.getSelectedItemId());
+
                     return true;
             }
             return false;
@@ -132,6 +152,11 @@ public class ContainActivity extends AppCompatActivity {
                 .commit();
         navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        mNo1Fragment = navigation.getSelectedItemId();
+        mNo2Fragment = mNo1Fragment + 1;
+        mNo3Fragment = mNo1Fragment + 2;
+        mNo4Fragment = mNo1Fragment + 3;
+        mNo5Fragment = mNo1Fragment + 4;
         navigation.setSelectedItemId(R.id.navigation_takephoto);
         int[][] states = new int[][]{
                 new int[]{-android.R.attr.state_checked},

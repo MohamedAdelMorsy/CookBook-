@@ -179,7 +179,7 @@ public class BasketActivity extends AppCompatActivity {
     /*-------------------------initData----------------------*/
     private void initData() {
         for (int i = 0; i < 2; i++) {
-            mList.add(new Basket("糖醋里脊", "猪肉里脊\n" + "白糖两勺\n" + "大葱\n" + "麻辣酱\n"));
+            mList.add(new Basket("糖醋里脊1", "猪肉里脊\n" + "白糖两勺\n" + "大葱\n" + "麻辣酱\n"));
         }
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor cursor = db.query("Basket", null, null, null, null, null, null);

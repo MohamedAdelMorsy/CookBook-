@@ -1,13 +1,35 @@
 package com.scorpiomiku.cookbook.classifierresultactivity;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.PopupMenu;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.scorpiomiku.cookbook.R;
+import com.scorpiomiku.cookbook.bean.FoodMaterials;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import cn.bmob.v3.AsyncCustomEndpoints;
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.CloudCodeListener;
+import cn.bmob.v3.listener.FindListener;
 
 public class ClassifierResultActivity extends AppCompatActivity {
 
@@ -24,6 +46,9 @@ public class ClassifierResultActivity extends AppCompatActivity {
 
     private String mFragmentSendMessage;
     private Intent i;
+
+    private int AllNU;
+    private int t;
 
 
     private static final String TAG = "ClassifierResultActivity";
@@ -50,6 +75,7 @@ public class ClassifierResultActivity extends AppCompatActivity {
     /*---------------------------RecommendFragment-----------------------------*/
     private void recommendInitView() {
         mFoodName = i.getStringExtra("foodname");
+
         initUrlView();
     }
 
@@ -70,7 +96,7 @@ public class ClassifierResultActivity extends AppCompatActivity {
             Log.d(TAG, "chooseInit: CameraActivity");
             cameraInitView();
         }
-        if(mFragmentSendMessage.equals("CombinationFragment")){
+        if (mFragmentSendMessage.equals("CombinationFragment")) {
             Log.d(TAG, "chooseInit: CombinationFragment");
         }
     }
@@ -88,4 +114,6 @@ public class ClassifierResultActivity extends AppCompatActivity {
                 "。解决办法就\n" +
                 "是把commit（）方法替换成 commitAllowingStateLoss()就行了，其效果是一样的。\n");
     }
+
+
 }

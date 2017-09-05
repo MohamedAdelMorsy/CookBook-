@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.scorpiomiku.cookbook.R;
 import com.scorpiomiku.cookbook.classifierresultactivity.ClassifierResultActivity;
@@ -46,7 +47,7 @@ public class RecommendFragment extends FragmentModule {
     public static TextView mDinnerChoose;
     public static TextView mLunchChoose;
 
-    public static boolean isDefault ;
+    public static boolean isDefault;
 
 
     public static RecommendFragment newInstance() {
@@ -106,7 +107,7 @@ public class RecommendFragment extends FragmentModule {
     }
 
     /*-------------------------------chooseDefault-----------------------------*/
-    public static void chooseDefault(){
+    public static void chooseDefault() {
         mBreakfastChoose.setVisibility(View.INVISIBLE);
         mLunchChoose.setVisibility(View.INVISIBLE);
         mDinnerChoose.setVisibility(View.INVISIBLE);
@@ -164,11 +165,15 @@ public class RecommendFragment extends FragmentModule {
             @Override
             public void onClick(View v) {
                 String text = mSearchEditText.getText().toString();
-                Intent i = new Intent(getActivity(), ClassifierResultActivity.class);
-                i.putExtra("foodname", text);
-                i.putExtra("FragmentSendMessage", "RecommendFragment");
-                mSearchEditText.setText("");
-                startActivity(i);
+                if (!text.equals("")) {
+                    Intent i = new Intent(getActivity(), ClassifierResultActivity.class);
+                    i.putExtra("foodname", text);
+                    i.putExtra("FragmentSendMessage", "RecommendFragment");
+                    mSearchEditText.setText("");
+                    startActivity(i);
+                }else {
+                    Toast.makeText(getActivity(),"请输入内容哦",Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

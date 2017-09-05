@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.scorpiomiku.cookbook.R;
 import com.scorpiomiku.cookbook.classifierresultactivity.ClassifierResultActivity;
@@ -130,12 +131,15 @@ public class CombinationFragment extends FragmentModule {
             @Override
             public void onClick(View v) {
                 mFoodName = mSearchEditView.getText().toString();
-                Intent i = new Intent(getActivity(), ClassifierResultActivity.class);
-                i.putExtra("FragmentSendMessage", "CombinationFragment");
-                i.putExtra("foodname", mFoodName);
-                mSearchEditView.setText("");
-                startActivity(i);
-
+                if (!mFoodName.equals("")) {
+                    Intent i = new Intent(getActivity(), ClassifierResultActivity.class);
+                    i.putExtra("FragmentSendMessage", "CombinationFragment");
+                    i.putExtra("foodname", mFoodName);
+                    mSearchEditView.setText("");
+                    startActivity(i);
+                } else {
+                    Toast.makeText(getActivity(),"请输入内容哦",Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

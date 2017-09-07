@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.scorpiomiku.cookbook.R;
 import com.scorpiomiku.cookbook.menuactivity.MenuActivity;
 import com.scorpiomiku.cookbook.module.FragmentModule;
+import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,7 @@ import java.util.List;
 public class BreakFastFragment extends FragmentModule {
 
     private RecyclerView mRecyclerView;
+    private SwipeMenuRecyclerView mSwipeMenuRecyclerView;
 
     public static BreakFastFragment newInstance() {
         return new BreakFastFragment();

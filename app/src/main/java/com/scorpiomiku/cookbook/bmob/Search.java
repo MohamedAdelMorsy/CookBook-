@@ -14,6 +14,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.scorpiomiku.cookbook.R;
+import com.scorpiomiku.cookbook.bean.CBLEC;
 import com.scorpiomiku.cookbook.bean.FoodMaterials;
 
 import org.json.JSONException;
@@ -107,7 +108,6 @@ public class Search {
             public void run() {
                 ace1.callEndpoint("get_way_fromShiCai", jas, new CloudCodeListener() {
                     public static final String TAG = "thing";
-
                     @Override
                     public void done(Object object, BmobException e) {
                         if (e == null) {
@@ -203,85 +203,6 @@ public class Search {
                                                                 yongliaoliang[9] = subObject.get("yongLiaoLiang10").getAsString();
                                                             }
                                                         }
-                                                        Log.d("initWay", "测试点5" + "查询食材成功");
-                                                        new Thread(new Runnable() {
-                                                            @Override
-                                                            public void run() {
-                                                                Drawable CBLdrawable = loadImageFromNetwork(ZuoFaTuUrl, ZuoFaTuMing);
-                                                                Log.d("initWay", "测试点5" + "图片加载成功");
-                                                                mCookBookList.add(new CBLEC(ZuoFaMing, CBLdrawable, "这里是介绍", yongliao[0], yongliao[1], yongliao[2], yongliao[3], yongliao[4], yongliao[5], yongliao[6], yongliao[7], yongliao[8], yongliaoliang[0], yongliaoliang[1], yongliaoliang[2], yongliaoliang[3], yongliaoliang[4], yongliaoliang[5], yongliaoliang[6], yongliaoliang[7], yongliaoliang[8], Way_objectID));
-                                                                //*/
-                                                                Log.d("initWay", "测试点5" + "放入对象成功");
-                                                                recyclerView.post(new Runnable() {
-                                                                    @Override
-                                                                    public void run() {
-                                                                        final CBLAdapter adapter = new CBLAdapter(this, mCookBookList);
-                                                                        Log.d("initWay", "测试点5" + "ada创建成功");
-                                                                        adapter.notifyDataSetChanged();
-                                                                        recyclerView.setAdapter(adapter);
-                                                                        //recyclerView.refreshComplete();
-                                                                        //System.out.println("Runnable thread id " + Thread.currentThread().getId());
-
-                                                                        adapter.setOnRecyclerViewListener(new CBLAdapter.OnRecyclerViewListener() {
-                                                                            @Override
-                                                                            public void onItemClick(View view, int position) {
-                                                                                String str = ((TextView) view.findViewById(R.id.cblec_Name)).getTag().toString();
-                                                                                //toast(str);
-                                                                                //   toast(str);
-                                                                                Intent intent = new Intent(CookBookListActivity.this, CookPrativeActivity.class);
-                                                                                intent.putExtra("WayObjId", str);
-                                                                                intent.putExtra("user_objId", userObjId);
-                                                                                intent.putExtra("FangFaMing", "get_way");
-                                                                                intent.putExtra("data", msg);
-                                                                                intent.putExtra("MethedJudge", MethedJudge);
-                                                                                startActivityForResult(intent, 100);
-                                                                                //startActivity(intent);
-                                                                                //另加返回值
-                                                                            }
-
-                                                                            @Override
-                                                                            public boolean onItemLongClick(View view, final int position) {
-                                                                                if (MethedJudge == 2) {
-                                                                                    PopupMenu popupMenu;
-                                                                                    final Menu menu;
-                                                                                    String str = ((TextView) view.findViewById(R.id.cblec_Name)).getTag().toString();
-                                                                                    popupMenu = new PopupMenu(CookBookListActivity.this, findViewById(R.id.cblec_recycler_view));
-                                                                                    menu = popupMenu.getMenu();
-                                                                                    // 通过代码添加菜单项
-                                                                                    menu.add(Menu.NONE, Menu.FIRST + 0, 0, "删除");
-                                                                                    popupMenu.show();
-                                                                                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                                                                                        @Override
-                                                                                        public boolean onMenuItemClick(MenuItem item) {
-                                                                                            switch (item.getItemId()) {
-                                                                                                case Menu.FIRST + 0:
-                                                                                                    Toast.makeText(CookBookListActivity.this, "删除",
-                                                                                                            Toast.LENGTH_LONG).show();
-                                                                                                    mCookBookList.remove(position);
-                                                                                                    adapter.notifyItemRemoved(position);
-                                                                                                    adapter.notifyItemRangeChanged(0, mCookBookList.size() - position);
-                                                                                                    adapter.notifyDataSetChanged();
-                                                                                                    ///adapter.removeData(position);
-                                                                                                    break;
-                                                                                                default:
-                                                                                                    break;
-                                                                                            }
-                                                                                            return false;
-                                                                                        }
-                                                                                    });
-                                                                                }
-                                                                                return false;
-                                                                            }
-                                                                        });
-                                                                        adapter.notifyDataSetChanged();
-                                                                        recyclerView.setAdapter(adapter);
-                                                                        //adapter.notifyDataSetChanged();
-                                                                        //recyclerView.notifyAll();
-                                                                    }
-                                                                });
-
-                                                            }
-                                                        }).start();
                                                     }
                                                 }
                                             }

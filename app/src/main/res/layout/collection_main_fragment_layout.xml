@@ -1,148 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.design.widget.CoordinatorLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:orientation="vertical"
     android:layout_height="match_parent">
 
-    <android.support.design.widget.AppBarLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#FFF">
+        android:layout_height="wrap_content">
 
-        <android.support.design.widget.CollapsingToolbarLayout
+
+        <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            android:layout_height="wrap_content"
+            android:background="#FFF">
 
-            <LinearLayout
+            <android.support.design.widget.CollapsingToolbarLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                >
-
-                <android.support.v7.widget.Toolbar
-                    android:id="@+id/collection_tool_bar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/toolbar_and_menu_color"
-                    app:contentInsetStart="0dp"
-                    app:layout_collapseMode="pin"
-                    app:title="@string/collection_toolbar_title">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:orientation="horizontal">
-
-                        <LinearLayout
-                            android:id="@+id/collection_mycolletion"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="30dp"
-                                android:layout_height="match_parent"/>
-
-                            <ImageView
-                                android:id="@+id/collection_collection_iamge_view"
-                                android:layout_width="30dp"
-                                android:layout_height="30dp"
-                                android:layout_gravity="center"
-                                android:background="@drawable/collection_image_red"
-                                android:textColor="@color/colorWhite"
-                                android:textSize="20sp"/>
-
-                            <TextView
-                                android:layout_width="10dp"
-                                android:layout_height="match_parent"/>
-
-                            <TextView
-                                android:id="@+id/collection_collection_text_view"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:layout_gravity="center"
-                                android:gravity="center"
-                                android:text="@string/collection_collection"
-                                android:textColor="@color/colorRed"
-                                android:textSize="16sp"/>
-                        </LinearLayout>
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="0.005"
-                            android:background="@color/colorHolder"/>
-
-                        <LinearLayout
-                            android:id="@+id/collection_myrecords"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="35dp"
-                                android:layout_height="match_parent"/>
-
-                            <ImageView
-                                android:id="@+id/collection_record_iamge_view"
-                                android:layout_width="25dp"
-                                android:layout_height="25dp"
-                                android:layout_gravity="center"
-                                android:background="@drawable/collection_record_image_white"
-                                android:textColor="@color/colorWhite"
-                                android:textSize="20sp"/>
-
-                            <TextView
-                                android:layout_width="10dp"
-                                android:layout_height="match_parent"/>
-
-                            <TextView
-                                android:id="@+id/collection_record_text_view"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:layout_gravity="center"
-                                android:gravity="center"
-                                android:text="@string/collection_record"
-                                android:textSize="16sp"/>
-
-                        </LinearLayout>
-                    </LinearLayout>
-                </android.support.v7.widget.Toolbar>
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:contentScrim="?attr/colorPrimary"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:orientation="vertical"
-                    app:layout_collapseMode="parallax">
+                    >
 
-
-                    <TextView
+                    <android.support.v7.widget.Toolbar
+                        android:id="@+id/collection_tool_bar"
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/colorHolder"/>
+                        android:layout_height="wrap_content"
+                        android:background="@color/toolbar_and_menu_color"
+                        app:contentInsetStart="0dp"
+                        app:layout_collapseMode="pin"
+                        app:title="@string/collection_toolbar_title">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:id="@+id/collection_mycolletion"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="30dp"
+                                    android:layout_height="match_parent"/>
+
+                                <ImageView
+                                    android:id="@+id/collection_collection_iamge_view"
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    android:layout_gravity="center"
+                                    android:background="@drawable/collection_image_red"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="20sp"/>
+
+                                <TextView
+                                    android:layout_width="10dp"
+                                    android:layout_height="match_parent"/>
+
+                                <TextView
+                                    android:id="@+id/collection_collection_text_view"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_gravity="center"
+                                    android:gravity="center"
+                                    android:text="@string/collection_collection"
+                                    android:textColor="@color/colorRed"
+                                    android:textSize="16sp"/>
+                            </LinearLayout>
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="0.005"
+                                android:background="@color/colorHolder"/>
+
+                            <LinearLayout
+                                android:id="@+id/collection_myrecords"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="35dp"
+                                    android:layout_height="match_parent"/>
+
+                                <ImageView
+                                    android:id="@+id/collection_record_iamge_view"
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:layout_gravity="center"
+                                    android:background="@drawable/collection_record_image_white"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="20sp"/>
+
+                                <TextView
+                                    android:layout_width="10dp"
+                                    android:layout_height="match_parent"/>
+
+                                <TextView
+                                    android:id="@+id/collection_record_text_view"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_gravity="center"
+                                    android:gravity="center"
+                                    android:text="@string/collection_record"
+                                    android:textSize="16sp"/>
+
+                            </LinearLayout>
+                        </LinearLayout>
+                    </android.support.v7.widget.Toolbar>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_collapseMode="parallax">
+
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/colorHolder"/>
+                    </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
 
-        </android.support.design.widget.CollapsingToolbarLayout>
+            </android.support.design.widget.CollapsingToolbarLayout>
 
-    </android.support.design.widget.AppBarLayout>
+        </android.support.design.widget.AppBarLayout>
 
+    </LinearLayout>
 
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/collection_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </FrameLayout>
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+    </LinearLayout>
 
-</android.support.design.widget.CoordinatorLayout>
-
-
+</LinearLayout>
 
 

@@ -3,6 +3,7 @@ package com.scorpiomiku.cookbook.recommend;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.scorpiomiku.cookbook.R;
 import com.scorpiomiku.cookbook.menuactivity.MenuActivity;
@@ -27,7 +29,7 @@ import java.util.List;
 public class BreakFastFragment extends FragmentModule {
 
     private RecyclerView mRecyclerView;
-    private SwipeMenuRecyclerView mSwipeMenuRecyclerView;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     public static BreakFastFragment newInstance() {
         return new BreakFastFragment();
@@ -45,6 +47,13 @@ public class BreakFastFragment extends FragmentModule {
         mRecyclerView = (RecyclerView) v.findViewById(R.id.recommend_breakfast_recycler_view);
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         mRecyclerView.setNestedScrollingEnabled(false);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.recommend_breakfast_swiperefreshlayout);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Toast.makeText(getActivity(),"刷新",Toast.LENGTH_SHORT).show();
+            }
+        });
         List<String> list = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
             list.add("1");

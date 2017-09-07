@@ -63,13 +63,13 @@
                                 android:layout_height="match_parent"/>
 
                             <TextView
-                                android:textColor="@color/colorRed"
                                 android:id="@+id/collection_collection_text_view"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 android:text="@string/collection_collection"
+                                android:textColor="@color/colorRed"
                                 android:textSize="16sp"/>
                         </LinearLayout>
 
@@ -134,18 +134,13 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <FrameLayout
-            android:id="@+id/collection_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </FrameLayout>
-    </android.support.v4.widget.NestedScrollView>
+    <FrameLayout
+        android:id="@+id/collection_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </FrameLayout>
+
 </android.support.design.widget.CoordinatorLayout>
 
 

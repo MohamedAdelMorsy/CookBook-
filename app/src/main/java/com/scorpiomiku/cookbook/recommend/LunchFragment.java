@@ -3,6 +3,7 @@ package com.scorpiomiku.cookbook.recommend;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.scorpiomiku.cookbook.R;
 import com.scorpiomiku.cookbook.menuactivity.MenuActivity;
@@ -47,6 +49,13 @@ public class LunchFragment extends FragmentModule {
             list.add("1");
         }
         mRecyclerView.setAdapter(new LunchFragment.Adapter(list));
+        RecommendFragment.mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Toast.makeText(getActivity(), "刷新", Toast.LENGTH_SHORT).show();
+                RecommendFragment.mSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
         return v;
     }
 

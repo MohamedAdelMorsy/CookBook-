@@ -50,7 +50,7 @@ public class RecommendFragment extends FragmentModule {
 
     public static boolean isDefault;
 
-    private SwipeRefreshLayout mSwipeRefreshLayout;
+    public static SwipeRefreshLayout mSwipeRefreshLayout;
 
 
     public static RecommendFragment newInstance() {
@@ -119,13 +119,7 @@ public class RecommendFragment extends FragmentModule {
 
     /*-------------------------------------setListener--------------------------*/
     private void setListener() {
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Toast.makeText(getActivity(), "刷新", Toast.LENGTH_SHORT).show();
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
-        });
+
         mBreakFastImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

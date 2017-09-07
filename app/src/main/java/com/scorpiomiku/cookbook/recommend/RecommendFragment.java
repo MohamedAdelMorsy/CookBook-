@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -49,6 +50,8 @@ public class RecommendFragment extends FragmentModule {
 
     public static boolean isDefault;
 
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+
 
     public static RecommendFragment newInstance() {
         return new RecommendFragment();
@@ -77,6 +80,7 @@ public class RecommendFragment extends FragmentModule {
                 .recommend_tool_bar_dinner_iamge_view);
         mLunchImageView = (ImageView) v.findViewById(R.id
                 .recommend_tool_bar_lunch_iamge_view);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.recommend_swipe_refresh_layout);
         mBreakfastChoose = (TextView) v.findViewById(R.id.recommend_choose_breakfast_text_view);
         mLunchChoose = (TextView) v.findViewById(R.id.recommend_choose_lunch_text_view);
         mDinnerChoose = (TextView) v.findViewById(R.id.recommend_choose_dinner_text_view);
@@ -115,6 +119,13 @@ public class RecommendFragment extends FragmentModule {
 
     /*-------------------------------------setListener--------------------------*/
     private void setListener() {
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Toast.makeText(getActivity(), "刷新", Toast.LENGTH_SHORT).show();
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
         mBreakFastImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -171,10 +182,16 @@ public class RecommendFragment extends FragmentModule {
                     i.putExtra("FragmentSendMessage", "RecommendFragment");
                     mSearchEditText.setText("");
                     startActivity(i);
-                }else {
-                    Toast.makeText(getActivity(),"请输入内容哦",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), "请输入内容哦", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+    }
+
+    /*-----------------------------------chechFragment--------------------------*/
+    private String getFragmentName() {
+        Fragment nowFragment = fm.findFragmentById(R.id.recommend_container);
+        return nowFragment.getClass().getName();
     }
 }

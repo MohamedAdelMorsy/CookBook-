@@ -29,7 +29,7 @@ import java.util.List;
 public class BreakFastFragment extends FragmentModule {
 
     private RecyclerView mRecyclerView;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
+
 
     public static BreakFastFragment newInstance() {
         return new BreakFastFragment();
@@ -47,13 +47,8 @@ public class BreakFastFragment extends FragmentModule {
         mRecyclerView = (RecyclerView) v.findViewById(R.id.recommend_breakfast_recycler_view);
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         mRecyclerView.setNestedScrollingEnabled(false);
-        mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.recommend_breakfast_swiperefreshlayout);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Toast.makeText(getActivity(),"刷新",Toast.LENGTH_SHORT).show();
-            }
-        });
+
+
         List<String> list = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
             list.add("1");

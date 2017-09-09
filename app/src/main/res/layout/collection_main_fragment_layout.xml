@@ -52,13 +52,13 @@
                                 android:orientation="horizontal">
 
                                 <TextView
-                                    android:layout_width="30dp"
+                                    android:layout_width="40dp"
                                     android:layout_height="match_parent"/>
 
                                 <ImageView
                                     android:id="@+id/collection_collection_iamge_view"
-                                    android:layout_width="30dp"
-                                    android:layout_height="30dp"
+                                    android:layout_width="15dp"
+                                    android:layout_height="15dp"
                                     android:layout_gravity="center"
                                     android:background="@drawable/collection_image_red"
                                     android:textColor="@color/colorWhite"
@@ -75,7 +75,7 @@
                                     android:layout_gravity="center"
                                     android:gravity="center"
                                     android:text="@string/collection_collection"
-                                    android:textColor="@color/colorRed"
+                                    android:textColor="@color/testColor"
                                     android:textSize="16sp"/>
                             </LinearLayout>
 
@@ -93,13 +93,13 @@
                                 android:orientation="horizontal">
 
                                 <TextView
-                                    android:layout_width="35dp"
+                                    android:layout_width="45dp"
                                     android:layout_height="match_parent"/>
 
                                 <ImageView
                                     android:id="@+id/collection_record_iamge_view"
-                                    android:layout_width="25dp"
-                                    android:layout_height="25dp"
+                                    android:layout_width="10dp"
+                                    android:layout_height="10dp"
                                     android:layout_gravity="center"
                                     android:background="@drawable/collection_record_image_white"
                                     android:textColor="@color/colorWhite"

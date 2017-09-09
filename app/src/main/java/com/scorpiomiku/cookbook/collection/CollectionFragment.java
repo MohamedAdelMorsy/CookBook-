@@ -69,7 +69,7 @@ public class CollectionFragment extends FragmentModule {
     private void changeViewColorToCollection() {
         mCollectionImage.setImageResource(R.drawable.collection_image_red);
         mRecordImage.setImageResource(R.drawable.collection_record_image_white);
-        mCollectionTextView.setTextColor(getResources().getColor(R.color.colorRed));
+        mCollectionTextView.setTextColor(getResources().getColor(R.color.testColor));
         mRecordTextView.setTextColor(getResources().getColor(R.color.colorWhite));
     }
 
@@ -77,7 +77,7 @@ public class CollectionFragment extends FragmentModule {
         mCollectionImage.setImageResource(R.drawable.collection_image_white);
         mRecordImage.setImageResource(R.drawable.collection_record_image_red);
         mCollectionTextView.setTextColor(getResources().getColor(R.color.colorWhite));
-        mRecordTextView.setTextColor(getResources().getColor(R.color.colorRed));
+        mRecordTextView.setTextColor(getResources().getColor(R.color.testColor));
     }
 
     /*------------------------------------------------clickListener---------------------------*/

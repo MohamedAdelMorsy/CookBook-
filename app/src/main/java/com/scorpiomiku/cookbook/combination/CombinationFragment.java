@@ -124,7 +124,7 @@ public class CombinationFragment extends FragmentModule {
         };
         mHorizontalDropDownMenu.setDropDownMenu(Arrays.asList(mHeaders), mPopupViews, mContextView
                 , mDrawables
-                , getResources().getDrawable(R.drawable.backtest, getActivity().getTheme()));
+                , getResources().getDrawable(R.drawable.swipe_background, getActivity().getTheme()));
 
 
         mSearchImageView.setOnClickListener(new View.OnClickListener() {

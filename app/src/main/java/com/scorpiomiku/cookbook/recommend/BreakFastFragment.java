@@ -1,11 +1,17 @@
 package com.scorpiomiku.cookbook.recommend;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +28,7 @@ import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
  * Created by Administrator on 2017/6/3.
  */
@@ -29,8 +36,13 @@ import java.util.List;
 public class BreakFastFragment extends FragmentModule {
 
     private RecyclerView mRecyclerView;
+    private boolean mIsTop;
+    private static String TAG = "BreakFastFragment";
+    private GridLayoutManager mGridLayoutManager;
 
-
+    private Adapter mAdapter;
+    boolean isLoading;
+    private Handler handler = new Handler();
     public static BreakFastFragment newInstance() {
         return new BreakFastFragment();
     }
@@ -38,6 +50,7 @@ public class BreakFastFragment extends FragmentModule {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         RecommendFragment.mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -47,12 +60,15 @@ public class BreakFastFragment extends FragmentModule {
         });
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.recommend_breakfast_fragment_layout, container, false);
         mRecyclerView = (RecyclerView) v.findViewById(R.id.recommend_breakfast_recycler_view);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        mGridLayoutManager = new GridLayoutManager(getContext(), 2);
+        mRecyclerView.setLayoutManager(mGridLayoutManager);
         mRecyclerView.setNestedScrollingEnabled(false);
 
 
@@ -60,7 +76,45 @@ public class BreakFastFragment extends FragmentModule {
         for (int i = 0; i < 20; i++) {
             list.add("1");
         }
-        mRecyclerView.setAdapter(new Adapter(list));
+        mAdapter = new Adapter(list);
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                Log.d("test", "StateChanged = " + newState);
+
+
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                Log.d("test", "onScrolled");
+
+                int lastVisibleItemPosition = mGridLayoutManager.findLastVisibleItemPosition();
+                if (lastVisibleItemPosition + 1 == mAdapter.getItemCount()) {
+                    Log.d("test", "loading executed");
+
+                    boolean isRefreshing = RecommendFragment.mSwipeRefreshLayout.isRefreshing();
+                    if (isRefreshing) {
+                        mAdapter.notifyItemRemoved(mAdapter.getItemCount());
+                        return;
+                    }
+                    if (!isLoading) {
+                        isLoading = true;
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                Log.d("test", "load more completed");
+                                isLoading = false;
+                            }
+                        }, 1000);
+                    }
+                }
+            }
+        });
         return v;
     }
 

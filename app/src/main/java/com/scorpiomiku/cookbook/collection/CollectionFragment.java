@@ -31,6 +31,8 @@ public class CollectionFragment extends FragmentModule {
     private TextView mRecordTextView;
 
     private FragmentManager mFragmentManager;
+    private TextView mChooseCollection;
+    private TextView mChooseRecord;
 
 
     public static CollectionFragment newInstance() {
@@ -61,6 +63,8 @@ public class CollectionFragment extends FragmentModule {
         mCollectionTextView = (TextView) v.findViewById(R.id.collection_collection_text_view);
         mRecordImage = (ImageView) v.findViewById(R.id.collection_record_iamge_view);
         mRecordTextView = (TextView) v.findViewById(R.id.collection_record_text_view);
+        mChooseCollection = (TextView) v.findViewById(R.id.collection_choose_collection);
+        mChooseRecord = (TextView) v.findViewById(R.id.collection_choose_record);
         setClickListener();
         return v;
     }
@@ -71,6 +75,8 @@ public class CollectionFragment extends FragmentModule {
         mRecordImage.setImageResource(R.drawable.collection_record_image_white);
         mCollectionTextView.setTextColor(getResources().getColor(R.color.testColor));
         mRecordTextView.setTextColor(getResources().getColor(R.color.colorWhite));
+        mChooseRecord.setVisibility(View.INVISIBLE);
+        mChooseCollection.setVisibility(View.VISIBLE);
     }
 
     private void changeViewColorToRecord() {
@@ -78,6 +84,8 @@ public class CollectionFragment extends FragmentModule {
         mRecordImage.setImageResource(R.drawable.collection_record_image_red);
         mCollectionTextView.setTextColor(getResources().getColor(R.color.colorWhite));
         mRecordTextView.setTextColor(getResources().getColor(R.color.testColor));
+        mChooseRecord.setVisibility(View.VISIBLE);
+        mChooseCollection.setVisibility(View.INVISIBLE);
     }
 
     /*------------------------------------------------clickListener---------------------------*/

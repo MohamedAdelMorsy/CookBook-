@@ -83,19 +83,15 @@ public class BreakFastFragment extends FragmentModule {
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 Log.d("test", "StateChanged = " + newState);
-
-
             }
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 Log.d("test", "onScrolled");
-
                 int lastVisibleItemPosition = mGridLayoutManager.findLastVisibleItemPosition();
                 if (lastVisibleItemPosition + 1 == mAdapter.getItemCount()) {
                     Log.d("test", "loading executed");
-
                     boolean isRefreshing = RecommendFragment.mSwipeRefreshLayout.isRefreshing();
                     if (isRefreshing) {
                         mAdapter.notifyItemRemoved(mAdapter.getItemCount());
@@ -106,7 +102,6 @@ public class BreakFastFragment extends FragmentModule {
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-
                                 Log.d("test", "load more completed");
                                 isLoading = false;
                             }

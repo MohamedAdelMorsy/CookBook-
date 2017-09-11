@@ -59,7 +59,7 @@ public class CameraActivity extends AppCompatActivity {
     private ImageView mTakePictureButton;
     private int mCameraId = CameraInfo.CAMERA_FACING_BACK;
 
-    private static final int INPUT_SIZE = 32;
+    private static final int INPUT_SIZE = 216;
     private static final int IMAGE_MEAN = 117;
     private static final float IMAGE_STD = 1;
     private static final String INPUT_NAME = "input";
@@ -130,7 +130,7 @@ public class CameraActivity extends AppCompatActivity {
         try {
             c = Camera.open();
             Camera.Parameters mParameters = c.getParameters();
-            mParameters.setPictureSize(224, 224);
+            mParameters.setPictureSize(216, 216);
             c.setParameters(mParameters);
         } catch (Exception e) {
             e.printStackTrace();
@@ -302,11 +302,11 @@ public class CameraActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        Intent i = new Intent(CameraActivity.this, ClassifierResultActivity.class);
+        /*Intent i = new Intent(CameraActivity.this, ClassifierResultActivity.class);
         i.putExtra("picturePath", mPicturePath);
         i.putExtra("pictureResult", mPictureResult);
         i.putExtra("FragmentSendMessage", "CameraActivity");
-        startActivity(i);
+        startActivity(i);*/
         super.onPause();
     }
 

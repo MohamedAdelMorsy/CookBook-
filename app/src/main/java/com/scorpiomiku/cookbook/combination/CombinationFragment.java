@@ -4,10 +4,12 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,7 @@ import com.scorpiomiku.cookbook.R;
 import com.scorpiomiku.cookbook.classifierresultactivity.ClassifierResultActivity;
 import com.scorpiomiku.cookbook.menuactivity.MenuActivity;
 import com.scorpiomiku.cookbook.module.FragmentModule;
+import com.scorpiomiku.cookbook.recommend.RecommendDefultFragment;
 import com.yyydjk.library.HorizontalDropDownMenu;
 
 import java.util.ArrayList;
@@ -32,6 +35,15 @@ import java.util.List;
  */
 
 public class CombinationFragment extends FragmentModule {
+    private LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getContext());
+    ;
+    private List<String> list = new ArrayList<>();
+
+    private MenuAdapter mAdapter = new MenuAdapter(list);
+    boolean isLoading;
+    private Handler handler = new Handler();
+    private static final int TYPE_ITEM = 0;
+    private static final int TYPE_FOOTER = 1;
 
     private HorizontalDropDownMenu mHorizontalDropDownMenu;
     private TastesAdapter mTastesAdapter;
@@ -42,6 +54,8 @@ public class CombinationFragment extends FragmentModule {
     private ImageView mSearchImageView;
 
     private String mFoodName;
+
+    private RecyclerView mRecyclerView;
 
 
     private String mHeaders[] = {"口味", "时段", "做法"};
@@ -60,9 +74,6 @@ public class CombinationFragment extends FragmentModule {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        for (int i = 0; i < 15; i++) {
-            testList.add("");
-        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -73,7 +84,9 @@ public class CombinationFragment extends FragmentModule {
         mHorizontalDropDownMenu = (HorizontalDropDownMenu) v.findViewById(R.id.combination_fragment_dropmenu);
         mSearchEditView = (EditText) v.findViewById(R.id.combination_search_edit_view);
         mSearchImageView = (ImageView) v.findViewById(R.id.combination_tool_bar_search_image_view);
+        initData();
         initView();
+
         return v;
     }
 
@@ -110,19 +123,21 @@ public class CombinationFragment extends FragmentModule {
         mPopupViews.add(mMakeWayView);
 
         /*-------------contextView-------------*/
-        RecyclerView mContextView = new RecyclerView(getContext());
-        mContextView.setLayoutParams(new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams
+        mRecyclerView = new RecyclerView(getContext());
+        mRecyclerView.setLayoutParams(new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams
                 .MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        mContextView.setAdapter(new MenuAdapter(testList));
-        mContextView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mContextView.setNestedScrollingEnabled(false);
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mRecyclerView.setNestedScrollingEnabled(false);
+        setRefresh();
+
 
         Drawable[] mDrawables = new Drawable[]{
                 getResources().getDrawable(R.drawable.combination_taste_ico, getActivity().getTheme()),
                 getResources().getDrawable(R.drawable.combination_time_ico_24dp, getActivity().getTheme()),
                 getResources().getDrawable(R.drawable.combination_makeway_ico, getActivity().getTheme())
         };
-        mHorizontalDropDownMenu.setDropDownMenu(Arrays.asList(mHeaders), mPopupViews, mContextView
+        mHorizontalDropDownMenu.setDropDownMenu(Arrays.asList(mHeaders), mPopupViews, mRecyclerView
                 , mDrawables
                 , getResources().getDrawable(R.drawable.swipe_background, getActivity().getTheme()));
 
@@ -138,10 +153,11 @@ public class CombinationFragment extends FragmentModule {
                     mSearchEditView.setText("");
                     startActivity(i);
                 } else {
-                    Toast.makeText(getActivity(),"请输入内容哦",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "请输入内容哦", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
     }
 
 
@@ -315,14 +331,34 @@ public class CombinationFragment extends FragmentModule {
 
         @Override
         public MenuHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater layoutInflater = LayoutInflater.from(getContext());
-            View v = layoutInflater.inflate(R.layout.combination_menu_recycler_view_item, parent, false);
-            return new MenuHolder(v);
+            if (viewType == TYPE_ITEM) {
+                View v = LayoutInflater.from(getContext()).inflate(R.layout
+                        .combination_menu_recycler_view_item, parent, false);
+                return new MenuHolder(v);
+            } else if (viewType == TYPE_FOOTER) {
+                View v = LayoutInflater.from(getContext()).inflate(R.layout
+                        .item_foot, parent, false);
+                return new MenuHolder(v);
+            }
+            return null;
         }
 
         @Override
         public void onBindViewHolder(MenuHolder holder, int position) {
-            holder.bindView();
+            if (position + 1 == getItemCount()) {
+
+            } else {
+                holder.bindView();
+            }
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            if (position + 1 == getItemCount()) {
+                return TYPE_FOOTER;
+            } else {
+                return TYPE_ITEM;
+            }
         }
 
         @Override
@@ -357,5 +393,86 @@ public class CombinationFragment extends FragmentModule {
             mNameTextView.setText("豌豆炒肉");
             mMatirialTextView.setText("豌豆。豌豆。豌豆。豌豆。豌豆。豌豆。豌豆。");
         }
+    }
+
+    private void initData() {
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getData();
+            }
+        }, 1000);
+    }
+
+    private void getData() {
+        for (int i = 0; i < 6; i++) {
+            list.add("1");
+        }
+        mAdapter.notifyDataSetChanged();
+        //RecommendFragment.mSwipeRefreshLayout.setRefreshing(false);
+        mAdapter.notifyItemRemoved(mAdapter.getItemCount());
+    }
+
+    private void setRefresh() {
+        /*RecommendFragment.mSwipeRefreshLayout.setColorSchemeResources(R.color.toolbar_and_menu_color);
+        RecommendFragment.mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                RecommendFragment.mSwipeRefreshLayout.setRefreshing(true);
+            }
+        });
+        RecommendFragment.mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d(TAG, "run: clear");
+                        list.clear();
+                        getData();
+                    }
+                }, 2000);
+            }
+        });*/
+        mLinearLayoutManager = new LinearLayoutManager(getContext());
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mRecyclerView.setNestedScrollingEnabled(false);
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                Log.d("test", "StateChanged = " + newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                Log.d("test", "在滑动");
+                int lastVisibleItemPosition = mLinearLayoutManager.findLastVisibleItemPosition();
+                Log.d("test", "onScrolled:最后一个可见的位子 " + lastVisibleItemPosition);
+                Log.d("test", "onScrolled: adapter" + mAdapter.getItemCount());
+                if (lastVisibleItemPosition + 1 == mAdapter.getItemCount()) {
+                    Log.d("test", "loading executed在加载新的");
+
+                    /*boolean isRefreshing = RecommendFragment.mSwipeRefreshLayout.isRefreshing();
+                    if (isRefreshing) {
+                        mAdapter.notifyItemRemoved(mAdapter.getItemCount());
+                        return;
+                    }*/
+                    if (!isLoading) {
+                        isLoading = true;
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                getData();
+                                Log.d("test", "load more completed");
+                                isLoading = false;
+                            }
+                        }, 1000);
+                    }
+                }
+            }
+        });
     }
 }

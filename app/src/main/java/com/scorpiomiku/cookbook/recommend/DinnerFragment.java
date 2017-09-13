@@ -31,7 +31,7 @@ public class DinnerFragment extends FragmentModule {
     private RecyclerView mRecyclerView;
     private GridLayoutManager mGridLayoutManager = new GridLayoutManager(getContext(), 2);
     private List<String> list = new ArrayList<>();
-    ;
+
     private Adapter mAdapter = new Adapter(list);
     boolean isLoading;
     private Handler handler = new Handler();

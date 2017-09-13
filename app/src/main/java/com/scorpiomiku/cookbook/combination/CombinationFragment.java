@@ -259,6 +259,7 @@ public class CombinationFragment extends FragmentModule {
                 @Override
                 public void onClick(View v) {
                     mHorizontalDropDownMenu.setTabText(position == 0 ? mHeaders[0] : mTimes[position]);
+                    Toast.makeText(getContext(),position == 0 ? mHeaders[0] : mTimes[position],Toast.LENGTH_SHORT).show();
                     mHorizontalDropDownMenu.closeMenu();
                 }
             });

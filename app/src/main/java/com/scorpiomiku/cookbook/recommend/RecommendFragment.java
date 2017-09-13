@@ -80,11 +80,9 @@ public class RecommendFragment extends FragmentModule {
                 .recommend_tool_bar_dinner_iamge_view);
         mLunchImageView = (ImageView) v.findViewById(R.id
                 .recommend_tool_bar_lunch_iamge_view);
-        mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.recommend_swipe_refresh_layout);
         mBreakfastChoose = (TextView) v.findViewById(R.id.recommend_choose_breakfast_text_view);
         mLunchChoose = (TextView) v.findViewById(R.id.recommend_choose_lunch_text_view);
         mDinnerChoose = (TextView) v.findViewById(R.id.recommend_choose_dinner_text_view);
-        mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.toolbar_and_menu_color));
         mMenuImageView = (ImageView) v.findViewById(R.id.recommend_tool_bar_menu_image_view);
         mSearchEditText = (EditText) v.findViewById(R.id.recommend_search_edit_view);
         mSearchImageView = (ImageView) v.findViewById(R.id.recommend_search_image_view);

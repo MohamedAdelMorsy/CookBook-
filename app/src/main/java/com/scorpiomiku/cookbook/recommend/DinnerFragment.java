@@ -35,13 +35,7 @@ public class DinnerFragment extends FragmentModule {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        RecommendFragment.mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Toast.makeText(getActivity(), "刷新", Toast.LENGTH_SHORT).show();
-                RecommendFragment.mSwipeRefreshLayout.setRefreshing(false);
-            }
-        });
+
     }
 
     @Nullable

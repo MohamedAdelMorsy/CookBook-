@@ -50,13 +50,7 @@ public class RecommendDefultFragment extends FragmentModule {
             list.add("1");
         }
         mRecyclerView.setAdapter(new Adapter(list));
-        RecommendFragment.mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Toast.makeText(getActivity(), "刷新", Toast.LENGTH_SHORT).show();
-                RecommendFragment.mSwipeRefreshLayout.setRefreshing(false);
-            }
-        });
+
         return v;
     }
 

@@ -26,7 +26,9 @@ import com.scorpiomiku.cookbook.module.FragmentModule;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -39,10 +41,12 @@ public class BreakFastFragment extends FragmentModule {
     private boolean mIsTop;
     private static String TAG = "BreakFastFragment";
     private GridLayoutManager mGridLayoutManager;
-
-    private Adapter mAdapter;
+    private List<String> list;
+    private Adapter mAdapter ;
     boolean isLoading;
     private Handler handler = new Handler();
+
+
     public static BreakFastFragment newInstance() {
         return new BreakFastFragment();
     }
@@ -50,14 +54,6 @@ public class BreakFastFragment extends FragmentModule {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        RecommendFragment.mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Toast.makeText(getActivity(), "刷新", Toast.LENGTH_SHORT).show();
-                RecommendFragment.mSwipeRefreshLayout.setRefreshing(false);
-            }
-        });
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -67,49 +63,10 @@ public class BreakFastFragment extends FragmentModule {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.recommend_breakfast_fragment_layout, container, false);
         mRecyclerView = (RecyclerView) v.findViewById(R.id.recommend_breakfast_recycler_view);
-        mGridLayoutManager = new GridLayoutManager(getContext(), 2);
-        mRecyclerView.setLayoutManager(mGridLayoutManager);
-        mRecyclerView.setNestedScrollingEnabled(false);
-
-
-        List<String> list = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
-            list.add("1");
-        }
+        list = new ArrayList<>();
         mAdapter = new Adapter(list);
-        mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                Log.d("test", "StateChanged = " + newState);
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                Log.d("test", "onScrolled");
-                int lastVisibleItemPosition = mGridLayoutManager.findLastVisibleItemPosition();
-                if (lastVisibleItemPosition + 1 == mAdapter.getItemCount()) {
-                    Log.d("test", "loading executed");
-                    boolean isRefreshing = RecommendFragment.mSwipeRefreshLayout.isRefreshing();
-                    if (isRefreshing) {
-                        mAdapter.notifyItemRemoved(mAdapter.getItemCount());
-                        return;
-                    }
-                    if (!isLoading) {
-                        isLoading = true;
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                Log.d("test", "load more completed");
-                                isLoading = false;
-                            }
-                        }, 1000);
-                    }
-                }
-            }
-        });
+        initData();
+        setRefresh();
         return v;
     }
 
@@ -166,6 +123,88 @@ public class BreakFastFragment extends FragmentModule {
         public int getItemCount() {
             return mStringList.size();
         }
+    }
+
+    /*-----------------------------------------refresh----------------------------------------*/
+    private void setRefresh() {
+        RecommendFragment.mSwipeRefreshLayout.setColorSchemeResources(R.color.toolbar_and_menu_color);
+        RecommendFragment.mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                RecommendFragment.mSwipeRefreshLayout.setRefreshing(true);
+            }
+        });
+        RecommendFragment.mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d(TAG, "run: clear");
+                        list.clear();
+                        getData();
+                    }
+                }, 2000);
+            }
+        });
+        mGridLayoutManager = new GridLayoutManager(getContext(), 2);
+        mRecyclerView.setLayoutManager(mGridLayoutManager);
+        mRecyclerView.setNestedScrollingEnabled(false);
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                Log.d("test", "StateChanged = " + newState);
+            }
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                Log.d("test", "在滑动");
+
+                int lastVisibleItemPosition = mGridLayoutManager.findLastVisibleItemPosition();
+                Log.d("test", "onScrolled:最后一个可见的位子 "+lastVisibleItemPosition);
+                Log.d(TAG, "onScrolled: adapter"+mAdapter.getItemCount());
+                if (lastVisibleItemPosition + 1 == mAdapter.getItemCount()) {
+                    Log.d("test", "loading executed在加载新的");
+
+                    boolean isRefreshing = RecommendFragment.mSwipeRefreshLayout.isRefreshing();
+                    if (isRefreshing) {
+                        mAdapter.notifyItemRemoved(mAdapter.getItemCount());
+                        return;
+                    }
+                    if (!isLoading) {
+                        isLoading = true;
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                getData();
+                                Log.d("test", "load more completed");
+                                isLoading = false;
+                            }
+                        }, 1000);
+                    }
+                }
+            }
+        });
+    }
+
+    private void initData() {
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getData();
+            }
+        }, 1000);
+    }
+
+    private void getData() {
+        for (int i = 0; i < 6; i++) {
+            list.add("1");
+        }
+        mAdapter.notifyDataSetChanged();
+        RecommendFragment.mSwipeRefreshLayout.setRefreshing(false);
+        mAdapter.notifyItemRemoved(mAdapter.getItemCount());
     }
 
 }

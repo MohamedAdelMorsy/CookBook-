@@ -30,11 +30,15 @@
     <color name="saveButton">#50efa2</color>
 
 
-
     <color name="sign_up_text_color">#6d7eff</color>
 
 
     <color name="item_background">#fdf6f6</color>
 
     <color name="recommend_choose">#b9d8f2</color>
+
+    <color name="dark">#424242</color>
+    <color name="red">#FFD4212A</color>
+    <color name="grey">#8C8C8C</color>
+    <color name="line">#EEEEEE</color>
 </resources>

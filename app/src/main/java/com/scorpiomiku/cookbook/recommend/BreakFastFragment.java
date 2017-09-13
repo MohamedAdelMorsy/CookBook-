@@ -111,7 +111,7 @@ public class BreakFastFragment extends FragmentModule {
 
         @Override
         public holder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+
             if (viewType == TYPE_ITEM) {
                 View v = LayoutInflater.from(getContext()).inflate(R.layout
                         .recommend_breakfast_recycler_view_item, parent, false);

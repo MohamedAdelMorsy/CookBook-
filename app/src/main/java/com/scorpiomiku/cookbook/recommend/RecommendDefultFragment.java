@@ -50,7 +50,6 @@ public class RecommendDefultFragment extends FragmentModule {
             list.add("1");
         }
         mRecyclerView.setAdapter(new Adapter(list));
-
         return v;
     }
 

@@ -55,6 +55,8 @@ public class LunchFragment extends FragmentModule {
         mRecyclerView.setLayoutManager(mGridLayoutManager);
         mRecyclerView.setNestedScrollingEnabled(false);
         mRecyclerView.setAdapter(mAdapter);
+        initData();
+        setRefresh();
         return v;
     }
 
@@ -110,7 +112,7 @@ public class LunchFragment extends FragmentModule {
 
         @Override
         public void onBindViewHolder(LunchFragment.holder holder, int position) {
-            holder.bindView(mStringList.get(position));
+
             if (position + 1 == getItemCount()) {
 
             } else {

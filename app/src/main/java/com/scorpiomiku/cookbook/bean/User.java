@@ -11,6 +11,7 @@ public class User extends BmobUser {
     private String AccountNumber;
     private String userPassword;
 
+
     public String getName() {
         return name;
     }

@@ -30,7 +30,8 @@ import java.util.List;
 
 public class RecommendDefultFragment extends FragmentModule {
 
-    private LinearLayoutManager mLinearLayoutManager= new LinearLayoutManager(getContext()); ;
+    private LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getContext());
+    ;
     private List<String> list = new ArrayList<>();
 
     private Adapter mAdapter = new Adapter(list);
@@ -38,6 +39,8 @@ public class RecommendDefultFragment extends FragmentModule {
     private Handler handler = new Handler();
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_FOOTER = 1;
+    public List<String> mListFoodNames;
+    public List<String> mListFoodMetirals;
 
 
     public static RecommendDefultFragment newInstance() {
@@ -83,11 +86,28 @@ public class RecommendDefultFragment extends FragmentModule {
                     .recommend_default_item_food_name_text_view);
         }
 
-        private void bindView(String s) {
-            mImageView.setImageResource(R.drawable.test_food);
-            mFoodNameTextView.setText("豌豆炒肉");
-            mFoodMatirialTextView.setText("豌豆、豌豆、豌豆、豌豆、豌豆、豌豆、豌豆、豌豆、豌豆、豌豆、豌豆、豌豆、肉" +
-                    "豌豆、豌豆、豌豆、豌豆、豌豆、豌豆、豌豆、");
+        private void bindView(int i, String s1,String s2) {
+            if (i == 0) {
+                mImageView.setImageResource(R.drawable.chroubing);
+
+            }
+            if (i == 1) {
+                mImageView.setImageResource(R.drawable.chpaigu);
+            }
+            if (i == 2) {
+                mImageView.setImageResource(R.drawable.chtudou);
+            }
+            if (i == 3) {
+                mImageView.setImageResource(R.drawable.chliyu);
+            }
+            if (i == 4) {
+                mImageView.setImageResource(R.drawable.chrouxie);
+            }
+            if (i != 1 && i != 0 && i != 2 && i != 3 && i != 4) {
+                mImageView.setImageResource(R.drawable.food_test_1);
+            }
+            mFoodNameTextView.setText(s1);
+            mFoodMatirialTextView.setText(s2);
             mWholeView.setOnClickListener(this);
         }
 
@@ -104,6 +124,20 @@ public class RecommendDefultFragment extends FragmentModule {
 
         public Adapter(List<String> list) {
             mStringList = list;
+            mListFoodNames = new ArrayList<>();
+            mListFoodNames.add("梅菜蒸肉饼");
+            mListFoodNames.add("梅干菜烧排骨");
+            mListFoodNames.add("红烧土豆");
+            mListFoodNames.add("榄角蒸立鱼");
+            mListFoodNames.add("姜葱大肉蟹");
+            mListFoodMetirals = new ArrayList<>();
+
+
+            mListFoodMetirals.add("梅菜、里脊肉适量、葱适量、糖、生抽、料酒");
+            mListFoodMetirals.add("排骨1.5磅、梅干菜、半碗水、蒜2粒、姜3片、八角1颗、生抽3大匙、老抽2茶匙、糖3茶匙、油1大匙、料酒1大匙");
+            mListFoodMetirals.add("猪瘦肉适量、土豆适量、葱适量、八角适量、老抽适量、姜适量、盐适量");
+            mListFoodMetirals.add("立鱼2条、榄角10来粒、姜4片、葱2根、蒸鱼豉油3大匙、盐1/2茶匙、料酒2茶匙、油1大匙");
+            mListFoodMetirals.add("加拿大肉蟹2个、姜适量、葱适量、高汤、玉米油2大匙");
         }
 
         @Override
@@ -126,7 +160,7 @@ public class RecommendDefultFragment extends FragmentModule {
             if (position + 1 == getItemCount()) {
 
             } else {
-                holder.bindView(mStringList.get(position));
+                holder.bindView(position, mListFoodNames.get(position),mListFoodMetirals.get(position));
             }
         }
 
@@ -135,6 +169,7 @@ public class RecommendDefultFragment extends FragmentModule {
         public int getItemCount() {
             return mStringList.size();
         }
+
         @Override
         public int getItemViewType(int position) {
             if (position + 1 == getItemCount()) {
@@ -155,13 +190,20 @@ public class RecommendDefultFragment extends FragmentModule {
     }
 
     private void getData() {
-        for (int i = 0; i < 6; i++) {
-            list.add("1");
+        if(mAdapter.getItemCount()>150){
+
+        }else{
+            for (int i = 0; i < 6; i++) {
+                list.add("1");
+                mListFoodNames.add("1");
+                mListFoodMetirals.add("1");
+            }
+            mAdapter.notifyDataSetChanged();
+            //RecommendFragment.mSwipeRefreshLayout.setRefreshing(false);
+            mAdapter.notifyItemRemoved(mAdapter.getItemCount());
         }
-        mAdapter.notifyDataSetChanged();
-        //RecommendFragment.mSwipeRefreshLayout.setRefreshing(false);
-        mAdapter.notifyItemRemoved(mAdapter.getItemCount());
     }
+
     private void setRefresh() {
         /*RecommendFragment.mSwipeRefreshLayout.setColorSchemeResources(R.color.toolbar_and_menu_color);
         RecommendFragment.mSwipeRefreshLayout.post(new Runnable() {

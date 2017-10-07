@@ -37,6 +37,8 @@ public class DinnerFragment extends FragmentModule {
     private Handler handler = new Handler();
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_FOOTER = 1;
+    public List<String> mListFoodNames;
+
 
     public static DinnerFragment newInstance() {
         return new DinnerFragment();
@@ -73,10 +75,27 @@ public class DinnerFragment extends FragmentModule {
                     .recommend_dinner_item_food_name_text_view);
         }
 
-        private void bindView(String s) {
-            mImageView.setImageResource(R.drawable.test_food);
+        private void bindView(int i,String s) {
+            if (i == 0){
+                mImageView.setImageResource(R.drawable.chtudou);
+            }
+            if (i == 1){
+                mImageView.setImageResource(R.drawable.chwucairoupian);
+            }
+            if (i == 2){
+                mImageView.setImageResource(R.drawable.test_food);
+            }
+            if (i == 3){
+                mImageView.setImageResource(R.drawable.food_test_1);
+            }
+            if (i == 4){
+                mImageView.setImageResource(R.drawable.changyucai1);
+            }
+            if (i!=1&&i!=0&&i!=2&&i!=3&&i!=4){
+                mImageView.setImageResource(R.drawable.changyutest);
+            }
             itemView.setOnClickListener(this);
-            mTextView.setText("豌豆炒肉");
+            mTextView.setText(s);
         }
 
         @Override
@@ -91,8 +110,16 @@ public class DinnerFragment extends FragmentModule {
     private class Adapter extends RecyclerView.Adapter<DinnerFragment.holder> {
         List<String> mStringList;
 
+
+
         public Adapter(List<String> list) {
             mStringList = list;
+            mListFoodNames =new ArrayList<>();
+            mListFoodNames.add("红烧土豆");
+            mListFoodNames.add("五彩肉片");
+            mListFoodNames.add("干煸豌豆");
+            mListFoodNames.add("干炒青菜");
+            mListFoodNames.add("一品鲳鱼");
         }
 
         @Override
@@ -114,7 +141,7 @@ public class DinnerFragment extends FragmentModule {
             if (position + 1 == getItemCount()) {
 
             } else {
-                holder.bindView(mStringList.get(position));
+                holder.bindView(position,mListFoodNames.get(position));
             }
         }
 
@@ -143,13 +170,20 @@ public class DinnerFragment extends FragmentModule {
     }
 
     private void getData() {
-        for (int i = 0; i < 6; i++) {
-            list.add("1");
+        if(mAdapter.getItemCount()>150){
+
+        }else{
+            for (int i = 0; i < 6; i++) {
+                list.add("1");
+                mListFoodNames.add("1");
+
+            }
+            mAdapter.notifyDataSetChanged();
+            //RecommendFragment.mSwipeRefreshLayout.setRefreshing(false);
+            mAdapter.notifyItemRemoved(mAdapter.getItemCount());
         }
-        mAdapter.notifyDataSetChanged();
-        //RecommendFragment.mSwipeRefreshLayout.setRefreshing(false);
-        mAdapter.notifyItemRemoved(mAdapter.getItemCount());
     }
+
     private void setRefresh() {
         /*RecommendFragment.mSwipeRefreshLayout.setColorSchemeResources(R.color.toolbar_and_menu_color);
         RecommendFragment.mSwipeRefreshLayout.post(new Runnable() {

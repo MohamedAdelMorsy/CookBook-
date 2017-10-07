@@ -37,6 +37,7 @@ public class LunchFragment extends FragmentModule {
     private Handler handler = new Handler();
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_FOOTER = 1;
+    public List<String> mListFoodNames;
 
     public static LunchFragment newInstance() {
         return new LunchFragment();
@@ -74,8 +75,25 @@ public class LunchFragment extends FragmentModule {
 
         }
 
-        private void bindView(String s) {
-            mImageView.setImageResource(R.drawable.food_test_1);
+        private void bindView(int i,String s) {
+            if (i == 0){
+                mImageView.setImageResource(R.drawable.chlianou);
+            }
+            if (i == 1){
+                mImageView.setImageResource(R.drawable.chqinggua);
+            }
+            if (i == 2){
+                mImageView.setImageResource(R.drawable.chroujiangyimian);
+            }
+            if (i == 3){
+                mImageView.setImageResource(R.drawable.chmanluo);
+            }
+            if (i == 4){
+                mImageView.setImageResource(R.drawable.chjizhen);
+            }
+            if (i!=1&&i!=0&&i!=2&&i!=3&&i!=4){
+                mImageView.setImageResource(R.drawable.chbaoyu);
+            }
             itemView.setOnClickListener(this);
             mTextView.setText("豌豆炒肉");
         }
@@ -94,6 +112,12 @@ public class LunchFragment extends FragmentModule {
 
         public Adapter(List<String> list) {
             mStringList = list;
+            mListFoodNames = new ArrayList<>();
+            mListFoodNames.add("莲藕杂炒");
+            mListFoodNames.add("青瓜炒肉");
+            mListFoodNames.add("肉酱意面");
+            mListFoodNames.add("蒜末炒罗曼生菜");
+            mListFoodNames.add("菠萝炒鸡胗");
         }
 
         @Override
@@ -116,7 +140,7 @@ public class LunchFragment extends FragmentModule {
             if (position + 1 == getItemCount()) {
 
             } else {
-                holder.bindView(mStringList.get(position));
+                holder.bindView(position,mListFoodNames.get(position));
             }
         }
 
@@ -145,12 +169,18 @@ public class LunchFragment extends FragmentModule {
     }
 
     private void getData() {
-        for (int i = 0; i < 6; i++) {
-            list.add("1");
+        if (mAdapter.getItemCount() > 150) {
+
+        } else {
+            for (int i = 0; i < 6; i++) {
+                list.add("1");
+                mListFoodNames.add("1");
+
+            }
+            mAdapter.notifyDataSetChanged();
+            //RecommendFragment.mSwipeRefreshLayout.setRefreshing(false);
+            mAdapter.notifyItemRemoved(mAdapter.getItemCount());
         }
-        mAdapter.notifyDataSetChanged();
-        //RecommendFragment.mSwipeRefreshLayout.setRefreshing(false);
-        mAdapter.notifyItemRemoved(mAdapter.getItemCount());
     }
 
     private void setRefresh() {

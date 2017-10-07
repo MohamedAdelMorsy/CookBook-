@@ -36,20 +36,22 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 
 import com.scorpiomiku.cookbook.classifierresultactivity.ClassifierResultActivity;
 import com.scorpiomiku.cookbook.tensorflow.Classifier;
-import com.scorpiomiku.cookbook.tensorflow.TensorFlowClassifier;
+import com.scorpiomiku.cookbook.tensorflow.MyTSF;
 
 
 public class CameraActivity extends AppCompatActivity {
 
     private String mPicturePath;
 
-    private String mPictureResult;
+    private String mPictureResult = "鲳鱼";
 
 
     private static final String TAG = "CameraActivity";
@@ -59,24 +61,33 @@ public class CameraActivity extends AppCompatActivity {
     private ImageView mTakePictureButton;
     private int mCameraId = CameraInfo.CAMERA_FACING_BACK;
 
-    private static final int INPUT_SIZE = 216;
-    private static final int IMAGE_MEAN = 117;
+    private static final int INPUT_SIZE =224;
+    /*private static final int IMAGE_MEAN = 117;
     private static final float IMAGE_STD = 1;
     private static final String INPUT_NAME = "input";
-    private static final String OUTPUT_NAME = "output";
+    private static final String OUTPUT_NAME = "output";*/
+    private static int[] results = new int[2];
+
+    private FrameLayout mCoverFrameLayout;
+    private Timer timer = new Timer();
+    private TimerTask mTimerTask = null;
+    private static final int MSG_WHAT_TIME_IS_UP = 1;//时间到了
+    private static final int MSG_WHAT_TIME_IS_TICK = 2;//时间减少中
+    private int mTimeCount = 0;
 
 
     private static final String MODEL_FILE = "file:///android_asset/tensorflow_inception_graph.pb";
     private static final String LABEL_FILE =
             "file:///android_asset/imagenet_comp_graph_label_strings.txt";
 
-    private Classifier mClassifier;
+
     private Executor mExecutor = Executors.newSingleThreadExecutor();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         //设置无标题
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
@@ -100,7 +111,8 @@ public class CameraActivity extends AppCompatActivity {
             }
         });
         setCameraDisplayOrientation(this, mCameraId, mCamera);
-        initTensorFlowAndLoadModel();
+
+        //initTensorFlowAndLoadModel();
 
 
     }
@@ -130,7 +142,7 @@ public class CameraActivity extends AppCompatActivity {
         try {
             c = Camera.open();
             Camera.Parameters mParameters = c.getParameters();
-            mParameters.setPictureSize(216, 216);
+            mParameters.setPictureSize(1024, 768);
             c.setParameters(mParameters);
         } catch (Exception e) {
             e.printStackTrace();
@@ -152,6 +164,7 @@ public class CameraActivity extends AppCompatActivity {
                 }
             });
             mCameraLayout = (FrameLayout) findViewById(R.id.camera_preview);
+            mCoverFrameLayout = (FrameLayout) findViewById(R.id.camera_cover_linearlayout);
             mCameraLayout.addView(mPreview);
             mCamera.startPreview();
         }
@@ -177,6 +190,24 @@ public class CameraActivity extends AppCompatActivity {
             final String picturePath = pictureDir + File.separator + pictureName;
             mPicturePath = picturePath;
             Log.d(TAG, mPicturePath);
+            mCoverFrameLayout.setVisibility(View.VISIBLE);
+
+            if (mTimerTask == null) {
+                mTimeCount = 3;
+                mTimerTask = new TimerTask() {
+                    @Override
+                    public void run() {
+                        mTimeCount--;
+
+                        if (mTimeCount <= 0) {   //时间到了就弹出对话框
+
+                            stopTimer();
+                        }
+                    }
+                };
+                timer.schedule(mTimerTask, 300, 300);
+
+            }
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -186,20 +217,24 @@ public class CameraActivity extends AppCompatActivity {
                         bitmap = rotateBitmapByDegree(bitmap, 90);
                         //缩放
                         bitmap = Bitmap.createScaledBitmap(bitmap, INPUT_SIZE, INPUT_SIZE, false);
-                        final List<Classifier.Recognition> results = mClassifier.recognizeImage(bitmap);
-                        Log.d(TAG, "run: " + results.toString());
-                        mPictureResult = results.toString();
                         BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
+                        //final List<Classifier.Recognition> results = mClassifier.recognizeImage(bitmap);
+                        MyTSF myTSF = new MyTSF(getAssets(), bitmap ,bitmap);
+                        results = myTSF.getResult();
+                        Log.d(TAG, "run: " + results[0]+"   "+results[1]);
+                        //mPictureResult = results.toString();
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
                         bos.flush();
                         bos.close();
                         bitmap.recycle();
+
+
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    finish();
+                    // finish();
                 }
             }).start();
             mCamera.startPreview();
@@ -271,7 +306,7 @@ public class CameraActivity extends AppCompatActivity {
         return returnBm;
     }
 
-    private void initTensorFlowAndLoadModel() {
+    /*private void initTensorFlowAndLoadModel() {
         mExecutor.execute(new Runnable() {
             @Override
             public void run() {
@@ -292,7 +327,7 @@ public class CameraActivity extends AppCompatActivity {
                 }
             }
         });
-    }
+    }*/
 
     @Override
     protected void onResume() {
@@ -302,23 +337,18 @@ public class CameraActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        /*Intent i = new Intent(CameraActivity.this, ClassifierResultActivity.class);
+        Intent i = new Intent(CameraActivity.this, ClassifierResultActivity.class);
         i.putExtra("picturePath", mPicturePath);
-        i.putExtra("pictureResult", mPictureResult);
+        i.putExtra("foodname", mPictureResult);
         i.putExtra("FragmentSendMessage", "CameraActivity");
-        startActivity(i);*/
+        startActivity(i);
         super.onPause();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mExecutor.execute(new Runnable() {
-            @Override
-            public void run() {
-                mClassifier.close();
-            }
-        });
+
         Log.d(TAG, "onDestroy: ");
     }
 
@@ -327,5 +357,9 @@ public class CameraActivity extends AppCompatActivity {
         super.onStop();
         Log.d(TAG, "onStop: ");
 
+    }
+
+    private void stopTimer() {
+        finish();
     }
 }

@@ -31,6 +31,7 @@ public class MenuHolder extends RecyclerView.ViewHolder {
                         .commit();
             }
         });
+
     }
 
     public void bindView(String s) {

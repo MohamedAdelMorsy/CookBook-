@@ -23,6 +23,7 @@ import com.scorpiomiku.cookbook.recommend.RecommendFragment;
 import com.scorpiomiku.cookbook.recommendmenufragment.RecommendMenuFragment;
 import com.scorpiomiku.cookbook.recommendmenufragment.RecommendMenuItemClickFragment;
 import com.scorpiomiku.cookbook.takephoto.TakePhotoMainFragment;
+import com.scorpiomiku.cookbook.tensorflow.test;
 
 import cn.bmob.v3.Bmob;
 
@@ -168,6 +169,12 @@ public class ContainActivity extends AppCompatActivity {
         navigation.setItemTextColor(colorStateList);
         navigation.setItemIconTintList(colorStateList);
         Bmob.initialize(this, "4719972bcf2771316e92505a854a484b");
+        Log.i(TAG, "click01: ");
+        test mytsf=new test(getAssets());
+        float[] result=mytsf.getAddResult();
+        for (int i=0;i<result.length;i++){
+            Log.i(TAG, "click01: "+result[i] );
+        }
     }
 
     @Override

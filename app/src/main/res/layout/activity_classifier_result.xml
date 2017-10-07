@@ -6,9 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -115,11 +113,12 @@
                 android:text="@string/classifier_result_recommend"
                 android:textSize="18sp"
                 />
-            <ImageView
-                android:layout_width="75dp"
-                android:layout_height="75dp"
-                android:padding="2dp"
-                android:id="@+id/test_iamge_view_result"/>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/classifier_result_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </android.support.v7.widget.RecyclerView>
         </LinearLayout>
-    </ScrollView>
+
 </LinearLayout>

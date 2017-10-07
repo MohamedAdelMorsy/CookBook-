@@ -47,6 +47,7 @@ public class BreakFastFragment extends FragmentModule {
     private Handler handler = new Handler();
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_FOOTER = 1;
+    public List<String> mListFoodNames;
 
 
     public static BreakFastFragment newInstance() {
@@ -56,6 +57,8 @@ public class BreakFastFragment extends FragmentModule {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -87,9 +90,27 @@ public class BreakFastFragment extends FragmentModule {
                     .recommend_breakfast_item_food_name_text_view);
         }
 
-        private void bindView(String s) {
-            mImageView.setImageResource(R.drawable.food_test_1);
-            mTextView.setText("干炒青菜");
+        private void bindView(int i ,String s) {
+            if (i == 0){
+                mImageView.setImageResource(R.drawable.chxiaren);
+            }
+            if (i == 1){
+                mImageView.setImageResource(R.drawable.chwucairoupian);
+            }
+            if (i == 2){
+                mImageView.setImageResource(R.drawable.chcuixiangdoufu);
+            }
+            if (i == 3){
+                mImageView.setImageResource(R.drawable.chmugua);
+            }
+            if (i == 4){
+                mImageView.setImageResource(R.drawable.changyucai2);
+            }
+            if (i!=1&&i!=0&&i!=2&&i!=3&&i!=4){
+                mImageView.setImageResource(R.drawable.food_test_1);
+            }
+
+            mTextView.setText(s);
             mWholeView.setOnClickListener(this);
         }
 
@@ -107,6 +128,12 @@ public class BreakFastFragment extends FragmentModule {
 
         public Adapter(List<String> list) {
             mStringList = list;
+            mListFoodNames = new ArrayList<>();
+            mListFoodNames.add("虾仁如意盏");
+            mListFoodNames.add("五彩肉片");
+            mListFoodNames.add("脆香豆腐");
+            mListFoodNames.add("冰糖炖木瓜");
+            mListFoodNames.add("红烧鲳鱼");
         }
 
         @Override
@@ -129,7 +156,7 @@ public class BreakFastFragment extends FragmentModule {
             if (position + 1 == getItemCount()) {
 
             } else {
-                holder.bindView(mStringList.get(position));
+                holder.bindView(position,mListFoodNames.get(position));
             }
         }
 
@@ -222,12 +249,18 @@ public class BreakFastFragment extends FragmentModule {
     }
 
     private void getData() {
-        for (int i = 0; i < 6; i++) {
-            list.add("1");
+        if(mAdapter.getItemCount()>150){
+
+        }else{
+            for (int i = 0; i < 6; i++) {
+                list.add("1");
+                mListFoodNames.add("1");
+
+            }
+            mAdapter.notifyDataSetChanged();
+            //RecommendFragment.mSwipeRefreshLayout.setRefreshing(false);
+            mAdapter.notifyItemRemoved(mAdapter.getItemCount());
         }
-        mAdapter.notifyDataSetChanged();
-        //RecommendFragment.mSwipeRefreshLayout.setRefreshing(false);
-        mAdapter.notifyItemRemoved(mAdapter.getItemCount());
     }
 
 

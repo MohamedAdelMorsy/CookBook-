@@ -56,6 +56,7 @@ public class CombinationFragment extends FragmentModule {
     private String mFoodName;
 
     private RecyclerView mRecyclerView;
+    public List<String> mListFoodNames;
 
 
     private String mHeaders[] = {"口味", "时段", "做法"};
@@ -170,6 +171,7 @@ public class CombinationFragment extends FragmentModule {
         public MakeWayAdapter(List<String> list) {
             super();
             mStringlist = list;
+
         }
 
 
@@ -259,7 +261,25 @@ public class CombinationFragment extends FragmentModule {
                 @Override
                 public void onClick(View v) {
                     mHorizontalDropDownMenu.setTabText(position == 0 ? mHeaders[0] : mTimes[position]);
-                    Toast.makeText(getContext(),position == 0 ? mHeaders[0] : mTimes[position],Toast.LENGTH_SHORT).show();
+                    Log.d("Coo", "onClick: " + (position == 0 ? mHeaders[0] : mTimes[position]));
+
+                    if ((position == 0 ? mHeaders[0] : mTimes[position]).equals("早餐")) {
+                        list.clear();
+                        mAdapter.notifyDataSetChanged();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                list.add("鸡蛋、牛奶、面包");
+                                list.add("炸酱面、鸡蛋");
+                                list.add("米线");
+                                for (int i = 0; i < 10; i++) {
+                                    list.add("1");
+                                }
+                                mAdapter.notifyDataSetChanged();
+                            }
+                        },1000);
+                    }
+
                     mHorizontalDropDownMenu.closeMenu();
                 }
             });
@@ -323,11 +343,14 @@ public class CombinationFragment extends FragmentModule {
     /*---------------------------------------MenuAdapter----------------------------*/
     private class MenuAdapter extends RecyclerView.Adapter<MenuHolder> {
 
+
         private List<String> mList;
 
         public MenuAdapter(List<String> l) {
             super();
             mList = l;
+            mListFoodNames = new ArrayList<>();
+
         }
 
         @Override
@@ -349,7 +372,7 @@ public class CombinationFragment extends FragmentModule {
             if (position + 1 == getItemCount()) {
 
             } else {
-                holder.bindView();
+                holder.bindView(position, mList.get(position));
             }
         }
 
@@ -389,10 +412,37 @@ public class CombinationFragment extends FragmentModule {
             });
         }
 
-        private void bindView() {
-            mImageView.setImageResource(R.drawable.food_test_1);
-            mNameTextView.setText("豌豆炒肉");
-            mMatirialTextView.setText("豌豆。豌豆。豌豆。豌豆。豌豆。豌豆。豌豆。");
+        private void bindView(int i, String s) {
+            if (i == 0) {
+                mImageView.setImageResource(R.drawable.chdapei2);
+            }
+            if (i == 1) {
+                mImageView.setImageResource(R.drawable.chdapei1);
+            }
+            if (i == 2) {
+                mImageView.setImageResource(R.drawable.chdapei3);
+            }
+            if (i == 3) {
+                mImageView.setImageResource(R.drawable.chmugua);
+            }
+            if (s.equals("鸡蛋、牛奶、面包")) {
+                mImageView.setImageResource(R.drawable.chqingdan);
+                mMatirialTextView.setText("鸡蛋、牛奶、面包、白糖");
+            }
+            if (s.equals("炸酱面、鸡蛋")) {
+                mImageView.setImageResource(R.drawable.chzhajiangmian);
+                mMatirialTextView.setText("面条、鸡蛋、肉丁");
+            }
+            if (s.equals("米线")) {
+                mImageView.setImageResource(R.drawable.chmixian);
+                mMatirialTextView.setText("鸡蛋、米线、青菜");
+            }
+
+            if (i != 1 && i != 0 && i != 2 && i != 3) {
+                mImageView.setImageResource(R.drawable.food_test_1);
+            }
+            mNameTextView.setText(s);
+            mMatirialTextView.setText("大白菜、红辣椒、清油、酱油、味精、少许猪肉");
         }
     }
 
@@ -406,8 +456,15 @@ public class CombinationFragment extends FragmentModule {
     }
 
     private void getData() {
-        for (int i = 0; i < 6; i++) {
-            list.add("1");
+        if (mAdapter.getItemCount() > 30) {
+
+        } else {
+            for (int i = 0; i < 6; i++) {
+
+                list.add("意大利面、水果沙拉、西瓜拼盘");
+                list.add("玉米饭、香菇炒肉、鲍鱼荚膜");
+                list.add("东坡肘子、甲鱼、油爆虾、炒白菜");
+            }
         }
         mAdapter.notifyDataSetChanged();
         //RecommendFragment.mSwipeRefreshLayout.setRefreshing(false);

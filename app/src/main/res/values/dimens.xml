@@ -5,13 +5,9 @@
 
 
     <dimen name="collection_item_width">60dp</dimen>
-
-    <!-- Default screen margins, per the Android Design guidelines. -->
-
     <dimen name="margin_10">10dp</dimen>
 
     <dimen name="textSize_title">20sp</dimen>
     <dimen name="textSize_normal">16sp</dimen>
     <dimen name="textSize_small">14sp</dimen>
-
 </resources>

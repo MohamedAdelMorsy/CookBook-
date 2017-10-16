@@ -16,8 +16,9 @@
 
 
     <string name="collection_toolbar_title">收藏</string>
-    <string name="collection_record">浏览记录</string>
+    <string name="collection_record">浏览菜谱查阅记录</string>
     <string name="collection_collection">我的收藏</string>
+    <string name="collection_toolbar_record">浏览记录</string>
 
 
     <string name="menu_defualt_fragment_steps">制作步骤:</string>
@@ -35,7 +36,7 @@
     <string name="my_information_draft">草稿箱</string>
     <string name="my_information_basket">菜篮子</string>
     <string name="my_information_help">帮助</string>
-
+    <string name="loading">加载中…</string>
 
     <string name="change_information_image">头像</string>
     <string name="change_information_sex">性别</string>
@@ -52,7 +53,7 @@
     <string name="combination_tastes">口味</string>
 
 
-    <string name="recommend_matirial">菜单：</string>
+    <string name="recommend_matirial">配料：</string>
 
 
     <string name="dynamic_toolbar_title">动态圈</string>
@@ -90,13 +91,10 @@
     <string name="sign_up_password">密码</string>
     <string name="sign_up_password_again">再次输入密码</string>
     <string name="sign_up_ok">完成注册</string>
-    <string name="forget_text">请输入你的邮箱</string>
 
     <string name="classifier_result_describe_text">详细介绍:</string>
     <string name="classifier_result_nutrition_text">营养早知道:</string>
     <string name="classifier_result_nutrition_text_all">查看全部></string>
     <string name="classifier_result_recommend">推荐菜谱:</string>
-
-    <string name="loading">加载中…</string>
 
 </resources>

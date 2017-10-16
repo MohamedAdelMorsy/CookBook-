@@ -1,6 +1,7 @@
 package com.scorpiomiku.cookbook.sql;
 
 import android.content.Context;
+import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -12,7 +13,7 @@ import android.util.Log;
 public class BasketDataHelper extends SQLiteOpenHelper {
     private static final String TAG = "BasketDataHelper";
 
-    public static final String CREAT_BASKET = "create table Basket (" +
+    public static final String CREAT_BOOK = "create table Basket (" +
             "id integer primary key autoincrement, " +
             "material text, " +
             "foodname text)";
@@ -26,7 +27,7 @@ public class BasketDataHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(CREAT_BASKET);
+        db.execSQL(CREAT_BOOK);
         Log.d(TAG, "basketSQL create successfully");
     }
 

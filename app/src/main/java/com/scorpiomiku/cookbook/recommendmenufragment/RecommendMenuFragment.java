@@ -67,7 +67,7 @@ public class RecommendMenuFragment extends FragmentModule {
             public void onClick(View v) {
                 fm.beginTransaction()
                         .setCustomAnimations(android.R.anim.fade_in,
-                                R.anim.slide_out_top)
+                                android.R.anim.fade_out)
                         .replace(R.id.fragment_container, RecommendFragment.newInstance())
                         .commit();
             }

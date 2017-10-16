@@ -90,7 +90,6 @@
 
         </RelativeLayout>
     </LinearLayout>
-
     <FrameLayout
         android:id="@+id/camera_cover_linearlayout"
         android:layout_width="match_parent"

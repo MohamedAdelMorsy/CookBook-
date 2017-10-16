@@ -1,0 +1,19 @@
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/activity_main"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context="com.scorpiomiku.cookbook.ShowShare.ShowShareList">
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/ssl_recycler_pl_all"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </android.support.v7.widget.RecyclerView>
+</LinearLayout>
+</ScrollView>

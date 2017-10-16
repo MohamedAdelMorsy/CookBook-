@@ -6,16 +6,15 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
         android:layout_marginLeft="6dp"
         android:layout_marginRight="6dp"
         android:layout_marginTop="6dp"
-        android:background="@drawable/recommend_breakfast_large_image"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="@drawable/breakfast_image"
         android:orientation="horizontal">
 
     </LinearLayout>
-
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recommend_breakfast_recycler_view"

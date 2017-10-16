@@ -1,27 +1,41 @@
 package com.scorpiomiku.cookbook.recommend;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.scorpiomiku.cookbook.R;
+import com.scorpiomiku.cookbook.combination.Way;
 import com.scorpiomiku.cookbook.menuactivity.MenuActivity;
 import com.scorpiomiku.cookbook.module.FragmentModule;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.bmob.v3.AsyncCustomEndpoints;
+import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.CloudCodeListener;
+import cn.bmob.v3.listener.FindListener;
 
 /**
  * Created by Administrator on 2017/6/3.
@@ -29,17 +43,12 @@ import java.util.List;
 
 public class DinnerFragment extends FragmentModule {
     private RecyclerView mRecyclerView;
-    private GridLayoutManager mGridLayoutManager = new GridLayoutManager(getContext(), 2);
-    private List<String> list = new ArrayList<>();
-
-    private Adapter mAdapter = new Adapter(list);
-    boolean isLoading;
-    private Handler handler = new Handler();
-    private static final int TYPE_ITEM = 0;
-    private static final int TYPE_FOOTER = 1;
-    public List<String> mListFoodNames;
-
-
+    private int AllNU;
+    private int t = 0 ;
+    private Boolean panduan;
+    private SharedPreferences pref;
+    private SharedPreferences.Editor editor;
+    private List<Way> wayList = new ArrayList<>();
     public static DinnerFragment newInstance() {
         return new DinnerFragment();
     }
@@ -54,53 +63,168 @@ public class DinnerFragment extends FragmentModule {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.recommend_dinner_fragment_layout, container, false);
         mRecyclerView = (RecyclerView) v.findViewById(R.id.recommend_dinner_recycler_view);
-        mRecyclerView.setLayoutManager(mGridLayoutManager);
+        mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
         mRecyclerView.setNestedScrollingEnabled(false);
-        mRecyclerView.setAdapter(mAdapter);
-        initData();
-        setRefresh();
+        Bmob.initialize(getActivity(), "3bfd53d40a453ea66ce653ab658582d1");
+        pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        editor = pref.edit();
+        String str1 = "FALSE";
+        String str2 = "FALSE";
+        String str3 = "TRUE";
+
+        /*if(t<1){
+             str = "午餐";
+        }else {
+             str = neirong;  //为传入的要搜索的食材名
+        }/*/
+
+        BmobQuery<Way> eq2 = new BmobQuery<Way>();
+        eq2.addWhereEqualTo("ZaoCan", str1);
+        BmobQuery<Way> eq1 = new BmobQuery<Way>();
+        eq1.addWhereEqualTo("WanCan", str2);
+        BmobQuery<Way> eq3 = new BmobQuery<Way>();
+        eq3.addWhereEqualTo("WuCan", str3);
+
+        //eq2.addWhereContains("FenLei","不限");
+
+        List<BmobQuery<Way>> queries = new ArrayList<BmobQuery<Way>>();
+        queries.add(eq2);
+        queries.add(eq1);
+        queries.add(eq3);
+        BmobQuery<Way> mainQuery = new BmobQuery<Way>();
+
+        mainQuery.or(queries);
+        //mainQuery.addWhereContains("FenLei","不限");
+        mainQuery.findObjects(new FindListener<Way>() {
+            @Override
+            public void done(List<Way> object, BmobException e) {
+                if(e==null){
+                    Log.d("早餐界面1", "测试点5"+"查询早成功");
+                    Log.d("早餐界面1", "测试点5"+"查询结果有"+object.size()+"个");
+                    //toast("查询结果有"+object.size()+"个");
+                    AllNU=object.size();
+                    for (Way identification : object) {
+                        t=t+1;
+                        final String LinShi_s = identification.getObjectId();
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                //initWay(LinShi_s);
+                                //mRecyclerView.setAdapter(new Adapter(wayList));
+                                initWay(LinShi_s);
+                            }
+                        }).start();
+                    }
+                }else{
+                    Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
+                }
+            }
+        });
+        /*List<String> list = new ArrayList<>();
+        for (int i = 0; i < 20; i++) {
+            list.add("1");
+        }*/
+        //mRecyclerView.setAdapter(new DinnerFragment.Adapter(list));
         return v;
     }
+    private void initWay(String objId){
+        final JSONObject jas = new JSONObject();
+        final AsyncCustomEndpoints ace1 = new AsyncCustomEndpoints();
+        try {
+            jas.put("objectId",objId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.d("晚餐界面", "测试点5"+"存储objectId成功");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ace1.callEndpoint("get_way_fromShiCai", jas, new CloudCodeListener() {
+                    public static final String TAG = "thing";
+                    @Override
+                    public void done(Object object, BmobException e) {
+                        if (e == null) {
+                            String result = object.toString();
+                            Log.d(TAG, "收藏界面: result："+result);
+                            JsonParser parser = new JsonParser();  //创建JSON解析器
+                            JsonObject ssobject = (JsonObject) parser.parse(result);  //创建JsonObject对象//将json数据转为为boolean型的数据
+                            JsonArray array = ssobject.get("results").getAsJsonArray();    //得到为json的数组
+                            Log.d("晚餐界面", "测试点5"+"查询Way成功");
+                            for (int i = 0; i <= array.size(); i++) {
+                                final String ZuoFaTu;
+                                String ZuoFaTu1;
+                                final JsonObject subObject = array.get(i).getAsJsonObject();
+                                try{
+                                    panduan = subObject.get("FromUser").getAsBoolean();
+                                }catch (Exception a){
+                                    panduan = false;
+                                }
+                                try{
+                                    JsonObject ZuoFaTuyuan = subObject.get("zuoFaTuUser").getAsJsonObject();
+                                    ZuoFaTu1 =ZuoFaTuyuan.get("url").getAsString();
+                                    final String ZuoFaTuname = ZuoFaTuyuan.get("filename").getAsString();
+                                }catch (Exception e1213){
+                                    ZuoFaTu1 = subObject.get("zuoFaTu").getAsString();
+                                }
+                                //获取做法的图片url
+                                ZuoFaTu = ZuoFaTu1;
+                                final String Way_objectID = subObject.get("objectId").getAsString();
+                                try {
+                                    int cishu = subObject.get("cishu").getAsInt();
+                                }catch (Exception d){
+                                    int cishu=0;
+                                }
+                                //int cishu = subObject.get("cishu").getAsInt();
+                                final String ZuoFaMing = subObject.get("zuoFaMing").getAsString();
+                                Way way = new Way();
+                                way.setObjid(Way_objectID);
+                                way.setZuoFaMing(ZuoFaMing);
+                                way.setZuoFaTu(ZuoFaTu);
+                                wayList.add(way);
+                                mRecyclerView.setAdapter(new DinnerFragment.Adapter(wayList));
+                            }
 
+                        }
+                    }
+                });
+            }
+        }).start();
+
+
+    }
     /*-------------------------------------holder------------------------------*/
     private class holder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private ImageView mImageView;
-        private TextView mTextView;
-
+        private TextView mTextView ;
+        private Way ss;
         public holder(View itemView) {
             super(itemView);
             mImageView = (ImageView) itemView.findViewById(R.id
                     .recommend_dinner_item_food_image_view);
-            mTextView = (TextView) itemView.findViewById(R.id
+            mTextView= (TextView) itemView.findViewById(R.id
                     .recommend_dinner_item_food_name_text_view);
         }
 
-        private void bindView(int i,String s) {
-            if (i == 0){
-                mImageView.setImageResource(R.drawable.chtudou);
-            }
-            if (i == 1){
-                mImageView.setImageResource(R.drawable.chwucairoupian);
-            }
-            if (i == 2){
-                mImageView.setImageResource(R.drawable.test_food);
-            }
-            if (i == 3){
-                mImageView.setImageResource(R.drawable.food_test_1);
-            }
-            if (i == 4){
-                mImageView.setImageResource(R.drawable.changyucai1);
-            }
-            if (i!=1&&i!=0&&i!=2&&i!=3&&i!=4){
-                mImageView.setImageResource(R.drawable.changyutest);
-            }
+        private void bindView(Way s ) {
+            ss=s;
+            RequestOptions options = new RequestOptions()
+                    .centerCrop()
+                    .placeholder(R.drawable.test_food);
+            Glide.with(getActivity())
+                    .load(s.getZuoFaTu())
+                    .apply(options)
+                    .into(mImageView);
+            //mImageView.setImageResource(R.drawable.test_food);
             itemView.setOnClickListener(this);
-            mTextView.setText(s);
+            mTextView.setText(s.getZuoFaMing());
         }
 
         @Override
         public void onClick(View v) {
+            editor.putString("LS_Way_objectID",ss.getObjid());
+            editor.apply();
             Intent i = new Intent(getActivity(), MenuActivity.class);
+            i.putExtra("Way_objectID",ss.getObjid());
             startActivity(i);
         }
     }
@@ -108,142 +232,27 @@ public class DinnerFragment extends FragmentModule {
 
     /*-----------------------------------------adapter--------------------------*/
     private class Adapter extends RecyclerView.Adapter<DinnerFragment.holder> {
-        List<String> mStringList;
+        List<Way> mStringList;
 
-
-
-        public Adapter(List<String> list) {
+        public Adapter(List<Way> list) {
             mStringList = list;
-            mListFoodNames =new ArrayList<>();
-            mListFoodNames.add("红烧土豆");
-            mListFoodNames.add("五彩肉片");
-            mListFoodNames.add("干煸豌豆");
-            mListFoodNames.add("干炒青菜");
-            mListFoodNames.add("一品鲳鱼");
         }
 
         @Override
         public DinnerFragment.holder onCreateViewHolder(ViewGroup parent, int viewType) {
-            if (viewType == TYPE_ITEM) {
-                View v = LayoutInflater.from(getContext()).inflate(R.layout
-                        .recommend_dinner_recycler_view_item, parent, false);
-                return new holder(v);
-            } else if (viewType == TYPE_FOOTER) {
-                View v = LayoutInflater.from(getContext()).inflate(R.layout
-                        .item_foot, parent, false);
-                return new holder(v);
-            }
-            return null;
+            LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+            View v = layoutInflater.inflate(R.layout.recommend_dinner_recycler_view_item, parent, false);
+            return new DinnerFragment.holder(v);
         }
 
         @Override
         public void onBindViewHolder(DinnerFragment.holder holder, int position) {
-            if (position + 1 == getItemCount()) {
-
-            } else {
-                holder.bindView(position,mListFoodNames.get(position));
-            }
+            holder.bindView(mStringList.get(position));
         }
 
         @Override
         public int getItemCount() {
             return mStringList.size();
         }
-
-        @Override
-        public int getItemViewType(int position) {
-            if (position + 1 == getItemCount()) {
-                return TYPE_FOOTER;
-            } else {
-                return TYPE_ITEM;
-            }
-        }
-    }
-
-    private void initData() {
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                getData();
-            }
-        }, 1000);
-    }
-
-    private void getData() {
-        if(mAdapter.getItemCount()>150){
-
-        }else{
-            for (int i = 0; i < 6; i++) {
-                list.add("1");
-                mListFoodNames.add("1");
-
-            }
-            mAdapter.notifyDataSetChanged();
-            //RecommendFragment.mSwipeRefreshLayout.setRefreshing(false);
-            mAdapter.notifyItemRemoved(mAdapter.getItemCount());
-        }
-    }
-
-    private void setRefresh() {
-        /*RecommendFragment.mSwipeRefreshLayout.setColorSchemeResources(R.color.toolbar_and_menu_color);
-        RecommendFragment.mSwipeRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                RecommendFragment.mSwipeRefreshLayout.setRefreshing(true);
-            }
-        });
-        RecommendFragment.mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d(TAG, "run: clear");
-                        list.clear();
-                        getData();
-                    }
-                }, 2000);
-            }
-        });*/
-        mGridLayoutManager = new GridLayoutManager(getContext(), 2);
-        mRecyclerView.setLayoutManager(mGridLayoutManager);
-        mRecyclerView.setNestedScrollingEnabled(false);
-        mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                Log.d("test", "StateChanged = " + newState);
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                Log.d("test", "在滑动");
-                int lastVisibleItemPosition = mGridLayoutManager.findLastVisibleItemPosition();
-                Log.d("test", "onScrolled:最后一个可见的位子 " + lastVisibleItemPosition);
-                Log.d("test", "onScrolled: adapter" + mAdapter.getItemCount());
-                if (lastVisibleItemPosition + 1 == mAdapter.getItemCount()) {
-                    Log.d("test", "loading executed在加载新的");
-
-                    /*boolean isRefreshing = RecommendFragment.mSwipeRefreshLayout.isRefreshing();
-                    if (isRefreshing) {
-                        mAdapter.notifyItemRemoved(mAdapter.getItemCount());
-                        return;
-                    }*/
-                    if (!isLoading) {
-                        isLoading = true;
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                getData();
-                                Log.d("test", "load more completed");
-                                isLoading = false;
-                            }
-                        }, 1000);
-                    }
-                }
-            }
-        });
     }
 }

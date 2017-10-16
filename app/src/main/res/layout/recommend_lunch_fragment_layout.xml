@@ -11,10 +11,9 @@
         android:layout_marginLeft="6dp"
         android:layout_marginRight="6dp"
         android:layout_marginTop="6dp"
-        android:background="@drawable/recommend_lunch_large_image"
+        android:background="@drawable/lunch_image"
         android:orientation="horizontal">
     </LinearLayout>
-
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recommend_lunch_recycler_view"

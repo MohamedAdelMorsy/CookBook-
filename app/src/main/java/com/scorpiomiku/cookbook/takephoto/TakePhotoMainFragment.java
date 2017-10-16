@@ -56,7 +56,6 @@ public class TakePhotoMainFragment extends FragmentModule {
                     ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.CAMERA}, REQUEST_CAMERA);
                 } else {
                     startActivity(mTakePhotoIntent);
-                    getActivity().finish();
                 }
             }
         });

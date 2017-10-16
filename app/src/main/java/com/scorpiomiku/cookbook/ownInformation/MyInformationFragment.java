@@ -1,10 +1,13 @@
 package com.scorpiomiku.cookbook.ownInformation;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +16,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.scorpiomiku.cookbook.R;
 import com.scorpiomiku.cookbook.basket.BasketActivity;
 import com.scorpiomiku.cookbook.dynamic.DynamicActivity;
 import com.scorpiomiku.cookbook.dynamic.MyDynamicActivity;
-import com.scorpiomiku.cookbook.menuactivity.MenuActivity;
 import com.scorpiomiku.cookbook.module.FragmentModule;
 import com.scorpiomiku.cookbook.sign.SignInActivity;
 
@@ -41,6 +45,11 @@ public class MyInformationFragment extends FragmentModule {
     private TextView mHelpTextView;
     private TextView mAccountManagerTextView;
     private TextView mCleanTextView;
+    private SharedPreferences pref;
+    private SharedPreferences.Editor editor;
+    private String url;
+    private int mLabel = 1;
+
     private Timer timer = new Timer();
     private TimerTask mTimerTask = null;
     private static final int MSG_WHAT_TIME_IS_UP = 1;//时间到了
@@ -48,10 +57,7 @@ public class MyInformationFragment extends FragmentModule {
 
     private int mTimeCount = 0;
 
-    private int mLabel = 1;
-
     private FrameLayout mCoverFrameLayout;
-
     public static MyInformationFragment newInstance() {
         return new MyInformationFragment();
     }
@@ -76,14 +82,6 @@ public class MyInformationFragment extends FragmentModule {
         mCleanTextView = (TextView) v.findViewById(R.id.my_information_clean_text_view);
         mCoverFrameLayout = (FrameLayout) v.findViewById(R.id.cover_linearlayout);
 
-        mAccountManagerTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getActivity(), SignInActivity.class);
-                startActivity(i);
-            }
-        });
-
         mCleanTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,6 +102,20 @@ public class MyInformationFragment extends FragmentModule {
                     timer.schedule(mTimerTask, 1000, 1000);
 
                 }
+            }
+        });
+
+        pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        editor = pref.edit();
+        mAccoutImageView.setImageResource(R.drawable.test);
+        mAccountNameTextView.setText(pref.getString("username","您还没有登录"));
+        SetSculpture();
+
+        mAccountManagerTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), SignInActivity.class);
+                startActivity(i);
             }
         });
 
@@ -128,7 +140,7 @@ public class MyInformationFragment extends FragmentModule {
         mDynamicTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getActivity(), DynamicActivity.class);
+                Intent i = new Intent(getActivity(), DynamicActivity .class);
                 startActivity(i);
             }
         });
@@ -149,7 +161,19 @@ public class MyInformationFragment extends FragmentModule {
         });
         return v;
     }
-
+    private void SetSculpture(){
+        url=pref.getString("url_r","http://img3.duitang.com/uploads/item/201602/20/20160220011711_4kzYy.jpeg");
+        Log.d("资料修改界面", "onCreate: SetSculpture()url_r"+url);
+        RequestOptions options = new RequestOptions()
+                .centerCrop()
+                .placeholder(R.drawable.test);
+        Glide.with(getActivity())
+                .load(url)
+                .thumbnail( 0.5f )
+                .apply(options)
+                .into(mAccoutImageView);
+        Log.d("资料修改界面", "onCreate: SetSculpture()放入图片");
+    }
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -173,12 +197,10 @@ public class MyInformationFragment extends FragmentModule {
             }
         }
     };
-
     private void stopTimer() {
         if (mTimerTask != null) {
             mTimerTask.cancel();
             mTimerTask = null;
         }
     }
-
 }

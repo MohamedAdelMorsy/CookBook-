@@ -6,9 +6,9 @@ package com.scorpiomiku.cookbook.bean;
 
 public class MenuStep {
     private int mRank ;
-    private String mStepText ;
+    private String mStepText ; //步骤描述
     private String mNutrition ;
-
+    private String Imageurl;
     public void setNutrition(String nutrition) {
         mNutrition = nutrition;
     }
@@ -17,11 +17,14 @@ public class MenuStep {
         return mNutrition;
     }
 
-    public MenuStep(String s , String nutrition){
+    public MenuStep(String s , String nutrition,String Imageurl){
         mStepText = s ;
         mNutrition = nutrition ;
+        this.Imageurl = Imageurl;
     }
-
+    public String getImageurl(){
+        return Imageurl;
+    }
     public int getRank() {
         return mRank;
     }
@@ -38,3 +41,4 @@ public class MenuStep {
         mStepText = stepText;
     }
 }
+

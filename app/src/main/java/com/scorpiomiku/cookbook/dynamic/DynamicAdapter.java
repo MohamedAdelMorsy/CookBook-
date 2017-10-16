@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.scorpiomiku.cookbook.R;
-import com.scorpiomiku.cookbook.combination.CombinationFragment;
+import com.scorpiomiku.cookbook.bean.CBLEC;
 
 import java.util.List;
 
@@ -17,9 +17,9 @@ import java.util.List;
 
 public class DynamicAdapter extends RecyclerView.Adapter<DynamicHolder> {
     private Context mContext;
-    private List<String> mList;
+    private List<CBLEC> mList;
 
-    public DynamicAdapter(List<String> list, Context context) {
+    public DynamicAdapter(List<CBLEC> list, Context context) {
         super();
         mList = list;
         mContext = context;
@@ -28,17 +28,21 @@ public class DynamicAdapter extends RecyclerView.Adapter<DynamicHolder> {
     @Override
     public DynamicHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(mContext);
-        View v = layoutInflater.inflate(R.layout.dynamic_item_recycler_view, parent, false);
+        View v = layoutInflater.inflate(R.layout.dynamic_item_all, parent, false);
         return new DynamicHolder(v);
+
     }
 
     @Override
     public void onBindViewHolder(DynamicHolder holder, int position) {
-        holder.bindView();
+
+        holder.bindView(mList.get(position),mContext);
+
     }
 
     @Override
     public int getItemCount() {
         return mList.size();
     }
+
 }

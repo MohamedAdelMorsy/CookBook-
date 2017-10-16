@@ -1,18 +1,25 @@
 package com.scorpiomiku.cookbook.menuactivity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.scorpiomiku.cookbook.R;
 import com.scorpiomiku.cookbook.bean.MenuStep;
 import com.scorpiomiku.cookbook.module.FragmentModule;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -25,6 +32,13 @@ public class MenuRecyclerStepsFragment extends FragmentModule {
     private RecyclerView mRecyclerView;
     private ArrayList<MenuStep> mMenuStepsList;
 
+    private SharedPreferences pref;
+    private SharedPreferences.Editor editor;
+    private String FangFa;
+    private String FangFa2;
+    private String ZuoFaTu;
+    private boolean FromUser;
+
     public static MenuRecyclerStepsFragment newInstance() {
         return new MenuRecyclerStepsFragment();
     }
@@ -32,9 +46,20 @@ public class MenuRecyclerStepsFragment extends FragmentModule {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        editor = pref.edit();
+        JSONObject params = new JSONObject();
         mMenuStepsList = new ArrayList<>();
-        for (int i = 0; i < 7; i++) {
-            mMenuStepsList.add(new MenuStep("我是第" + i + "步步骤描述","我是营养介绍"));
+        for (int i = 1; i < 13; i++) {
+            String buzgouneirong = "buZhou" + i + "NeiRong";
+            String image_url = "buZhou" + i + "photo";
+            Log.d("菜谱界面2", "onCreate: " + "buZhou" + i + "NeiRong=" + buzgouneirong + "buZhou" + i + "photo=" + image_url);
+            String NeiRong = pref.getString(buzgouneirong, "null");
+            String ImageUrl = pref.getString(image_url, "null");
+            Log.d("菜谱界面2", "onCreate: 内容" + "buZhou" + i + "NeiRong=" + NeiRong + "buZhou" + i + "photo=" + ImageUrl);
+            if (NeiRong != "null"&&NeiRong!="") {
+                mMenuStepsList.add(new MenuStep(NeiRong, "我是营养介绍", ImageUrl));
+            }
         }
     }
 
@@ -114,12 +139,22 @@ public class MenuRecyclerStepsFragment extends FragmentModule {
             mHowToDoTextView = (TextView) itemView.findViewById(R.id.menu_recycler_item_steps_text_view);
             mNutritionTextView = (TextView) itemView.findViewById(R.id.menu_recycler_footer_nutrition_text_view);
         }
-
-        private void bindDefaultView(MenuStep m) {
+        private void bindDefaultView(final MenuStep m) {
+            mItemImageView.post(new Runnable() {
+                @Override
+                public void run() {
+                    RequestOptions options = new RequestOptions()
+                            .centerCrop()
+                            .placeholder(R.drawable.test);
+                    Glide.with(getActivity())
+                            .load(m.getImageurl())
+                            .apply(options)
+                            .into(mItemImageView);
+                }
+            });
             mRankTextView.setText(m.getRank() + "");
             mHowToDoTextView.setText(m.getStepText());
         }
-
         private void bindFooterView(MenuStep m) {
             mNutritionTextView.setText(m.getNutrition());
         }

@@ -7,17 +7,14 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.os.Environment;
-
-
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
+import android.hardware.Camera;
+import android.hardware.Camera.AutoFocusCallback;
+import android.hardware.Camera.CameraInfo;
+import android.hardware.Camera.PictureCallback;
 import android.os.Bundle;
-import android.hardware.*;
-import android.hardware.Camera.*;
+import android.os.Environment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-
 import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
@@ -28,30 +25,25 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.scorpiomiku.cookbook.R;
+import com.scorpiomiku.cookbook.classifierresultactivity.ClassifierResultActivity;
+import com.scorpiomiku.cookbook.tensorflow.MyTSF;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 
-import com.scorpiomiku.cookbook.classifierresultactivity.ClassifierResultActivity;
-import com.scorpiomiku.cookbook.tensorflow.Classifier;
-import com.scorpiomiku.cookbook.tensorflow.MyTSF;
-
-
 public class CameraActivity extends AppCompatActivity {
 
     private String mPicturePath;
 
-    private String mPictureResult = "鲳鱼";
+    private String mPictureResult;
 
 
     private static final String TAG = "CameraActivity";
@@ -59,22 +51,17 @@ public class CameraActivity extends AppCompatActivity {
     private CameraPreview mPreview;
     private FrameLayout mCameraLayout;
     private ImageView mTakePictureButton;
+    private static int[] results = new int[2];
     private int mCameraId = CameraInfo.CAMERA_FACING_BACK;
-
-    private static final int INPUT_SIZE =224;
-    /*private static final int IMAGE_MEAN = 117;
+    private TimerTask mTimerTask = null;
+    private int mTimeCount = 0;
+    private static final int INPUT_SIZE = 224;
+    private static final int IMAGE_MEAN = 117;
     private static final float IMAGE_STD = 1;
     private static final String INPUT_NAME = "input";
-    private static final String OUTPUT_NAME = "output";*/
-    private static int[] results = new int[2];
-
+    private static final String OUTPUT_NAME = "output";
     private FrameLayout mCoverFrameLayout;
     private Timer timer = new Timer();
-    private TimerTask mTimerTask = null;
-    private static final int MSG_WHAT_TIME_IS_UP = 1;//时间到了
-    private static final int MSG_WHAT_TIME_IS_TICK = 2;//时间减少中
-    private int mTimeCount = 0;
-
 
     private static final String MODEL_FILE = "file:///android_asset/tensorflow_inception_graph.pb";
     private static final String LABEL_FILE =
@@ -87,7 +74,6 @@ public class CameraActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         //设置无标题
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
@@ -110,11 +96,8 @@ public class CameraActivity extends AppCompatActivity {
                 mCamera.autoFocus(mAutoFocusCallback);
             }
         });
+        mCoverFrameLayout = (FrameLayout) findViewById(R.id.camera_cover_linearlayout);
         setCameraDisplayOrientation(this, mCameraId, mCamera);
-
-        //initTensorFlowAndLoadModel();
-
-
     }
 
 
@@ -142,7 +125,7 @@ public class CameraActivity extends AppCompatActivity {
         try {
             c = Camera.open();
             Camera.Parameters mParameters = c.getParameters();
-            mParameters.setPictureSize(1024, 768);
+            mParameters.setPictureSize(224, 224);
             c.setParameters(mParameters);
         } catch (Exception e) {
             e.printStackTrace();
@@ -164,7 +147,6 @@ public class CameraActivity extends AppCompatActivity {
                 }
             });
             mCameraLayout = (FrameLayout) findViewById(R.id.camera_preview);
-            mCoverFrameLayout = (FrameLayout) findViewById(R.id.camera_cover_linearlayout);
             mCameraLayout.addView(mPreview);
             mCamera.startPreview();
         }
@@ -188,6 +170,7 @@ public class CameraActivity extends AppCompatActivity {
             final File pictureDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
             final String pictureName = System.currentTimeMillis() + ".jpg";
             final String picturePath = pictureDir + File.separator + pictureName;
+
             mPicturePath = picturePath;
             Log.d(TAG, mPicturePath);
             mCoverFrameLayout.setVisibility(View.VISIBLE);
@@ -198,14 +181,12 @@ public class CameraActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         mTimeCount--;
-
                         if (mTimeCount <= 0) {   //时间到了就弹出对话框
-
                             stopTimer();
                         }
                     }
                 };
-                timer.schedule(mTimerTask, 300, 300);
+                timer.schedule(mTimerTask, 4000);
 
             }
             new Thread(new Runnable() {
@@ -217,24 +198,23 @@ public class CameraActivity extends AppCompatActivity {
                         bitmap = rotateBitmapByDegree(bitmap, 90);
                         //缩放
                         bitmap = Bitmap.createScaledBitmap(bitmap, INPUT_SIZE, INPUT_SIZE, false);
-                        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
-                        //final List<Classifier.Recognition> results = mClassifier.recognizeImage(bitmap);
-                        MyTSF myTSF = new MyTSF(getAssets(), bitmap ,bitmap);
+                        MyTSF myTSF = new MyTSF(getAssets(), bitmap, bitmap);
                         results = myTSF.getResult();
-                        Log.d(TAG, "run: " + results[0]+"   "+results[1]);
-                        //mPictureResult = results.toString();
+                        Log.d(TAG, "run: " + results[0] + "   " + results[1]);
+                        num2String(results[0]);
+                        ClassifierResultActivity.mPicturePath = picturePath;
+                        ClassifierResultActivity.mPictureResult = mPictureResult;
+                        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
                         bos.flush();
                         bos.close();
                         bitmap.recycle();
-
-
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    // finish();
+                    finish();
                 }
             }).start();
             mCamera.startPreview();
@@ -306,28 +286,6 @@ public class CameraActivity extends AppCompatActivity {
         return returnBm;
     }
 
-    /*private void initTensorFlowAndLoadModel() {
-        mExecutor.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    mClassifier = TensorFlowClassifier.create(
-                            getAssets(),
-                            MODEL_FILE,
-                            LABEL_FILE,
-                            INPUT_SIZE,
-                            IMAGE_MEAN,
-                            IMAGE_STD,
-                            INPUT_NAME,
-                            OUTPUT_NAME);
-
-                } catch (final Exception e) {
-                    Log.e(TAG, "run: ", e);
-                    throw new RuntimeException("Error initializing TensorFlow!", e);
-                }
-            }
-        });
-    }*/
 
     @Override
     protected void onResume() {
@@ -338,8 +296,6 @@ public class CameraActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         Intent i = new Intent(CameraActivity.this, ClassifierResultActivity.class);
-        i.putExtra("picturePath", mPicturePath);
-        i.putExtra("foodname", mPictureResult);
         i.putExtra("FragmentSendMessage", "CameraActivity");
         startActivity(i);
         super.onPause();
@@ -348,7 +304,6 @@ public class CameraActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
         Log.d(TAG, "onDestroy: ");
     }
 
@@ -361,5 +316,65 @@ public class CameraActivity extends AppCompatActivity {
 
     private void stopTimer() {
         finish();
+        Log.d(TAG, "stopTimer: ");
+    }
+
+    private void num2String(int input) {
+        if (input == 0) {
+            mPictureResult = "白菜";
+        }
+        if (input == 1) {
+            mPictureResult = "菜花";
+        }
+        if (input == 2) {
+            mPictureResult = "草莓";
+        }
+        if (input == 3) {
+            mPictureResult = "鲳鱼";
+        }
+        if (input == 4) {
+            mPictureResult = "番茄";
+        }
+        if (input == 5) {
+            mPictureResult = "黑芝麻";
+        }
+        if (input == 6) {
+            mPictureResult = "猴头菇";
+        }
+        if (input == 7) {
+            mPictureResult = "韭菜";
+        }
+        if (input == 8) {
+            mPictureResult = "空心菜";
+        }
+        if (input == 9) {
+            mPictureResult = "牛肉";
+        }
+        if (input == 10) {
+            mPictureResult = "荞麦米";
+        }
+        if (input == 11) {
+            mPictureResult = "秋葵";
+        }
+        if (input == 12) {
+            mPictureResult = "茼蒿";
+        }
+        if (input == 13) {
+            mPictureResult = "土豆";
+        }
+        if (input == 14) {
+            mPictureResult = "五花肉";
+        }
+        if (input == 15) {
+            mPictureResult = "西葫芦";
+        }
+        if (input == 16) {
+            mPictureResult = "香菇";
+        }
+        if (input == 17) {
+            mPictureResult = "杏鲍菇";
+        }
+
+
     }
 }

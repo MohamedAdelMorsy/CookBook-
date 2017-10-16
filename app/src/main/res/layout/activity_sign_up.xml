@@ -16,6 +16,7 @@
         >
 
         <TextView
+
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
@@ -43,7 +44,7 @@
             android:orientation="vertical">
 
             <EditText
-                android:id="@+id/sign_up_user_name_edit_text"
+                android:id="@+id/register_username"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="@string/sign_up_account_name"
@@ -51,38 +52,38 @@
         </LinearLayout>
 
         <LinearLayout
+
             android:layout_width="270dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="vertical">
 
             <EditText
-                android:id="@+id/sign_up_account_edit_text"
+                android:id="@+id/register_email"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="@string/sign_up_account"
                 android:textSize="16sp"/>
 
             <EditText
-                android:id="@+id/sign_up_pass_word_edit_text"
+                android:id="@+id/register_passwod"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="@string/sign_up_password"
                 android:textSize="16sp"/>
 
             <EditText
-                android:id="@+id/sign_up_pass_word_check_edit_text"
+                android:id="@+id/register_passwod_again"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="@string/sign_up_password_again"
                 android:textSize="16sp"/>
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"/>
 
             <Button
-                android:id="@+id/sign_up_ok_button"
+                android:id="@+id/register_send"
                 android:layout_width="270dp"
                 android:layout_height="50dp"
                 android:text="@string/sign_up_ok"/>

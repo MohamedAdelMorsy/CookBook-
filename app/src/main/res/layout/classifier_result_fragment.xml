@@ -30,6 +30,7 @@
                     <ImageView
                         android:id="@+id/classifier_result_imageview"
                         android:layout_width="match_parent"
+                        android:scaleType="fitXY"
                         android:layout_height="match_parent"/>
 
                 </android.support.v7.widget.CardView>
@@ -99,12 +100,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/textview_background_2"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="4dp"/>
+                android:background="@drawable/textview_background_2">
 
                 <TextView
                     android:id="@+id/nutrition_know_text_view"
@@ -120,10 +116,6 @@
                 android:text="@string/classifier_result_recommend"
                 android:textSize="18sp"
                 />
-
-
         </LinearLayout>
-
-
     </ScrollView>
 </LinearLayout>

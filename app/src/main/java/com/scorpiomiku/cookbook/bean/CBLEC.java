@@ -1,16 +1,17 @@
 package com.scorpiomiku.cookbook.bean;
 
-import android.graphics.drawable.Drawable;
-
 import java.util.List;
 
+
 /**
- * Created by Administrator on 2017/9/7.
+ * Created by a on 2017/7/12.
  */
 
 public class CBLEC {
+    private String postId;
     private String name;
-    private Drawable image;
+    private String imageurl;
+    // private Drawable image;
     private String Introduce;
     private String objId;
     private String ShiCaiMing1;
@@ -31,28 +32,33 @@ public class CBLEC {
     private String ShiCaiLiang7;
     private String ShiCaiLiang8;
     private String ShiCaiLiang9;
+    private String userImage;
+    private boolean FromUser;
     private List<SSEC> ssec;
+    private int geshu;
 
-    public void setSsec(List<SSEC> h) {
+    public void setSsec(List<SSEC> h){
         ssec = h;
     }
-
-    public List<SSEC> getSsec() {
+    public List<SSEC> getSsec (){
         return ssec;
     }
-
-    public void setObjId(String h) {
+    public void setObjId(String h){
         objId = h;
     }
-
-    public String getObjId() {
+    public String getObjId(){
         return objId;
     }
-
-    public CBLEC(String name, Drawable image, String Introduce, String ShiCaiMing1, String ShiCaiMing2, String ShiCaiMing3, String ShiCaiMing4, String ShiCaiMing5, String ShiCaiMing6, String ShiCaiMing7, String ShiCaiMing8, String ShiCaiMing9, String ShiCaiLiang1, String ShiCaiLiang2, String ShiCaiLiang3, String ShiCaiLiang4, String ShiCaiLiang5, String ShiCaiLiang6, String ShiCaiLiang7, String ShiCaiLiang8, String ShiCaiLiang9, String Way_objectID, List<SSEC> ssecs) {
+    public void setName(String s){
+        name = s;
+    }
+    public void setImageurl(String s){
+        imageurl = s;
+    }
+    public CBLEC(String name, String image, String Introduce, String ShiCaiMing1, String ShiCaiMing2, String ShiCaiMing3, String ShiCaiMing4, String ShiCaiMing5, String ShiCaiMing6, String ShiCaiMing7, String ShiCaiMing8, String ShiCaiMing9, String ShiCaiLiang1, String ShiCaiLiang2, String ShiCaiLiang3, String ShiCaiLiang4, String ShiCaiLiang5, String ShiCaiLiang6, String ShiCaiLiang7, String ShiCaiLiang8, String ShiCaiLiang9, String Way_objectID, boolean FromUser, List<SSEC> ssecs){
         ssec = ssecs;
         this.name = name;
-        this.image = image;
+        this.imageurl =image;
         this.Introduce = Introduce;
         this.ShiCaiMing1 = ShiCaiMing1;
         this.ShiCaiMing2 = ShiCaiMing2;
@@ -72,13 +78,14 @@ public class CBLEC {
         this.ShiCaiLiang7 = ShiCaiLiang7;
         this.ShiCaiLiang8 = ShiCaiLiang8;
         this.ShiCaiLiang9 = ShiCaiLiang9;
-        this.objId = Way_objectID;
+        this.objId=Way_objectID;
+        this.FromUser = FromUser;
+        postId = "";
     }
-
-    public CBLEC(String name, Drawable image, String Introduce, String ShiCaiMing1, String ShiCaiMing2, String ShiCaiMing3, String ShiCaiMing4, String ShiCaiMing5, String ShiCaiMing6, String ShiCaiMing7, String ShiCaiMing8, String ShiCaiMing9, String ShiCaiLiang1, String ShiCaiLiang2, String ShiCaiLiang3, String ShiCaiLiang4, String ShiCaiLiang5, String ShiCaiLiang6, String ShiCaiLiang7, String ShiCaiLiang8, String ShiCaiLiang9, String Way_objectID) {
+    public CBLEC(String name, String image, String Introduce, String ShiCaiMing1, String ShiCaiMing2, String ShiCaiMing3, String ShiCaiMing4, String ShiCaiMing5, String ShiCaiMing6, String ShiCaiMing7, String ShiCaiMing8, String ShiCaiMing9, String ShiCaiLiang1, String ShiCaiLiang2, String ShiCaiLiang3, String ShiCaiLiang4, String ShiCaiLiang5, String ShiCaiLiang6, String ShiCaiLiang7, String ShiCaiLiang8, String ShiCaiLiang9, String Way_objectID, boolean FromUser){
 
         this.name = name;
-        this.image = image;
+        this.imageurl =image;
         this.Introduce = Introduce;
         this.ShiCaiMing1 = ShiCaiMing1;
         this.ShiCaiMing2 = ShiCaiMing2;
@@ -98,91 +105,110 @@ public class CBLEC {
         this.ShiCaiLiang7 = ShiCaiLiang7;
         this.ShiCaiLiang8 = ShiCaiLiang8;
         this.ShiCaiLiang9 = ShiCaiLiang9;
-        this.objId = Way_objectID;
+        this.objId=Way_objectID;
+        this.FromUser = FromUser;
+        postId ="";
     }
-
-    public String getName() {
+    public CBLEC(String name, String image, String Introduce, String ShiCaiMing1, String ShiCaiMing2, String ShiCaiMing3, String ShiCaiMing4, String ShiCaiMing5, String ShiCaiMing6, String ShiCaiMing7, String ShiCaiMing8, String ShiCaiMing9, String ShiCaiLiang1, String ShiCaiLiang2, String ShiCaiLiang3, String ShiCaiLiang4, String ShiCaiLiang5, String ShiCaiLiang6, String ShiCaiLiang7, String ShiCaiLiang8, String ShiCaiLiang9, String Way_objectID, boolean FromUser, List<SSEC> ssecs,String postId,int s,String userImage){
+        this.userImage = userImage;
+        geshu = s;
+        ssec = ssecs;
+        this.name = name;
+        this.imageurl =image;
+        this.Introduce = Introduce;
+        this.ShiCaiMing1 = ShiCaiMing1;
+        this.ShiCaiMing2 = ShiCaiMing2;
+        this.ShiCaiMing3 = ShiCaiMing3;
+        this.ShiCaiMing4 = ShiCaiMing4;
+        this.ShiCaiMing5 = ShiCaiMing5;
+        this.ShiCaiMing6 = ShiCaiMing6;
+        this.ShiCaiMing7 = ShiCaiMing7;
+        this.ShiCaiMing8 = ShiCaiMing8;
+        this.ShiCaiMing9 = ShiCaiMing9;
+        this.ShiCaiLiang1 = ShiCaiLiang1;
+        this.ShiCaiLiang2 = ShiCaiLiang2;
+        this.ShiCaiLiang3 = ShiCaiLiang3;
+        this.ShiCaiLiang4 = ShiCaiLiang4;
+        this.ShiCaiLiang5 = ShiCaiLiang5;
+        this.ShiCaiLiang6 = ShiCaiLiang6;
+        this.ShiCaiLiang7 = ShiCaiLiang7;
+        this.ShiCaiLiang8 = ShiCaiLiang8;
+        this.ShiCaiLiang9 = ShiCaiLiang9;
+        this.objId=Way_objectID;
+        this.FromUser = FromUser;
+        this.postId = postId;
+    }
+    public String getName(){
         return name;
     }
-
-    public Drawable getImage(
-    ) {
-        return image;
+    public String getImageurl(
+    ){
+        return imageurl;
     }
-
-    public String getIntroduce() {
+    public String getIntroduce(){
         return Introduce;
     }
-
-    public String getShiCaiMing1() {
+    public String getShiCaiMing1(){
         return ShiCaiMing1;
     }
-
-    public String getShiCaiMing2() {
+    public String getShiCaiMing2(){
         return ShiCaiMing2;
     }
-
-    public String getShiCaiMing3() {
+    public String getShiCaiMing3(){
         return ShiCaiMing3;
     }
-
-    public String getShiCaiMing4() {
+    public String getShiCaiMing4(){
         return ShiCaiMing4;
     }
-
-    public String getShiCaiMing5() {
+    public String getShiCaiMing5(){
         return ShiCaiMing5;
     }
-
-    public String getShiCaiMing6() {
+    public String getShiCaiMing6(){
         return ShiCaiMing6;
     }
-
-    public String getShiCaiMing7() {
+    public String getShiCaiMing7(){
         return ShiCaiMing7;
     }
-
-    public String getShiCaiMing8() {
+    public String getShiCaiMing8(){
         return ShiCaiMing8;
     }
-
-    public String getShiCaiMing9() {
+    public String getShiCaiMing9(){
         return ShiCaiMing9;
     }
-
-    public String getShiCaiLiang1() {
+    public String getShiCaiLiang1(){
         return ShiCaiLiang1;
     }
-
-    public String getShiCaiLiang2() {
+    public String getShiCaiLiang2(){
         return ShiCaiLiang2;
     }
-
-    public String getShiCaiLiang3() {
+    public String getShiCaiLiang3(){
         return ShiCaiLiang3;
     }
-
-    public String getShiCaiLiang4() {
+    public String getShiCaiLiang4(){
         return ShiCaiLiang4;
     }
-
-    public String getShiCaiLiang5() {
+    public String getShiCaiLiang5(){
         return ShiCaiLiang5;
     }
-
-    public String getShiCaiLiang6() {
+    public String getShiCaiLiang6(){
         return ShiCaiLiang6;
     }
-
-    public String getShiCaiLiang7() {
+    public String getShiCaiLiang7(){
         return ShiCaiLiang7;
     }
-
-    public String getShiCaiLiang8() {
+    public String getShiCaiLiang8(){
         return ShiCaiLiang8;
     }
-
-    public String getShiCaiLiang9() {
+    public String getShiCaiLiang9(){
         return ShiCaiLiang9;
+    }
+    public boolean getFromUser(){
+        return FromUser;
+    }
+    public String getPostId(){
+        return postId;
+    }
+    public int getGeshu(){
+        return geshu;
     }
 }

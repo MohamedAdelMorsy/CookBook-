@@ -1433,8 +1433,8 @@ public class CombinationFragment extends FragmentModule {
 
         private ImageView mImageView1;
         private ImageView mImageView2;
-        private ImageView mImageView3;
-        private ImageView mImageView4;
+        //private ImageView mImageView3;
+        //private ImageView mImageView4;
         private TextView mNameTextView;
         private TextView mMatirialTextView;
         private CaiZuEC a213;
@@ -1442,8 +1442,8 @@ public class CombinationFragment extends FragmentModule {
             super(itemView);
             mImageView1 = (ImageView) itemView.findViewById(R.id.combination_item_image_view_1);
             mImageView2 = (ImageView) itemView.findViewById(R.id.combination_item_image_view_2);
-            mImageView3 = (ImageView) itemView.findViewById(R.id.combination_item_image_view_3);
-            mImageView4 = (ImageView) itemView.findViewById(R.id.combination_item_image_view_4);
+            //mImageView3 = (ImageView) itemView.findViewById(R.id.combination_item_image_view_3);
+            //mImageView4 = (ImageView) itemView.findViewById(R.id.combination_item_image_view_4);
             mNameTextView = (TextView) itemView.findViewById(R.id.combination_item_food_name_text_name);
             mMatirialTextView = (TextView) itemView.findViewById(R.id.combination_item_food_matirial_text_shicai);
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -1473,7 +1473,7 @@ public class CombinationFragment extends FragmentModule {
                         .load(mcblec.getImageurl2())
                         .apply(options)
                         .into(mImageView2);
-            if(mcblec.getImageurl3()!=null){
+            /*if(mcblec.getImageurl3()!=null){
                 Glide.with(getActivity())
                         .load(mcblec.getImageurl3())
                         .apply(options)
@@ -1486,7 +1486,7 @@ public class CombinationFragment extends FragmentModule {
                         .apply(options)
                         .into(mImageView4);
             }else{
-            }
+            }*/
 
             //mImageView.setImageResource(R.drawable.food_test_1);
             mNameTextView.setText(mcblec.getName());

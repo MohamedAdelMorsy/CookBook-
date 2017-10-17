@@ -1,45 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.scorpiomiku.cookbook">
+          package="com.scorpiomiku.cookbook">
 
     <uses-sdk
         android:minSdkVersion="8"
-        android:targetSdkVersion="17" />
+        android:targetSdkVersion="17"/>
 
     <meta-data
         android:name="BMOB_CHANNEL"
-        android:value="Channel ID" />
+        android:value="Channel ID"/>
 
     <uses-feature
         android:name="android.hardware.camera"
-        android:required="false" />
+        android:required="false"/>
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
     <!-- 允许联网 -->
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
     <!-- 获取GSM（2g）、WCDMA（联通3g）等网络状态的信息 -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <!-- 获取wifi网络状态的信息 -->
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <!-- 保持CPU 运转，屏幕和键盘灯有可能是关闭的,用于文件上传和下载 -->
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <!-- 获取sd卡写的权限，用于文件上传和下载 -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <!-- 允许读取手机状态 用于创建BmobInstallation -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
-    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature android:name="android.hardware.camera.autofocus"/>
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
     <!-- To auto-complete the email text field in the login form with the user's emails -->
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.READ_PROFILE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.READ_PROFILE"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
 
     <application
         android:allowBackup="true"
@@ -52,29 +52,31 @@
             android:name=".mainactivity.ContainActivity"
             android:label="@string/app_name">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".menuactivity.MenuActivity"></activity>
+        <activity android:name=".menuactivity.MenuActivity"/>
         <activity
             android:name="cn.bmob.v3.update.UpdateDialogActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"></activity>
-        <activity android:name=".basket.BasketActivity"></activity>
-        <activity android:name=".takephoto.CameraActivity"></activity>
-        <activity android:name=".dynamic.DynamicActivity"></activity>
-        <activity android:name=".dynamic.MyDynamicActivity"></activity>
-        <activity android:name=".ownInformation.InformationChangeActivity"></activity>
-        <activity android:name=".ownInformation.HelpActivity"></activity>
-        <activity android:name=".basket.CreateNewBasketActivity"></activity>
-        <activity android:name=".sign.SignInActivity"></activity>
-        <activity android:name=".sign.SignUpActivity"></activity>
-        <activity android:name=".classifierresultactivity.ClassifierResultActivity"></activity>
-        <activity android:name=".ShowShare.ShowShareList"></activity>
-        <activity android:name=".ShareActivity" />
-        <activity android:name=".combination.ZuCaiJieMian"></activity>
-        <activity android:name=".sign.ForgetPasswordActivity"></activity>
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <activity android:name=".basket.BasketActivity"/>
+        <activity android:name=".takephoto.CameraActivity"/>
+        <activity android:name=".dynamic.DynamicActivity"/>
+        <activity android:name=".dynamic.MyDynamicActivity"/>
+        <activity android:name=".ownInformation.InformationChangeActivity"/>
+        <activity android:name=".ownInformation.HelpActivity"/>
+        <activity android:name=".basket.CreateNewBasketActivity"/>
+        <activity android:name=".sign.SignInActivity"/>
+        <activity android:name=".sign.SignUpActivity"/>
+        <activity android:name=".classifierresultactivity.ClassifierResultActivity"/>
+        <activity android:name=".ShowShare.ShowShareList"/>
+        <activity android:name=".ShareActivity"/>
+        <activity android:name=".combination.ZuCaiJieMian"/>
+        <activity android:name=".sign.ForgetPasswordActivity"/>
+        <activity android:name=".takephoto.MoreCameraActivity">
+        </activity>
     </application>
 
 </manifest>

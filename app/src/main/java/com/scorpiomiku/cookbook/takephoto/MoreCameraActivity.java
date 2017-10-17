@@ -5,15 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.hardware.Camera;
-import android.hardware.Camera.AutoFocusCallback;
-import android.hardware.Camera.CameraInfo;
-import android.hardware.Camera.PictureCallback;
-import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.Surface;
@@ -27,29 +23,23 @@ import android.widget.Toast;
 import com.scorpiomiku.cookbook.R;
 import com.scorpiomiku.cookbook.classifierresultactivity.ClassifierResultActivity;
 import com.scorpiomiku.cookbook.tensorflow.Classifier;
-import com.scorpiomiku.cookbook.tensorflow.MyTSF;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+public class MoreCameraActivity extends AppCompatActivity {
 
-public class CameraActivity extends AppCompatActivity {
 
     private String mPicturePath;
-
-    private String mPictureResult;
-
     public static final String APP_ID = "10248328";
     public static final String API_KEY = "7Wdkd5GkbFEsZ3284movvU8f";
     public static final String SECRET_KEY = "afPh1ig2SQKYQ13tSxtrGq6CNsengFqN";
@@ -58,26 +48,14 @@ public class CameraActivity extends AppCompatActivity {
     private CameraPreview mPreview;
     private FrameLayout mCameraLayout;
     private ImageView mTakePictureButton;
-    private static int[] results = new int[2];
-    private int mCameraId = CameraInfo.CAMERA_FACING_BACK;
+    private int mCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
     private TimerTask mTimerTask = null;
     private int mTimeCount = 0;
     private Classifier mClassifier;
-    private static final int INPUT_SIZE = 224;
-    private static final int IMAGE_MEAN = 117;
-    private static final float IMAGE_STD = 1;
-    private static final String INPUT_NAME = "input";
-    private static final String OUTPUT_NAME = "output";
     private FrameLayout mCoverFrameLayout;
     private Timer timer = new Timer();
+    private List<String> results = new ArrayList<>();
     private HashMap<String, String> options = new HashMap<String, String>();
-    private static final String MODEL_FILE = "file:///android_asset/tensorflow_inception_graph.pb";
-    private static final String LABEL_FILE =
-            "file:///android_asset/imagenet_comp_graph_label_strings.txt";
-
-
-    private Executor mExecutor = Executors.newSingleThreadExecutor();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +71,7 @@ public class CameraActivity extends AppCompatActivity {
         options.put("top_num", "3");
         mClassifier = new Classifier(APP_ID, API_KEY, SECRET_KEY);
         if (!checkCameraHardware(this)) {
-            Toast.makeText(CameraActivity.this, "相机不支持", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MoreCameraActivity.this, "相机不支持", Toast.LENGTH_SHORT).show();
         } else {
             openCamera();
         }
@@ -109,7 +87,7 @@ public class CameraActivity extends AppCompatActivity {
     }
 
 
-    private AutoFocusCallback mAutoFocusCallback = new AutoFocusCallback() {
+    private Camera.AutoFocusCallback mAutoFocusCallback = new Camera.AutoFocusCallback() {
         @Override
         public void onAutoFocus(boolean success, Camera camera) {
             if (success) {
@@ -133,7 +111,7 @@ public class CameraActivity extends AppCompatActivity {
         try {
             c = Camera.open();
             Camera.Parameters mParameters = c.getParameters();
-            mParameters.setPictureSize(224, 224);
+            mParameters.setPictureSize(720, 1280);
             c.setParameters(mParameters);
         } catch (Exception e) {
             e.printStackTrace();
@@ -146,7 +124,7 @@ public class CameraActivity extends AppCompatActivity {
     public void openCamera() {
         if (null == mCamera) {
             mCamera = getCameraInstance();
-            mPreview = new CameraPreview(CameraActivity.this, mCamera);
+            mPreview = new CameraPreview(MoreCameraActivity.this, mCamera);
             mPreview.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -170,7 +148,7 @@ public class CameraActivity extends AppCompatActivity {
         }
     }
 
-    private PictureCallback mPictureCallback = new PictureCallback() {
+    private Camera.PictureCallback mPictureCallback = new Camera.PictureCallback() {
         @Override
         public void onPictureTaken(final byte[] data, Camera camera) {
 
@@ -195,7 +173,6 @@ public class CameraActivity extends AppCompatActivity {
                     }
                 };
                 timer.schedule(mTimerTask, 300);
-
             }
             new Thread(new Runnable() {
                 @Override
@@ -205,9 +182,9 @@ public class CameraActivity extends AppCompatActivity {
                     try {
                         if(res.getJSONArray("result").getJSONObject(0).getString("name").equals("洋柿子"))
                         {
-                            ClassifierResultActivity.mPictureResult = "番茄";
+                            results.add("番茄");
                         }else{
-                            ClassifierResultActivity.mPictureResult = res.getJSONArray("result").getJSONObject(0).getString("name");
+                            results.add(res.getJSONArray("result").getJSONObject(0).getString("name"));
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -221,12 +198,8 @@ public class CameraActivity extends AppCompatActivity {
         }
     };
 
-    //设置分辨率
-    private void setResolution() {
 
-    }
 
-//    private void cropImage()
 
     //将相机设置成竖屏
     public static void setCameraDisplayOrientation(Activity activity, int cameraId, Camera camera) {
@@ -255,7 +228,7 @@ public class CameraActivity extends AppCompatActivity {
                 break;
         }
         int result;
-        if (info.facing == CameraInfo.CAMERA_FACING_FRONT) {
+        if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
             result = (info.orientation + degrees) % 360;
             result = (360 - result) % 360;
         } else {
@@ -264,34 +237,9 @@ public class CameraActivity extends AppCompatActivity {
         camera.setDisplayOrientation(result);
     }
 
-    //修改图片保存方向
-    public static Bitmap rotateBitmapByDegree(Bitmap bm, int degree) {
-        Bitmap returnBm = null;
-
-        //Matrix图片动作（旋转平移）
-        Matrix matrix = new Matrix();
-        matrix.postRotate(degree);
-
-        try {
-            returnBm = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), matrix, true);
-        } catch (OutOfMemoryError e) {
-
-        }
-        if (returnBm == null) {
-            returnBm = bm;
-        }
-        if (bm != returnBm) {
-            bm.recycle();
-        }
-        return returnBm;
-    }
-
-
-
     @Override
     protected void onPause() {
-        Intent i = new Intent(CameraActivity.this, ClassifierResultActivity.class);
-        i.putExtra("FragmentSendMessage", "CameraActivity");
+        Intent i = new Intent(MoreCameraActivity.this, ClassifierResultActivity.class);
         startActivity(i);
         super.onPause();
     }

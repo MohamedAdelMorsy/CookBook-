@@ -59,6 +59,7 @@ public class ClassifierResultActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_classifier_result);
         mRecyclerView = (RecyclerView)findViewById(R.id.classifier_result_recyclerview);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));

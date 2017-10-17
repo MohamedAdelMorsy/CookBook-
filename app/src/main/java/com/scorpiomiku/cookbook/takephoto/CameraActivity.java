@@ -29,6 +29,7 @@ import com.scorpiomiku.cookbook.classifierresultactivity.ClassifierResultActivit
 import com.scorpiomiku.cookbook.tensorflow.Classifier;
 import com.scorpiomiku.cookbook.tensorflow.MyTSF;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedOutputStream;
@@ -201,7 +202,17 @@ public class CameraActivity extends AppCompatActivity {
                 public void run() {
                     File file = new File(picturePath);
                     JSONObject res = mClassifier.plantDetect(data, options);
-                    mPictureResult = res.toString();
+                    try {
+                        if(res.getJSONArray("result").getJSONObject(0).getString("name").equals("洋柿子"))
+                        {
+                            ClassifierResultActivity.mPictureResult = "番茄";
+                        }else{
+                            ClassifierResultActivity.mPictureResult = res.getJSONArray("result").getJSONObject(0).getString("name");
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    Log.d(TAG, "run: "+res.toString());
                     Log.d(TAG, "run: "+options.get("name"));
                     finish();
                 }

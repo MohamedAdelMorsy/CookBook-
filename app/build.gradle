@@ -65,4 +65,6 @@ dependencies {
     compile 'cn.bmob.android:bmob-sms:1.0.1'
     compile 'cn.bmob.android:http-legacy:1.0'
     testCompile 'junit:junit:4.12'
+    compile files('libs/json-20160810.jar')
+    compile files('libs/aip-java-sdk-3.2.0.jar')
 }

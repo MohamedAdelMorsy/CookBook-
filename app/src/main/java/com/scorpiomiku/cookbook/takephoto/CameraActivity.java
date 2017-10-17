@@ -26,13 +26,17 @@ import android.widget.Toast;
 
 import com.scorpiomiku.cookbook.R;
 import com.scorpiomiku.cookbook.classifierresultactivity.ClassifierResultActivity;
+import com.scorpiomiku.cookbook.tensorflow.Classifier;
 import com.scorpiomiku.cookbook.tensorflow.MyTSF;
+
+import org.json.JSONObject;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Executor;
@@ -45,7 +49,9 @@ public class CameraActivity extends AppCompatActivity {
 
     private String mPictureResult;
 
-
+    public static final String APP_ID = "10248328";
+    public static final String API_KEY = "7Wdkd5GkbFEsZ3284movvU8f";
+    public static final String SECRET_KEY = "afPh1ig2SQKYQ13tSxtrGq6CNsengFqN";
     private static final String TAG = "CameraActivity";
     private Camera mCamera;
     private CameraPreview mPreview;
@@ -55,6 +61,7 @@ public class CameraActivity extends AppCompatActivity {
     private int mCameraId = CameraInfo.CAMERA_FACING_BACK;
     private TimerTask mTimerTask = null;
     private int mTimeCount = 0;
+    private Classifier mClassifier;
     private static final int INPUT_SIZE = 224;
     private static final int IMAGE_MEAN = 117;
     private static final float IMAGE_STD = 1;
@@ -62,7 +69,7 @@ public class CameraActivity extends AppCompatActivity {
     private static final String OUTPUT_NAME = "output";
     private FrameLayout mCoverFrameLayout;
     private Timer timer = new Timer();
-
+    private HashMap<String, String> options = new HashMap<String, String>();
     private static final String MODEL_FILE = "file:///android_asset/tensorflow_inception_graph.pb";
     private static final String LABEL_FILE =
             "file:///android_asset/imagenet_comp_graph_label_strings.txt";
@@ -82,8 +89,8 @@ public class CameraActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         //注意：上面两个设置必须写在setContentView前面
         setContentView(R.layout.camera_activity_layout);
-
-
+        options.put("top_num", "3");
+        mClassifier = new Classifier(APP_ID, API_KEY, SECRET_KEY);
         if (!checkCameraHardware(this)) {
             Toast.makeText(CameraActivity.this, "相机不支持", Toast.LENGTH_SHORT).show();
         } else {
@@ -186,34 +193,16 @@ public class CameraActivity extends AppCompatActivity {
                         }
                     }
                 };
-                timer.schedule(mTimerTask, 4000);
+                timer.schedule(mTimerTask, 300);
 
             }
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     File file = new File(picturePath);
-                    try {
-                        Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-                        bitmap = rotateBitmapByDegree(bitmap, 90);
-                        //缩放
-                        bitmap = Bitmap.createScaledBitmap(bitmap, INPUT_SIZE, INPUT_SIZE, false);
-                        MyTSF myTSF = new MyTSF(getAssets(), bitmap, bitmap);
-                        results = myTSF.getResult();
-                        Log.d(TAG, "run: " + results[0] + "   " + results[1]);
-                        num2String(results[0]);
-                        ClassifierResultActivity.mPicturePath = picturePath;
-                        ClassifierResultActivity.mPictureResult = mPictureResult;
-                        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
-                        bos.flush();
-                        bos.close();
-                        bitmap.recycle();
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    JSONObject res = mClassifier.plantDetect(data, options);
+                    mPictureResult = res.toString();
+                    Log.d(TAG, "run: "+options.get("name"));
                     finish();
                 }
             }).start();

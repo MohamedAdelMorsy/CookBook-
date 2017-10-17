@@ -3,10 +3,10 @@ package com.scorpiomiku.cookbook.takephoto;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +23,7 @@ public class TakePhotoMainFragment extends FragmentModule {
     private static final int REQUEST_CAMERA = 0;
     private Button mTakePhotoButton;
     private boolean canTakePhoto;
+    private static final String DIALOG_BUTTON = "ButtonDialog";
     private Intent mTakePhotoIntent;
 
     public static TakePhotoMainFragment newInstance() {
@@ -55,7 +56,9 @@ public class TakePhotoMainFragment extends FragmentModule {
                         != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.CAMERA}, REQUEST_CAMERA);
                 } else {
-                    startActivity(mTakePhotoIntent);
+                    FragmentManager fm = getFragmentManager();
+                    TakePhotoDialogFragment dialogFragment = TakePhotoDialogFragment.newInstance();
+                    dialogFragment.show(fm, DIALOG_BUTTON);
                 }
             }
         });

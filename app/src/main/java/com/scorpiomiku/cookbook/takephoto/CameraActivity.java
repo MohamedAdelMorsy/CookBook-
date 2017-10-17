@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.hardware.Camera.AutoFocusCallback;
@@ -27,16 +26,11 @@ import android.widget.Toast;
 import com.scorpiomiku.cookbook.R;
 import com.scorpiomiku.cookbook.classifierresultactivity.ClassifierResultActivity;
 import com.scorpiomiku.cookbook.tensorflow.Classifier;
-import com.scorpiomiku.cookbook.tensorflow.MyTSF;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -63,18 +57,9 @@ public class CameraActivity extends AppCompatActivity {
     private TimerTask mTimerTask = null;
     private int mTimeCount = 0;
     private Classifier mClassifier;
-    private static final int INPUT_SIZE = 224;
-    private static final int IMAGE_MEAN = 117;
-    private static final float IMAGE_STD = 1;
-    private static final String INPUT_NAME = "input";
-    private static final String OUTPUT_NAME = "output";
     private FrameLayout mCoverFrameLayout;
     private Timer timer = new Timer();
     private HashMap<String, String> options = new HashMap<String, String>();
-    private static final String MODEL_FILE = "file:///android_asset/tensorflow_inception_graph.pb";
-    private static final String LABEL_FILE =
-            "file:///android_asset/imagenet_comp_graph_label_strings.txt";
-
 
     private Executor mExecutor = Executors.newSingleThreadExecutor();
 

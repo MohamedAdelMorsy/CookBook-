@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -33,8 +31,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 public class MoreCameraActivity extends AppCompatActivity {
 
@@ -52,9 +48,10 @@ public class MoreCameraActivity extends AppCompatActivity {
     private TimerTask mTimerTask = null;
     private int mTimeCount = 0;
     private Classifier mClassifier;
+    private ImageView mTakePhotoOk;
     private FrameLayout mCoverFrameLayout;
     private Timer timer = new Timer();
-    private List<String> results = new ArrayList<>();
+    public static List<String> results = new ArrayList<>();
     private HashMap<String, String> options = new HashMap<String, String>();
 
     @Override
@@ -67,7 +64,7 @@ public class MoreCameraActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         //注意：上面两个设置必须写在setContentView前面
-        setContentView(R.layout.camera_activity_layout);
+        setContentView(R.layout.camera_more_take_activity_layout);
         options.put("top_num", "3");
         mClassifier = new Classifier(APP_ID, API_KEY, SECRET_KEY);
         if (!checkCameraHardware(this)) {
@@ -75,13 +72,27 @@ public class MoreCameraActivity extends AppCompatActivity {
         } else {
             openCamera();
         }
-        mTakePictureButton = (ImageView) findViewById(R.id.button_capture);
+        mTakePictureButton = (ImageView) findViewById(R.id.more_take_photo_button_capture);
         mTakePictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mCamera.autoFocus(mAutoFocusCallback);
             }
         });
+
+
+        mTakePhotoOk = (ImageView) findViewById(R.id.more_takephoto_ok);
+        mTakePhotoOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (int item = 0 ;item < results.size();item++ ){
+                    Log.d(TAG, results.get(item));
+                }
+            }
+        });
+
+
+
         mCoverFrameLayout = (FrameLayout) findViewById(R.id.camera_cover_linearlayout);
         setCameraDisplayOrientation(this, mCameraId, mCamera);
     }
@@ -180,25 +191,20 @@ public class MoreCameraActivity extends AppCompatActivity {
                     File file = new File(picturePath);
                     JSONObject res = mClassifier.plantDetect(data, options);
                     try {
-                        if(res.getJSONArray("result").getJSONObject(0).getString("name").equals("洋柿子"))
-                        {
+                        if (res.getJSONArray("result").getJSONObject(0).getString("name").equals("洋柿子")) {
                             results.add("番茄");
-                        }else{
+                        } else {
                             results.add(res.getJSONArray("result").getJSONObject(0).getString("name"));
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    Log.d(TAG, "run: "+res.toString());
-                    Log.d(TAG, "run: "+options.get("name"));
-                    finish();
+                    Log.d(TAG, "run: " + res.toString());
                 }
             }).start();
             mCamera.startPreview();
         }
     };
-
-
 
 
     //将相机设置成竖屏
@@ -237,17 +243,15 @@ public class MoreCameraActivity extends AppCompatActivity {
         camera.setDisplayOrientation(result);
     }
 
+    /*
     @Override
     protected void onPause() {
-        Intent i = new Intent(MoreCameraActivity.this, ClassifierResultActivity.class);
-        startActivity(i);
         super.onPause();
     }
-
+    */
 
     private void stopTimer() {
-        finish();
-        Log.d(TAG, "stopTimer: ");
+        mCoverFrameLayout.setVisibility(View.INVISIBLE);
     }
 
 }

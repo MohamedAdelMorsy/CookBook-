@@ -36,6 +36,7 @@
                     android:id="@+id/top_mask"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
+                    android:textColor="#FFFF"
                     android:alpha="0.4"
                     android:background="#8A000000"
                     android:gravity="center"/>

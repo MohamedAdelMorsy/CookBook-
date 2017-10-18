@@ -18,6 +18,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.scorpiomiku.cookbook.R;
@@ -56,6 +57,7 @@ public class MoreCameraActivity extends AppCompatActivity {
     private ImageView mTakePhotoOk;
     private FrameLayout mCoverFrameLayout;
     private Timer timer = new Timer();
+    private TextView mTextView ;
     public static List<String> moreResults = new ArrayList<>();
     private HashMap<String, String> options = new HashMap<String, String>();
 
@@ -77,6 +79,7 @@ public class MoreCameraActivity extends AppCompatActivity {
         } else {
             openCamera();
         }
+        mTextView = (TextView) findViewById(R.id.top_mask);
         mTakePictureButton = (ImageView) findViewById(R.id.more_take_photo_button_capture);
         mTakePictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,9 +93,12 @@ public class MoreCameraActivity extends AppCompatActivity {
         mTakePhotoOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String text = "";
                 for (int item = 0 ;item < moreResults.size();item++ ){
+                    text = text +moreResults.get(item);
                     Log.d(TAG, moreResults.get(item));
                 }
+                mTextView.setText(text);
             }
         });
 
@@ -170,19 +176,9 @@ public class MoreCameraActivity extends AppCompatActivity {
             super.handleMessage(msg);
             switch (msg.what) {
                 case MSG_WHAT_TIME_IS_UP:
-                    if (mLabel == 1) {
-                        Random random = new Random();
-                        int num = random.nextInt(50) % (50 - 10 + 1) + 10;
-                        mLabel++;
-                        mCoverFrameLayout.setVisibility(View.INVISIBLE);
-
-                    } else {
-                        mCoverFrameLayout.setVisibility(View.INVISIBLE);
-
-                    }
+                    mCoverFrameLayout.setVisibility(View.INVISIBLE);
                     break;
                 case MSG_WHAT_TIME_IS_TICK://显示动态时间
-
                     break;
             }
         }
@@ -206,7 +202,9 @@ public class MoreCameraActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         mTimeCount--;
+                        handler.sendEmptyMessage(MSG_WHAT_TIME_IS_TICK);
                         if (mTimeCount <= 0) {   //时间到了就弹出对话框
+                            handler.sendEmptyMessage(MSG_WHAT_TIME_IS_UP);
                             stopTimer();
                         }
                     }

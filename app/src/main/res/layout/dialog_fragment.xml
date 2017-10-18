@@ -3,14 +3,17 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
     android:padding="10dp"
-    android:orientation="horizontal">
-    <ImageButton
-        android:id="@+id/button_take_photo_single"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:background="@drawable/dialog_single"
-        />
+    >
+
+   <ImageButton
+       android:layout_width="150dp"
+       android:id="@+id/button_take_photo_single"
+       android:layout_height="150dp"
+       android:background="@drawable/dialog_single"/>
+
     <ImageButton
         android:id="@+id/button_take_photo_more"
         android:layout_width="150dp"

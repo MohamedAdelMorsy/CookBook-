@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.scorpiomiku.cookbook.R;
 import com.scorpiomiku.cookbook.module.FragmentModule;
@@ -21,7 +22,7 @@ import com.scorpiomiku.cookbook.module.FragmentModule;
 
 public class TakePhotoMainFragment extends FragmentModule {
     private static final int REQUEST_CAMERA = 0;
-    private Button mTakePhotoButton;
+    private ImageView mTakePhotoButton;
     private boolean canTakePhoto;
     private static final String DIALOG_BUTTON = "ButtonDialog";
     private Intent mTakePhotoIntent;
@@ -41,7 +42,7 @@ public class TakePhotoMainFragment extends FragmentModule {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.takephoto_fragment_layout, container, false);
-        mTakePhotoButton = (Button) v.findViewById(R.id.takephoto_take_photo_button);
+        mTakePhotoButton = (ImageView) v.findViewById(R.id.takephoto_take_photo_button);
         mTakePhotoButton.setEnabled(canTakePhoto);
         setListener();
         return v;

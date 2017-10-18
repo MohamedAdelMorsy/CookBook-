@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,18 +31,21 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class MoreCameraActivity extends AppCompatActivity {
 
-
+    private static final int MSG_WHAT_TIME_IS_UP = 1;//时间到了
+    private static final int MSG_WHAT_TIME_IS_TICK = 2;//时间减少中
     private String mPicturePath;
     public static final String APP_ID = "10248328";
     public static final String API_KEY = "7Wdkd5GkbFEsZ3284movvU8f";
     public static final String SECRET_KEY = "afPh1ig2SQKYQ13tSxtrGq6CNsengFqN";
     private static final String TAG = "CameraActivity";
     private Camera mCamera;
+    private int mLabel = 1;
     private CameraPreview mPreview;
     private FrameLayout mCameraLayout;
     private ImageView mTakePictureButton;
@@ -51,7 +56,7 @@ public class MoreCameraActivity extends AppCompatActivity {
     private ImageView mTakePhotoOk;
     private FrameLayout mCoverFrameLayout;
     private Timer timer = new Timer();
-    public static List<String> results = new ArrayList<>();
+    public static List<String> moreResults = new ArrayList<>();
     private HashMap<String, String> options = new HashMap<String, String>();
 
     @Override
@@ -85,15 +90,15 @@ public class MoreCameraActivity extends AppCompatActivity {
         mTakePhotoOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for (int item = 0 ;item < results.size();item++ ){
-                    Log.d(TAG, results.get(item));
+                for (int item = 0 ;item < moreResults.size();item++ ){
+                    Log.d(TAG, moreResults.get(item));
                 }
             }
         });
 
 
 
-        mCoverFrameLayout = (FrameLayout) findViewById(R.id.camera_cover_linearlayout);
+        mCoverFrameLayout = (FrameLayout) findViewById(R.id.more_camera_cover_linearlayout);
         setCameraDisplayOrientation(this, mCameraId, mCamera);
     }
 
@@ -159,6 +164,29 @@ public class MoreCameraActivity extends AppCompatActivity {
         }
     }
 
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case MSG_WHAT_TIME_IS_UP:
+                    if (mLabel == 1) {
+                        Random random = new Random();
+                        int num = random.nextInt(50) % (50 - 10 + 1) + 10;
+                        mLabel++;
+                        mCoverFrameLayout.setVisibility(View.INVISIBLE);
+
+                    } else {
+                        mCoverFrameLayout.setVisibility(View.INVISIBLE);
+
+                    }
+                    break;
+                case MSG_WHAT_TIME_IS_TICK://显示动态时间
+
+                    break;
+            }
+        }
+    };
     private Camera.PictureCallback mPictureCallback = new Camera.PictureCallback() {
         @Override
         public void onPictureTaken(final byte[] data, Camera camera) {
@@ -183,7 +211,7 @@ public class MoreCameraActivity extends AppCompatActivity {
                         }
                     }
                 };
-                timer.schedule(mTimerTask, 300);
+                timer.schedule(mTimerTask,300, 300);
             }
             new Thread(new Runnable() {
                 @Override
@@ -192,9 +220,9 @@ public class MoreCameraActivity extends AppCompatActivity {
                     JSONObject res = mClassifier.plantDetect(data, options);
                     try {
                         if (res.getJSONArray("result").getJSONObject(0).getString("name").equals("洋柿子")) {
-                            results.add("番茄");
+                            moreResults.add("番茄");
                         } else {
-                            results.add(res.getJSONArray("result").getJSONObject(0).getString("name"));
+                            moreResults.add(res.getJSONArray("result").getJSONObject(0).getString("name"));
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -251,7 +279,8 @@ public class MoreCameraActivity extends AppCompatActivity {
     */
 
     private void stopTimer() {
-        mCoverFrameLayout.setVisibility(View.INVISIBLE);
+        mTimerTask.cancel();
+        mTimerTask = null;
     }
 
 }

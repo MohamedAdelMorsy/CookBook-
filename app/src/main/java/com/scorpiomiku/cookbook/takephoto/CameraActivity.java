@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.hardware.Camera.AutoFocusCallback;
@@ -30,7 +31,11 @@ import com.scorpiomiku.cookbook.tensorflow.Classifier;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -186,6 +191,25 @@ public class CameraActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     File file = new File(picturePath);
+                    final File pictureDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+                    final String pictureName = System.currentTimeMillis() + ".jpg";
+                    final String picturePath = pictureDir + File.separator + pictureName;
+                    mPicturePath = picturePath;
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+                    bitmap = rotateBitmapByDegree(bitmap, 90);
+                    //缩放
+                    bitmap = Bitmap.createScaledBitmap(bitmap, 224, 224, false);
+                    try {
+                        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+                        Log.d(TAG, "run: "+picturePath);
+                        bos.flush();
+                        bos.close();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     JSONObject res = mClassifier.plantDetect(data, options);
                     try {
                         if(res.getJSONArray("result").getJSONObject(0).getString("name").equals("洋柿子"))
@@ -276,7 +300,7 @@ public class CameraActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         Intent i = new Intent(CameraActivity.this, ClassifierResultActivity.class);
-        i.putExtra("FragmentSendMessage", "CameraActivity");
+        ClassifierResultActivity.mPicturePath = mPicturePath ;
         startActivity(i);
         super.onPause();
     }

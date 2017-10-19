@@ -54,6 +54,7 @@ public class ClassifierResultActivity extends AppCompatActivity {
     private int t=0;
     private String neirong;
     private Boolean panduan;
+    private Intent i;
 
     private static final String TAG = "ClassifierResultActivity";
     @Override
@@ -74,6 +75,7 @@ public class ClassifierResultActivity extends AppCompatActivity {
         mImageView.setImageBitmap(BitmapFactory.decodeFile(mPicturePath));
         mFoodNameTextView.setText(mPictureResult);
         initYuanliao();
+
         Log.d(TAG, "onCreate: " + mPicturePath + "    " + mPictureResult);
     }
     public void initYuanliao(){

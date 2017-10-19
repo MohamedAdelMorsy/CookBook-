@@ -190,15 +190,15 @@ public class CameraActivity extends AppCompatActivity {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    File file = new File(picturePath);
                     final File pictureDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
                     final String pictureName = System.currentTimeMillis() + ".jpg";
                     final String picturePath = pictureDir + File.separator + pictureName;
                     mPicturePath = picturePath;
+                    File file = new File(picturePath);
                     Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
                     bitmap = rotateBitmapByDegree(bitmap, 90);
                     //缩放
-                    bitmap = Bitmap.createScaledBitmap(bitmap, 224, 224, false);
+                    bitmap = Bitmap.createScaledBitmap(bitmap, 720, 1280, false);
                     try {
                         BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);

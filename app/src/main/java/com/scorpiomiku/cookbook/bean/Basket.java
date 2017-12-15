@@ -3,7 +3,7 @@ package com.scorpiomiku.cookbook.bean;
 import android.graphics.drawable.Drawable;
 
 /**
- * Created by Administrator on 2017/7/15.
+ * Create d by  Administrator  on 2017/7/15.
  */
 
 public class Basket {

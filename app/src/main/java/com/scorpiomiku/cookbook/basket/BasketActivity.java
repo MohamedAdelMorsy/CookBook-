@@ -32,7 +32,7 @@ import java.util.List;
 public class BasketActivity extends AppCompatActivity {
 
     private SwipeMenuRecyclerView mSwipeMenuRecyclerView;
-    private List<Basket> mList = new ArrayList<>();
+    private List<Basket> mList = new ArrayList<Basket>();
     private BasketAdapter mAdapter;
     private FloatingActionButton mFloatingActionButton;
     private BasketDataHelper dbHelper;

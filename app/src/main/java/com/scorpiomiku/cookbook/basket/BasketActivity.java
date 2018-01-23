@@ -36,7 +36,7 @@ public class BasketActivity extends AppCompatActivity {
     private BasketAdapter mAdapter;
     private FloatingActionButton mFloatingActionButton;
     private BasketDataHelper dbHelper;
-
+//oncreate
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

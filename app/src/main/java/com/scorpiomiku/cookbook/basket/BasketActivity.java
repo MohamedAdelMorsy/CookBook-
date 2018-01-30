@@ -14,7 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+//import
 import com.scorpiomiku.cookbook.R;
 import com.scorpiomiku.cookbook.bean.Basket;
 import com.scorpiomiku.cookbook.sql.BasketDataHelper;

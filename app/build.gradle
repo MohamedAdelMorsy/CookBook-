@@ -48,8 +48,6 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.1'
     compile 'com.jakewharton:butterknife:8.6.0'
     compile 'com.github.arimorty:floatingsearchview:2.1.1'
-    compile 'com.flurgle:camerakit:0.9.13'
-    compile files('libs/json-20160810.jar')
     compile files('libs/aip-java-sdk-3.2.0.jar')
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:design:25.3.1'
@@ -59,7 +57,7 @@ dependencies {
     compile 'com.yanzhenjie:recyclerview-swipe:1.0.4'
     compile 'com.android.support.constraint:constraint-layout:1.0.1'
     compile 'com.github.arimorty:floatingsearchview:2.1.1'
-    compile 'com.flurgle:camerakit:0.9.13'
+
     compile 'com.jakewharton:butterknife:8.6.0'
     compile 'cn.bmob.android:bmob-sdk:3.5.5'
     compile 'cn.bmob.android:bmob-push:0.8'

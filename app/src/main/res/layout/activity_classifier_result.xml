@@ -30,6 +30,7 @@
                     <ImageView
                         android:id="@+id/classifier_result_imageview"
                         android:layout_width="match_parent"
+                        android:scaleType="fitXY"
                         android:layout_height="match_parent"/>
 
                 </android.support.v7.widget.CardView>

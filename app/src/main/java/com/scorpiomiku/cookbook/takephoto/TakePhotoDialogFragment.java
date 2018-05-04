@@ -1,8 +1,12 @@
 package com.scorpiomiku.cookbook.takephoto;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.view.LayoutInflater;
@@ -21,20 +25,21 @@ public class TakePhotoDialogFragment extends AppCompatDialogFragment implements 
 
     private ImageButton mSingleButton;
     private ImageButton mMoreButton;
-    public static TakePhotoDialogFragment newInstance(){
+
+    public static TakePhotoDialogFragment newInstance() {
         return new TakePhotoDialogFragment();
     }
 
     @Override
     public void onClick(View v) {
         int Id = v.getId();
-        switch (Id){
+        switch (Id) {
             case R.id.button_take_photo_single:
-                Intent i = new Intent(getActivity(),CameraActivity.class);
+                Intent i = new Intent(getActivity(), CameraActivity.class);
                 startActivity(i);
                 break;
             case R.id.button_take_photo_more:
-                Intent intent = new Intent(getActivity(),MoreCameraActivity.class);
+                Intent intent = new Intent(getActivity(), MoreCameraActivity.class);
                 startActivity(intent);
                 break;
         }
@@ -51,4 +56,6 @@ public class TakePhotoDialogFragment extends AppCompatDialogFragment implements 
                 .setView(v)
                 .create();
     }
+
+
 }

@@ -19,6 +19,7 @@ public class Classifier extends BaseClient {
     public Classifier(String appId, String apiKey, String secretKey) {
         super(appId, apiKey, secretKey);
     }
+
     public JSONObject dishDetect(byte[] image, HashMap<String, String> options) {
         AipRequest request = new AipRequest();
         preOperation(request);

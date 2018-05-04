@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.scorpiomiku.cookbook.R;
 import com.scorpiomiku.cookbook.classifierresultactivity.ClassifierResultActivity;
 import com.scorpiomiku.cookbook.tensorflow.Classifier;
+import com.scorpiomiku.cookbook.tensorflow.Face_test;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,9 +50,11 @@ public class CameraActivity extends AppCompatActivity {
 
     private String mPictureResult;
 
-    public static final String APP_ID = "10248328";
-    public static final String API_KEY = "7Wdkd5GkbFEsZ3284movvU8f";
-    public static final String SECRET_KEY = "afPh1ig2SQKYQ13tSxtrGq6CNsengFqN";
+    public static final String APP_ID = "11194410";
+    public static final String API_KEY = "41yx7SNyudF0u1y7Vrvoain0";
+    public static final String SECRET_KEY = "muddna10dlYBQFx5lyNKy9pSezdNatl5";
+
+
     private static final String TAG = "CameraActivity";
     private Camera mCamera;
     private CameraPreview mPreview;
@@ -164,13 +167,6 @@ public class CameraActivity extends AppCompatActivity {
         @Override
         public void onPictureTaken(final byte[] data, Camera camera) {
 
-            //开辟线程来处理图片
-            final File pictureDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-            final String pictureName = System.currentTimeMillis() + ".jpg";
-            final String picturePath = pictureDir + File.separator + pictureName;
-
-            mPicturePath = picturePath;
-            Log.d(TAG, mPicturePath);
             mCoverFrameLayout.setVisibility(View.VISIBLE);
 
             if (mTimerTask == null) {
@@ -202,7 +198,7 @@ public class CameraActivity extends AppCompatActivity {
                     try {
                         BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
-                        Log.d(TAG, "run: "+picturePath);
+                        Log.d(TAG, "run: " + picturePath);
                         bos.flush();
                         bos.close();
                     } catch (FileNotFoundException e) {
@@ -210,19 +206,33 @@ public class CameraActivity extends AppCompatActivity {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    JSONObject res = mClassifier.plantDetect(data, options);
+                    Face_test face_test = new Face_test();
+                    JSONObject res = face_test.plantDetect(data);
+                    //JSONObject res = mClassifier.plantDetect(data, options);
+                    //JSONObject res = mClassifier.dishDetect(data, options);
+//                    try {
+//                        if (res.getJSONArray("result").getJSONObject(0).getString("name").equals("洋柿子")) {
+//                            ClassifierResultActivity.mPictureResult = "番茄";
+//                        } else {
+//                            ClassifierResultActivity.mPictureResult = res.getJSONArray("result").getJSONObject(0).getString("name");
+//                        }
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                    try {
+//                        Log.d(TAG, "run: " + res.getJSONArray("result").getJSONObject(0).getString("name"));
+//                    } catch (JSONException e) {
+//                        Log.d(TAG, "---------------------------");
+//                        e.printStackTrace();
+//                        Log.d(TAG, "---------------------------");
+//                    }
                     try {
-                        if(res.getJSONArray("result").getJSONObject(0).getString("name").equals("洋柿子"))
-                        {
-                            ClassifierResultActivity.mPictureResult = "番茄";
-                        }else{
-                            ClassifierResultActivity.mPictureResult = res.getJSONArray("result").getJSONObject(0).getString("name");
-                        }
+                        String str = res.getJSONArray("objects").getJSONObject(0).getString("value");
+                        ClassifierResultActivity.mPictureResult = str;
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    Log.d(TAG, "run: "+res.toString());
-                    Log.d(TAG, "run: "+options.get("name"));
+
                     finish();
                 }
             }).start();
@@ -230,12 +240,6 @@ public class CameraActivity extends AppCompatActivity {
         }
     };
 
-    //设置分辨率
-    private void setResolution() {
-
-    }
-
-//    private void cropImage()
 
     //将相机设置成竖屏
     public static void setCameraDisplayOrientation(Activity activity, int cameraId, Camera camera) {
@@ -296,11 +300,10 @@ public class CameraActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     protected void onPause() {
         Intent i = new Intent(CameraActivity.this, ClassifierResultActivity.class);
-        ClassifierResultActivity.mPicturePath = mPicturePath ;
+        ClassifierResultActivity.mPicturePath = mPicturePath;
         startActivity(i);
         super.onPause();
     }
@@ -308,6 +311,7 @@ public class CameraActivity extends AppCompatActivity {
 
     private void stopTimer() {
         finish();
+        releaseCamera();
         Log.d(TAG, "stopTimer: ");
     }
 

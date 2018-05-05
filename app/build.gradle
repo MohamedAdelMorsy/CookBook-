@@ -57,7 +57,6 @@ dependencies {
     compile 'com.yanzhenjie:recyclerview-swipe:1.0.4'
     compile 'com.android.support.constraint:constraint-layout:1.0.1'
     compile 'com.github.arimorty:floatingsearchview:2.1.1'
-
     compile 'com.jakewharton:butterknife:8.6.0'
     compile 'cn.bmob.android:bmob-sdk:3.5.5'
     compile 'cn.bmob.android:bmob-push:0.8'
@@ -65,4 +64,8 @@ dependencies {
     compile 'cn.bmob.android:bmob-sms:1.0.1'
     compile 'cn.bmob.android:http-legacy:1.0'
     testCompile 'junit:junit:4.12'
+    implementation files('libs/YoudaoBase.jar')
+    implementation files('libs/YoudaoCnDictOffline.jar')
+    implementation files('libs/YoudaoTranslateOffline.jar')
+    implementation files('libs/YoudaoTranslateOnline.jar')
 }

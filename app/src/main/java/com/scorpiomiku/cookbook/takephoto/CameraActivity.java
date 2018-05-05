@@ -28,6 +28,16 @@ import com.scorpiomiku.cookbook.R;
 import com.scorpiomiku.cookbook.classifierresultactivity.ClassifierResultActivity;
 import com.scorpiomiku.cookbook.tensorflow.Classifier;
 import com.scorpiomiku.cookbook.tensorflow.Face_test;
+import com.youdao.sdk.app.Language;
+import com.youdao.sdk.app.LanguageUtils;
+import com.youdao.sdk.app.YouDaoApplication;
+import com.youdao.sdk.ydonlinetranslate.Translator;
+import com.youdao.sdk.ydtranslate.EnWordTranslator;
+import com.youdao.sdk.ydtranslate.Translate;
+import com.youdao.sdk.ydtranslate.TranslateErrorCode;
+import com.youdao.sdk.ydtranslate.TranslateListener;
+import com.youdao.sdk.ydtranslate.TranslateParameters;
+import com.youdao.sdk.ydtranslate.TranslatorOffline;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,6 +48,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Executor;
@@ -70,11 +81,17 @@ public class CameraActivity extends AppCompatActivity {
     private HashMap<String, String> options = new HashMap<String, String>();
 
     private Executor mExecutor = Executors.newSingleThreadExecutor();
+    private TranslatorOffline translatorOffline;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        YouDaoApplication.init(this, "0bc38eee2baaf2f8");
+
+
         //设置无标题
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
@@ -208,6 +225,13 @@ public class CameraActivity extends AppCompatActivity {
                     }
                     Face_test face_test = new Face_test();
                     JSONObject res = face_test.plantDetect(data);
+                    String str = null;
+                    try {
+                        str = res.getJSONArray("objects").getJSONObject(0).getString("value");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    Log.d(TAG, "onResult: "+str);
                     //JSONObject res = mClassifier.plantDetect(data, options);
                     //JSONObject res = mClassifier.dishDetect(data, options);
 //                    try {
@@ -226,12 +250,30 @@ public class CameraActivity extends AppCompatActivity {
 //                        e.printStackTrace();
 //                        Log.d(TAG, "---------------------------");
 //                    }
-                    try {
-                        String str = res.getJSONArray("objects").getJSONObject(0).getString("value");
-                        ClassifierResultActivity.mPictureResult = str;
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+
+                    Language langFrom = LanguageUtils.getLangByName("英文");
+                    Language langTo = LanguageUtils.getLangByName("中文");
+                    TranslateParameters tps = new TranslateParameters.Builder()
+                            .source("识菜帮")
+                            .from(langFrom).to(langTo).build();
+                    Translator translator = Translator.getInstance(tps);
+                    translator.lookup(str, "5a6d7b852ba9ea34", new TranslateListener() {
+                        @Override
+                        public void onError(TranslateErrorCode translateErrorCode, String s) {
+                            Log.e(TAG, "onError: " + translateErrorCode.toString() + ";" + s);
+                        }
+
+                        @Override
+                        public void onResult(Translate translate, String s, String s1) {
+                            ClassifierResultActivity.mPictureResult = translate.getTranslations().get(0);
+                            Log.d(TAG, "onResult: " + ClassifierResultActivity.mPictureResult);
+                        }
+
+                        @Override
+                        public void onResult(List<Translate> list, List<String> list1, List<TranslateErrorCode> list2, String s) {
+
+                        }
+                    });
 
                     finish();
                 }

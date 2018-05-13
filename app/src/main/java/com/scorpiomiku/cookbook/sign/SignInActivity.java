@@ -60,7 +60,7 @@ public class SignInActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
-        Bmob.initialize(this, "3bfd53d40a453ea66ce653ab658582d1");
+        Bmob.initialize(this, "accfd3a92dc224c9369613948c03c014");
         Log.d("登录界面", "onCreate: "+"bmob载入完成");
         pref = PreferenceManager.getDefaultSharedPreferences(this);
         editor = pref.edit();
@@ -107,10 +107,12 @@ public class SignInActivity extends AppCompatActivity {
                                 }
                                 if (s == false) {
                                     toast("请在你的邮箱中认证");
+                                    h = h + 1;
                                 }
                                 if (2 == h) {
                                     editor = pref.edit();
                                     Log.d("登录界面", "done: "+user.getSculpture().toString());
+                                    Log.d("登录界面", "done: "+ user.getEmail()+"   "+user.getName()+"   "+user.getHome());
                                     editor.putString("useremail", user.getEmail());
                                     editor.putString("user_objId", user.getObjectId());
                                     editor.putString("username", user.getName());

@@ -15,6 +15,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.scorpiomiku.cookbook.R;
 import com.scorpiomiku.cookbook.bean.MenuStep;
 import com.scorpiomiku.cookbook.module.FragmentModule;
@@ -50,19 +53,27 @@ public class MenuRecyclerStepsFragment extends FragmentModule {
         editor = pref.edit();
         JSONObject params = new JSONObject();
         mMenuStepsList = new ArrayList<>();
-        for (int i = 1; i < 13; i++) {
-            String buzgouneirong = "buZhou" + i + "NeiRong";
-            String image_url = "buZhou" + i + "photo";
-            Log.d("菜谱界面2", "onCreate: " + "buZhou" + i + "NeiRong=" + buzgouneirong + "buZhou" + i + "photo=" + image_url);
-            String NeiRong = pref.getString(buzgouneirong, "null");
-            String ImageUrl = pref.getString(image_url, "null");
-            Log.d("菜谱界面2", "onCreate: 内容" + "buZhou" + i + "NeiRong=" + NeiRong + "buZhou" + i + "photo=" + ImageUrl);
-            if (NeiRong != "null"&&NeiRong!="") {
-                mMenuStepsList.add(new MenuStep(NeiRong, "我是营养介绍", ImageUrl));
+        showAll();
+    }
+    private void showAll(){
+        String data =  pref.getString("data","");
+        JsonParser parser = new JsonParser();  //创建JSON解析器
+        JsonObject ssobject = (JsonObject) parser.parse(data);  //创建JsonObject对象//将json数据转为为boolean型的数据
+        // ********************************************************************************
+        JsonObject resultOBJ = ssobject.get("result").getAsJsonObject();
+        JsonArray dataARRAY = resultOBJ.get("data").getAsJsonArray();    //得到为json的数组
+        for (int i = 0; i < dataARRAY.size(); i++) {
+            final JsonObject dataARRAY_OLN = dataARRAY.get(i).getAsJsonObject();
+            JsonArray stepsARRAY = dataARRAY_OLN.get("steps").getAsJsonArray();    //得到为json的数组
+
+            for (int j = 0; j < stepsARRAY.size(); j++) {
+                JsonObject stepsARRAY_OLN = stepsARRAY.get(j).getAsJsonObject();
+                mMenuStepsList.add(new MenuStep(stepsARRAY_OLN.get("step").getAsString(), dataARRAY_OLN.get("imtro").getAsString(),stepsARRAY_OLN.get("img").getAsString()));
+
             }
+
         }
     }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

@@ -27,14 +27,19 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.scorpiomiku.cookbook.R;
 import com.scorpiomiku.cookbook.bean.CaiZuEC;
+import com.scorpiomiku.cookbook.bean.CaiZuEC_Gai;
 import com.scorpiomiku.cookbook.bean.ZuCai;
+import com.scorpiomiku.cookbook.menuactivity.DefaultFragment;
+import com.scorpiomiku.cookbook.menuactivity.MenuActivity;
 import com.scorpiomiku.cookbook.module.FragmentModule;
+import com.scorpiomiku.cookbook.recommend.BreakFastFragment;
 import com.scorpiomiku.cookbook.recommendmenufragment.RecommendMenuItemClickFragment;
 import com.yyydjk.library.HorizontalDropDownMenu;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -45,6 +50,11 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.CloudCodeListener;
 import cn.bmob.v3.listener.FindListener;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+import static com.scorpiomiku.cookbook.recommend.BreakFastFragment.URL;
 
 
 /**
@@ -59,18 +69,21 @@ public class CombinationFragment extends FragmentModule {
     private MakeWayAdapter mMakeWayAdapter;
     private RecyclerView mContextView;
     public static String SouSuoNeiRong = "2948692387";
-
-    private int chargeFangfa;
-    private int AllNU;
-    private int t=0;
     private String neirong;
+    private int geshu=0;
+
     private Boolean panduan ;
     private ImageView mSearchImageView;
     private String mFoodName;
     private EditText mSearchEditView;
+
+    public static final String APPKEY = "0d6cb9431d04bba78300b0227867d48c";// 你的appkey
+     static int cid = 37;
+    private int tpyecid = 0;
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
-
+    private String date = null;
+    private    int pn = 0;
 
     private String mHeaders[] = {"口味", "时段", "做法"};
     private String mTastes[] = {"不限", "清淡", "辛辣", "酸甜"};
@@ -78,7 +91,7 @@ public class CombinationFragment extends FragmentModule {
     private String mMakeWays[] = {"不限", "清蒸", "爆炒", "凉拌"};
     private List<View> mPopupViews = new ArrayList<>();
 
-    private List<CaiZuEC> mCblecList = new ArrayList<>();
+    private List<CaiZuEC_Gai> mCblecList = new ArrayList<>();
 
 
     public static CombinationFragment newInstance() {
@@ -121,63 +134,6 @@ public class CombinationFragment extends FragmentModule {
         mHorizontalDropDownMenu.setDropDownMenu(Arrays.asList(mHeaders), mPopupViews, mContextView
                 , mDrawables
                 , getResources().getDrawable(R.drawable.swipe_background, getActivity().getTheme()));
-
-
-        Bmob.initialize(getActivity(),"3bfd53d40a453ea66ce653ab658582d1");
-        String str1 = "";
-        String str2 = "";
-        String str3 = "";
-        str1 = "TRUE";
-        str2 = "TRUE";
-        str3 = "TRUE";
-        BmobQuery<ZuCai> eq2 = new BmobQuery<ZuCai>();
-        eq2.addWhereEqualTo("ZaoCan", str1);
-        BmobQuery<ZuCai> eq1 = new BmobQuery<ZuCai>();
-        eq1.addWhereEqualTo("WanCan", str2);
-        BmobQuery<ZuCai> eq3 = new BmobQuery<ZuCai>();
-        eq3.addWhereEqualTo("WuCan", str3);
-        //eq2.addWhereContains("FenLei","不限");
-
-        List<BmobQuery<ZuCai>> queries = new ArrayList<BmobQuery<ZuCai>>();
-        queries.add(eq2);
-        queries.add(eq1);
-        queries.add(eq3);
-        BmobQuery<ZuCai> mainQuery = new BmobQuery<ZuCai>();
-
-        mainQuery.or(queries);
-        //mainQuery.addWhereContains("FenLei","不限");
-        mainQuery.findObjects(new FindListener<ZuCai>() {
-            @Override
-            public void done(List<ZuCai> object, BmobException e) {
-                if(e==null){
-                    Log.d("组菜界面", "测试点5"+"查询早成功");
-                    Log.d("组菜界面", "测试点5"+"查询结果有"+object.size()+"个");
-                    //toast("查询结果有"+object.size()+"个");
-                    AllNU=object.size();
-                    for (ZuCai identification : object) {
-                        t=t+1;
-                        final List<String> ids = new ArrayList<String>();
-                        ids.add(identification.getId1());
-                        ids.add(identification.getId2());
-                        ids.add(identification.getId3());
-                        ids.add(identification.getId4());
-                        Log.d("组菜界面", "Array添加成功");
-                        final String LinShi_s = identification.getObjectId();
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                //initWay(LinShi_s);
-                                //mRecyclerView.setAdapter(new Adapter(wayList));
-                                initWay(ids);
-                            }
-                        }).start();
-                    }
-                }else{
-                    Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
-                }
-            }
-        });
-
         mSearchImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -197,332 +153,118 @@ public class CombinationFragment extends FragmentModule {
                 }
             }
         });
-
+        urlget(44, 88);
         return v;
     }
-
-    private void initWay(final List<String> objIds){
-        Log.d("组菜界面", "进入initway");
-
-        Log.d("组菜界面", "测试点5"+"存储objectId成功");
+    private void urlget(final int cid1, final int cid2){
         new Thread(new Runnable() {
             @Override
             public void run() {
-                String objId = objIds.get(0);
-                final String[] tp2 = new String[1];
-                final String[] tp3 = new String[1];
-                final String[] tp4 = new String[1];
-                final JSONObject jas = new JSONObject();
+                String url1 = null;
+                if (tpyecid == 0){
+                    url1 = URL +  APPKEY+"&cid="+cid1+"&rn=20";
+                }else {
+                    url1 = URL +  APPKEY+"&cid="+cid1+"&pn="+pn+"&rn=20";
+                    tpyecid = 0;
+                }
+                String url2 = null;
+                if (tpyecid == 0){
+                    url2 = URL +  APPKEY+"&cid="+cid2+"&rn=20";
+                }else {
+                    url2 = URL +  APPKEY+"&cid="+cid2+"&pn="+pn+"&rn=20";
+                    tpyecid = 0;
+                }
+
+                String data1 = null,data2 = null;
+                //url = URL + "?keyword=" + URLEncoder.encode(keyword, "utf-8") + "&num=" + num + "&appkey=" + APPKEY;
+                OkHttpClient okHttpClient=new OkHttpClient();
+                //服务器返回的地址
+                Request request=new Request.Builder()
+                        .url(url1).build();
                 try {
-                    jas.put("objectId",objIds.get(1));
-                } catch (JSONException e) {
+                    Response response=okHttpClient.newCall(request).execute();
+                    //获取到数据
+                     data1=response.body().string();
+                    Log.d("组菜界面：", "run: "+data1);
+                    //把数据传入解析josn数据方法
+                    // jsonJX(date);
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
-                final AsyncCustomEndpoints ace2 = new AsyncCustomEndpoints();
-                ace2.callEndpoint("get_way_fromShiCai", jas, new CloudCodeListener() {
-                    public static final String TAG = "thing";
-
-                    @Override
-                    public void done(Object object, BmobException e) {
-                        if (e == null) {
-                            String result = object.toString();
-                            Log.d(TAG, "收藏界面: result：" + result);
-                            JsonParser parser = new JsonParser();  //创建JSON解析器
-                            JsonObject ssobject = (JsonObject) parser.parse(result);  //创建JsonObject对象//将json数据转为为boolean型的数据
-                            JsonArray array = ssobject.get("results").getAsJsonArray();    //得到为json的数组
-                            Log.d("收藏界面", "测试点5" + "查询Way成功");
-                            for (int i = 0; i <= array.size(); i++) {
-                                final JsonObject subObject = array.get(i).getAsJsonObject();
-
-                                String ZuoFaTu;
-                                try{
-                                    JsonObject ZuoFaTuyuan = subObject.get("zuoFaTuUser").getAsJsonObject();
-                                    ZuoFaTu=ZuoFaTuyuan.get("url").getAsString();
-                                    final String ZuoFaTuname = ZuoFaTuyuan.get("filename").getAsString();
-                                }catch (Exception e1213){
-                                    ZuoFaTu = subObject.get("zuoFaTu").getAsString();
-                                }
-                                tp2[0] = ZuoFaTu;
-                            }
-                        }
-                    }
-                });
+                //服务器返回的地址
+                 request=new Request.Builder()
+                        .url(url2).build();
                 try {
-                    Log.d("组菜界面", "第一步测试完成");
-                    if(objIds.get(3)!=null){
-                        try {
-                            jas.put("objectId",objIds.get(2));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        final AsyncCustomEndpoints ace3 = new AsyncCustomEndpoints();
-                        ace3.callEndpoint("get_way_fromShiCai", jas, new CloudCodeListener() {
-                            public static final String TAG = "thing";
-
-                            @Override
-                            public void done(Object object, BmobException e) {
-                                if (e == null) {
-                                    String result = object.toString();
-                                    Log.d(TAG, "组菜界面: result：" + result);
-                                    JsonParser parser = new JsonParser();  //创建JSON解析器
-                                    JsonObject ssobject = (JsonObject) parser.parse(result);  //创建JsonObject对象//将json数据转为为boolean型的数据
-                                    JsonArray array = ssobject.get("results").getAsJsonArray();    //得到为json的数组
-                                    Log.d("组菜界面", "测试点5" + "查询Way成功");
-                                    for (int i = 0; i <= array.size(); i++) {
-                                        final JsonObject subObject = array.get(i).getAsJsonObject();
-
-                                        String ZuoFaTu;
-                                        try{
-                                            JsonObject ZuoFaTuyuan = subObject.get("zuoFaTuUser").getAsJsonObject();
-                                            ZuoFaTu=ZuoFaTuyuan.get("url").getAsString();
-                                            final String ZuoFaTuname = ZuoFaTuyuan.get("filename").getAsString();
-                                        }catch (Exception e1213){
-                                            ZuoFaTu = subObject.get("zuoFaTu").getAsString();
-                                        }
-                                        tp3[0] = ZuoFaTu;
-                                    }
-                                }
-                            }
-                        });
-                    }
-                }catch (Exception a){
-
-                }
-                try{
-                    Log.d("组菜界面", "第二步测试完成");
-                    if (objIds.get(4)!=null){
-                        try {
-                            jas.put("objectId",objIds.get(3));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        final AsyncCustomEndpoints ace4 = new AsyncCustomEndpoints();
-                        ace4.callEndpoint("get_way_fromShiCai", jas, new CloudCodeListener() {
-                            public static final String TAG = "thing";
-
-                            @Override
-                            public void done(Object object, BmobException e) {
-                                if (e == null) {
-                                    String result = object.toString();
-                                    Log.d(TAG, "组菜界面: result：" + result);
-                                    JsonParser parser = new JsonParser();  //创建JSON解析器
-                                    JsonObject ssobject = (JsonObject) parser.parse(result);  //创建JsonObject对象//将json数据转为为boolean型的数据
-                                    JsonArray array = ssobject.get("results").getAsJsonArray();    //得到为json的数组
-                                    Log.d("组菜界面", "测试点5" + "查询Way成功");
-                                    for (int i = 0; i <= array.size(); i++) {
-                                        final JsonObject subObject = array.get(i).getAsJsonObject();
-
-                                        String ZuoFaTu;
-                                        try{
-                                            JsonObject ZuoFaTuyuan = subObject.get("zuoFaTuUser").getAsJsonObject();
-                                            ZuoFaTu=ZuoFaTuyuan.get("url").getAsString();
-                                            final String ZuoFaTuname = ZuoFaTuyuan.get("filename").getAsString();
-                                        }catch (Exception e1213){
-                                            ZuoFaTu = subObject.get("zuoFaTu").getAsString();
-                                        }
-                                        tp4[0] = ZuoFaTu;
-                                    }
-                                }
-                            }
-                        });
-                    }
-                }catch (Exception a){
-
-                }
-
-                Log.d("组菜界面", "第三步测试完成");
-                final AsyncCustomEndpoints ace1 = new AsyncCustomEndpoints();
-                try {
-                    jas.put("objectId",objId);
-                } catch (JSONException e) {
+                    Response response=okHttpClient.newCall(request).execute();
+                    //获取到数据
+                     data2=response.body().string();
+                    Log.d("组菜界面：", "run: "+data2);
+                    //把数据传入解析josn数据方法
+                    // jsonJX(date);
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
-                ace1.callEndpoint("get_way_fromShiCai", jas, new CloudCodeListener() {
-                    public static final String TAG = "thing";
-                    @Override
-                    public void done(Object object, BmobException e) {
-                        if (e == null) {
-                            String result = object.toString();
-                            Log.d(TAG, "组菜界面: result："+result);
-                            JsonParser parser = new JsonParser();  //创建JSON解析器
-                            JsonObject ssobject = (JsonObject) parser.parse(result);  //创建JsonObject对象//将json数据转为为boolean型的数据
-                            JsonArray array = ssobject.get("results").getAsJsonArray();    //得到为json的数组
-                            Log.d("组菜界面", "测试点5"+"查询Way成功");
-                            for (int i = 0; i <= array.size(); i++) {
-                                final JsonObject subObject = array.get(i).getAsJsonObject();
-                                try{
-                                    panduan = subObject.get("FromUser").getAsBoolean();
-                                }catch (Exception a){
-                                    panduan = false;
-                                }
-                                String ZuoFaTu;
-                                try{
-                                    JsonObject ZuoFaTuyuan = subObject.get("zuoFaTuUser").getAsJsonObject();
-                                    ZuoFaTu=ZuoFaTuyuan.get("url").getAsString();
-                                    final String ZuoFaTuname = ZuoFaTuyuan.get("filename").getAsString();
-                                }catch (Exception e1213){
-                                    ZuoFaTu = subObject.get("zuoFaTu").getAsString();
-                                }
-
-                                //获取做法的图片url
-
-                                final String Way_objectID = subObject.get("objectId").getAsString();
-                                try {
-                                    int cishu = subObject.get("cishu").getAsInt();
-                                }catch (Exception d){
-                                    int cishu=0;
-                                }
-                                //int cishu = subObject.get("cishu").getAsInt();
-                                final String ZuoFaMing = subObject.get("zuoFaMing").getAsString();
-                                final String finalZuoFaTu = ZuoFaTu;
-                                new Thread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        //identification
-                                        try {
-                                            jas.put("identification",Way_objectID);
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                        Log.d("组菜界面", "测试点5"+"开始查询食材部分");
-                                        ace1.callEndpoint("get_shicai", jas, new CloudCodeListener() {
-                                            public static final String TAG = "thing";
-
-                                            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-                                            @Override
-                                            public void done(Object object, BmobException e) {
-                                                if (e == null) {
-                                                    final String result = object.toString();
-                                                    Log.d("组菜界面", "测试点5"+"开始查询食材部分result = "+result);
-                                                    JsonParser parser = new JsonParser();  //创建JSON解析器
-                                                    JsonObject ssobject = (JsonObject) parser.parse(result);  //创建JsonObject对象//将json数据转为为boolean型的数据
-                                                    JsonArray array = ssobject.get("results").getAsJsonArray();    //得到为json的数组
-                                                    for (int i = 0; i <= array.size(); i++) {
-                                                        final JsonObject subObject = array.get(i).getAsJsonObject();
-                                                        final String yongliao[] = new String[10];
-                                                        final String yongliaoliang[] = new String[10];
-
-                                                               /*{"results":
-                                                                    [{"createdAt":"2017-07-10 16:11:26",
-                                                                        "identification":"49b2867f32","objectId":"65149c467e",
-                                                                        "updatedAt":"2017-07-10 16:11:26",
-                                                                        "yongLiao1":"","yongLiao2":"",
-                                                                        "yongLiao3":"",
-                                                                        "yongLiao4":"",
-                                                                        "yongLiao5":"","yongLiao6":"","yongLiao7":"","yongLiao8":"","yongLiao9":"","yongLiaoLiang1":"","yongLiaoLiang2":"","yongLiaoLiang3":"","yongLiaoLiang4":"","yongLiaoLiang5":"","yongLiaoLiang6":"","yongLiaoLiang7":"","yongLiaoLiang8":"","yongLiaoLiang9":""}]}
-                                                                        "ShiCaiLiang":7,
-                                                                        */
-                                                        int ShiCaiLiang = 0;
-                                                        ShiCaiLiang = 9;
-                                                        int ls_panding = 0;
-                                                        for (int k = 0; k < ShiCaiLiang; k++) {
-                                                            if (k == 0) {
-                                                                yongliao[ls_panding] = subObject.get("yongLiao1").getAsString();
-                                                                yongliaoliang[ls_panding] = subObject.get("yongLiaoLiang1").getAsString();
-                                                                if(yongliao[ls_panding]!=""){
-                                                                    yongliao[ls_panding] = yongliao[ls_panding]+",";
-                                                                    yongliaoliang[ls_panding] = yongliaoliang[ls_panding]+";";
-                                                                    ls_panding= ls_panding+1;
-                                                                }
-                                                            } else if (k == 1) {
-                                                                yongliao[ls_panding] = subObject.get("yongLiao2").getAsString();
-                                                                yongliaoliang[ls_panding] = subObject.get("yongLiaoLiang2").getAsString();
-                                                                if(yongliao[ls_panding]!=""){
-                                                                    yongliao[ls_panding] = yongliao[ls_panding]+",";
-                                                                    yongliaoliang[ls_panding] = yongliaoliang[ls_panding]+";";
-                                                                    ls_panding= ls_panding+1;
-                                                                }
-                                                            } else if (k == 2) {
-                                                                yongliao[ls_panding] = subObject.get("yongLiao3").getAsString();
-                                                                yongliaoliang[ls_panding] = subObject.get("yongLiaoLiang3").getAsString();
-                                                                if(yongliao[ls_panding]!=""){
-                                                                    yongliao[ls_panding] = yongliao[ls_panding]+",";
-                                                                    yongliaoliang[ls_panding] = yongliaoliang[ls_panding]+";";
-                                                                    ls_panding= ls_panding+1;
-                                                                }
-                                                            } else if (k == 3) {
-                                                                yongliao[ls_panding] = subObject.get("yongLiao4").getAsString();
-                                                                yongliaoliang[ls_panding] = subObject.get("yongLiaoLiang4").getAsString();
-                                                                if(yongliao[ls_panding]!=""){
-                                                                    yongliao[ls_panding] = yongliao[ls_panding]+",";
-                                                                    yongliaoliang[ls_panding] = yongliaoliang[ls_panding]+";";
-                                                                    ls_panding= ls_panding+1;
-                                                                }
-                                                            } else if (k == 4) {
-                                                                yongliao[ls_panding] = subObject.get("yongLiao5").getAsString();
-                                                                yongliaoliang[ls_panding] = subObject.get("yongLiaoLiang5").getAsString();
-                                                                if(yongliao[ls_panding]!=""){
-                                                                    yongliao[ls_panding] = yongliao[ls_panding]+",";
-                                                                    yongliaoliang[ls_panding] = yongliaoliang[ls_panding]+";";
-                                                                    ls_panding= ls_panding+1;
-                                                                }
-                                                            } else if (k == 5) {
-                                                                yongliao[ls_panding] = subObject.get("yongLiao6").getAsString();
-                                                                yongliaoliang[ls_panding] = subObject.get("yongLiaoLiang6").getAsString();
-                                                                if(yongliao[ls_panding]!=""){
-                                                                    yongliao[ls_panding] = yongliao[ls_panding]+",";
-                                                                    yongliaoliang[ls_panding] = yongliaoliang[ls_panding]+";";
-                                                                    ls_panding= ls_panding+1;
-                                                                }
-                                                            } else if (k == 6) {
-                                                                yongliao[ls_panding] = subObject.get("yongLiao7").getAsString();
-                                                                yongliaoliang[ls_panding] = subObject.get("yongLiaoLiang7").getAsString();
-                                                                if(yongliao[ls_panding]!=""){
-                                                                    yongliao[ls_panding] = yongliao[ls_panding]+",";
-                                                                    yongliaoliang[ls_panding] = yongliaoliang[ls_panding]+";";
-                                                                    ls_panding= ls_panding+1;
-                                                                }
-                                                            } else if (k == 7) {
-                                                                yongliao[ls_panding] = subObject.get("yongLiao8").getAsString();
-                                                                yongliaoliang[ls_panding] = subObject.get("yongLiaoLiang8").getAsString();
-                                                                if(yongliao[ls_panding]!=""){
-                                                                    yongliao[ls_panding] = yongliao[ls_panding]+",";
-                                                                    yongliaoliang[ls_panding] = yongliaoliang[ls_panding]+";";
-                                                                    ls_panding= ls_panding+1;
-                                                                }
-                                                            } else if (k == 8) {
-                                                                yongliao[ls_panding] = subObject.get("yongLiao9").getAsString();
-                                                                yongliaoliang[ls_panding] = subObject.get("yongLiaoLiang9").getAsString();
-                                                                if(yongliao[ls_panding]!=""){
-                                                                    yongliao[ls_panding] = yongliao[ls_panding]+",";
-                                                                    yongliaoliang[ls_panding] = yongliaoliang[ls_panding]+";";
-                                                                    ls_panding= ls_panding+1;
-                                                                }
-                                                            } else if (k == 9) {
-                                                                yongliao[ls_panding] = subObject.get("yongLiao10").getAsString();
-                                                                yongliaoliang[ls_panding] = subObject.get("yongLiaoLiang10").getAsString();
-                                                                if(yongliao[ls_panding]!=""){
-                                                                    yongliao[ls_panding] = yongliao[ls_panding]+",";
-                                                                    yongliaoliang[ls_panding] = yongliaoliang[ls_panding]+";";
-                                                                    ls_panding= ls_panding+1;
-                                                                }
-                                                            }
-                                                        }
-                                                        for(;ls_panding<10;ls_panding++){
-                                                            yongliao[ls_panding] = " ";
-                                                            yongliaoliang[ls_panding] = " ";
-                                                        }
-                                                        Log.d("组菜界面", "测试点5"+"图片加载成功");
-                                                        Log.d("组菜界面", "测试点5"+"tp2[0]"+tp2[0]+"tp3[0]"+tp3[0]+"tp4[0]"+tp4[0]);
-                                                        mCblecList.add(new CaiZuEC(ZuoFaMing, finalZuoFaTu,tp2[0],tp3[0],tp4[0], "这里是介绍", yongliao[0], yongliao[1], yongliao[2], yongliao[3], yongliao[4], yongliao[5], yongliao[6], yongliao[7], yongliao[8], yongliaoliang[0], yongliaoliang[1], yongliaoliang[2], yongliaoliang[3], yongliaoliang[4], yongliaoliang[5], yongliaoliang[6], yongliaoliang[7], yongliaoliang[8],Way_objectID,objIds.get(1),objIds.get(2),objIds.get(3),panduan));
-                                                        mContextView.setAdapter(new MenuAdapter(mCblecList));
-                                                        //initView();
-                                                        //mContextView.setAdapter(new MenuAdapter(mCblecList));
-                                                    }
-                                                }
-                                            }
-                                        });
-                                    }
-
-                                }).start();
-                            }
-
-                        }
-                    }
-                });
+                GetSorce(data1,data2);
             }
         }).start();
+    }
+    private void  GetSorce(String data1,String data2){
+        String ZuoFaTu1 = null,ZuoFaTu2 = null;
+        String name1= null,name2= null;
+        String shicai1= null,shicai2= null;
+        String id1 = null,id2=null;
+        JsonParser parser = new JsonParser();  //创建JSON解析器
+        JsonObject ssobject = (JsonObject) parser.parse(data1);  //创建JsonObject对象//将json数据转为为boolean型的数据
+        // ********************************************************************************
+        JsonObject nei1 = ssobject.get("result").getAsJsonObject();
+        ssobject = (JsonObject) parser.parse(data2);  //创建JsonObject对象//将json数据转为为boolean型的数据
+        // ********************************************************************************
+        JsonObject nei11 = ssobject.get("result").getAsJsonObject();
 
+        final JsonArray array = nei1.get("data").getAsJsonArray();    //得到为json的数组
+        final JsonArray array1 = nei11.get("data").getAsJsonArray();    //得到为json的数组
+        if (array.size()<array1.size()){
+            geshu = array.size();
+        }else  geshu = array1.size();
+        for (int i = 0; i < geshu; i++) {
+            Log.d("组菜界面", "***********array.size(): "+array.size());
+            final int finalI = i;
+
+            final JsonObject subObject = array.get(finalI).getAsJsonObject();
+            try{
+                ZuoFaTu1 = subObject.get("albums").getAsString();
+            }catch (Exception e1213){
+            }
+            Log.d("组菜界面", "检查点1");
+            //int cishu = subObject.get("cishu").getAsInt();
+            name1 = subObject.get("title").getAsString();
+            shicai1 =  subObject.get("ingredients").getAsString();
+            id1 = subObject.get("id").getAsString();
+            Log.d("组菜界面", "***********array1.size(): "+array1.size());
+
+
+            final JsonObject subObject1 = array1.get(finalI).getAsJsonObject();
+            try{
+                ZuoFaTu2 = subObject1.get("albums").getAsString();
+            }catch (Exception e1213){
+            }
+            Log.d("组菜界面", "检查点1");
+            //int cishu = subObject.get("cishu").getAsInt();
+            name2 = subObject1.get("title").getAsString();
+            shicai2 =  subObject1.get("ingredients").getAsString();
+            id2 = subObject1.get("id").getAsString();
+            Log.d("组菜界面", "检查点_开始导入");
+            Log.d("组菜界面", "CaiZuEC_Gai:"+"name1:"+name1+"name2"+name2+"ZuoFaTu1"+ZuoFaTu1+"ZuoFaTu2"+ZuoFaTu1);
+            mCblecList.add(new CaiZuEC_Gai(name1, ZuoFaTu1,ZuoFaTu2,ZuoFaTu1,ZuoFaTu1,"jieshao", shicai1,shicai2,id1,id2,id1,id2,false));
+            Log.d("组菜界面", "检查点2");
+
+            mContextView.post(new Runnable() {
+                @Override
+                public void run() {
+                    mContextView.setAdapter(new MenuAdapter(mCblecList));
+                }
+            });
+        }
 
     }
     /*-------------------------------------initView---------------------------------*/
@@ -614,227 +356,19 @@ public class CombinationFragment extends FragmentModule {
                     mHorizontalDropDownMenu.closeMenu();
                     if ((position == 0 ? mHeaders[0] : mMakeWays[position]).equals("做法")) {
                         mCblecList.clear();
-                        String str1 = "";
-                        String str2 = "";
-                        String str3 = "";
-                        str1 = "清蒸";
-                        str2 = "爆炒";
-                        str3 = "凉拌";
-                        BmobQuery<ZuCai> eq2 = new BmobQuery<ZuCai>();
-                        eq2.addWhereEqualTo("zuoFa", str1);
-                        BmobQuery<ZuCai> eq1 = new BmobQuery<ZuCai>();
-                        eq1.addWhereEqualTo("zuoFa", str2);
-                        BmobQuery<ZuCai> eq3 = new BmobQuery<ZuCai>();
-                        eq3.addWhereEqualTo("zuoFa", str3);
-                        //eq2.addWhereContains("FenLei","不限");
-
-                        List<BmobQuery<ZuCai>> queries = new ArrayList<BmobQuery<ZuCai>>();
-                        queries.add(eq2);
-                        queries.add(eq1);
-                        queries.add(eq3);
-                        BmobQuery<ZuCai> mainQuery = new BmobQuery<ZuCai>();
-
-                        mainQuery.or(queries);
-                        //mainQuery.addWhereContains("FenLei","不限");
-                        mainQuery.findObjects(new FindListener<ZuCai>() {
-                            @Override
-                            public void done(List<ZuCai> object, BmobException e) {
-                                if(e==null){
-                                    Log.d("组菜界面", "测试点5"+"查询早成功");
-                                    Log.d("组菜界面", "测试点5"+"查询结果有"+object.size()+"个");
-                                    //toast("查询结果有"+object.size()+"个");
-                                    AllNU=object.size();
-                                    for (ZuCai identification : object) {
-                                        t=t+1;
-                                        final List<String> ids = new ArrayList<String>();
-                                        ids.add(identification.getId1());
-                                        ids.add(identification.getId2());
-                                        ids.add(identification.getId3());
-                                        ids.add(identification.getId4());
-                                        Log.d("组菜界面", "Array添加成功");
-                                        final String LinShi_s = identification.getObjectId();
-                                        new Thread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                //initWay(LinShi_s);
-                                                //mRecyclerView.setAdapter(new Adapter(wayList));
-                                                initWay(ids);
-                                            }
-                                        }).start();
-                                    }
-                                }else{
-                                    Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
-                                }
-                            }
-                        });
+                        urlget(40,70);
                     }
                     if ((position == 0 ? mHeaders[0] : mMakeWays[position]).equals("清蒸")) {
                         mCblecList.clear();
-                        String str1 = "";
-                        String str2 = "";
-                        String str3 = "";
-                        str1 = "清蒸";
-                        str2 = "11";
-                        str3 = "11";
-                        BmobQuery<ZuCai> eq2 = new BmobQuery<ZuCai>();
-                        eq2.addWhereEqualTo("zuoFa", str1);
-                        BmobQuery<ZuCai> eq1 = new BmobQuery<ZuCai>();
-                        eq1.addWhereEqualTo("zuoFa", str2);
-                        BmobQuery<ZuCai> eq3 = new BmobQuery<ZuCai>();
-                        eq3.addWhereEqualTo("zuoFa", str3);
-                        //eq2.addWhereContains("FenLei","不限");
-
-                        List<BmobQuery<ZuCai>> queries = new ArrayList<BmobQuery<ZuCai>>();
-                        queries.add(eq2);
-                        queries.add(eq1);
-                        queries.add(eq3);
-                        BmobQuery<ZuCai> mainQuery = new BmobQuery<ZuCai>();
-
-                        mainQuery.or(queries);
-                        //mainQuery.addWhereContains("FenLei","不限");
-                        mainQuery.findObjects(new FindListener<ZuCai>() {
-                            @Override
-                            public void done(List<ZuCai> object, BmobException e) {
-                                if(e==null){
-                                    Log.d("组菜界面", "测试点5"+"查询早成功");
-                                    Log.d("组菜界面", "测试点5"+"查询结果有"+object.size()+"个");
-                                    //toast("查询结果有"+object.size()+"个");
-                                    AllNU=object.size();
-                                    for (ZuCai identification : object) {
-                                        t=t+1;
-                                        final List<String> ids = new ArrayList<String>();
-                                        ids.add(identification.getId1());
-                                        ids.add(identification.getId2());
-                                        ids.add(identification.getId3());
-                                        ids.add(identification.getId4());
-                                        Log.d("组菜界面", "Array添加成功");
-                                        final String LinShi_s = identification.getObjectId();
-                                        new Thread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                //initWay(LinShi_s);
-                                                //mRecyclerView.setAdapter(new Adapter(wayList));
-                                                initWay(ids);
-                                            }
-                                        }).start();
-                                    }
-                                }else{
-                                    Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
-                                }
-                            }
-                        });
+                        urlget(47,111);
                     }
                     if ((position == 0 ? mHeaders[0] : mMakeWays[position]).equals("爆炒")) {
                         mCblecList.clear();
-                        String str1 = "";
-                        String str2 = "";
-                        String str3 = "";
-                        str1 = "11";
-                        str2 = "爆炒";
-                        str3 = "11";
-                        BmobQuery<ZuCai> eq2 = new BmobQuery<ZuCai>();
-                        eq2.addWhereEqualTo("zuoFa", str1);
-                        BmobQuery<ZuCai> eq1 = new BmobQuery<ZuCai>();
-                        eq1.addWhereEqualTo("zuoFa", str2);
-                        BmobQuery<ZuCai> eq3 = new BmobQuery<ZuCai>();
-                        eq3.addWhereEqualTo("zuoFa", str3);
-                        //eq2.addWhereContains("FenLei","不限");
-
-                        List<BmobQuery<ZuCai>> queries = new ArrayList<BmobQuery<ZuCai>>();
-                        queries.add(eq2);
-                        queries.add(eq1);
-                        queries.add(eq3);
-                        BmobQuery<ZuCai> mainQuery = new BmobQuery<ZuCai>();
-
-                        mainQuery.or(queries);
-                        //mainQuery.addWhereContains("FenLei","不限");
-                        mainQuery.findObjects(new FindListener<ZuCai>() {
-                            @Override
-                            public void done(List<ZuCai> object, BmobException e) {
-                                if(e==null){
-                                    Log.d("组菜界面", "测试点5"+"查询早成功");
-                                    Log.d("组菜界面", "测试点5"+"查询结果有"+object.size()+"个");
-                                    //toast("查询结果有"+object.size()+"个");
-                                    AllNU=object.size();
-                                    for (ZuCai identification : object) {
-                                        t=t+1;
-                                        final List<String> ids = new ArrayList<String>();
-                                        ids.add(identification.getId1());
-                                        ids.add(identification.getId2());
-                                        ids.add(identification.getId3());
-                                        ids.add(identification.getId4());
-                                        Log.d("组菜界面", "Array添加成功");
-                                        final String LinShi_s = identification.getObjectId();
-                                        new Thread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                //initWay(LinShi_s);
-                                                //mRecyclerView.setAdapter(new Adapter(wayList));
-                                                initWay(ids);
-                                            }
-                                        }).start();
-                                    }
-                                }else{
-                                    Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
-                                }
-                            }
-                        });
+                        urlget(46,173);
                     }
                     if ((position == 0 ? mHeaders[0] : mMakeWays[position]).equals("凉拌")) {
                         mCblecList.clear();
-                        String str1 = "";
-                        String str2 = "";
-                        String str3 = "";
-                        str1 = "11";
-                        str2 = "11";
-                        str3 = "凉拌";
-                        BmobQuery<ZuCai> eq2 = new BmobQuery<ZuCai>();
-                        eq2.addWhereEqualTo("zuoFa", str1);
-                        BmobQuery<ZuCai> eq1 = new BmobQuery<ZuCai>();
-                        eq1.addWhereEqualTo("zuoFa", str2);
-                        BmobQuery<ZuCai> eq3 = new BmobQuery<ZuCai>();
-                        eq3.addWhereEqualTo("zuoFa", str3);
-                        //eq2.addWhereContains("FenLei","不限");
-
-                        List<BmobQuery<ZuCai>> queries = new ArrayList<BmobQuery<ZuCai>>();
-                        queries.add(eq2);
-                        queries.add(eq1);
-                        queries.add(eq3);
-                        BmobQuery<ZuCai> mainQuery = new BmobQuery<ZuCai>();
-
-                        mainQuery.or(queries);
-                        //mainQuery.addWhereContains("FenLei","不限");
-                        mainQuery.findObjects(new FindListener<ZuCai>() {
-                            @Override
-                            public void done(List<ZuCai> object, BmobException e) {
-                                if(e==null){
-                                    Log.d("组菜界面", "测试点5"+"查询早成功");
-                                    Log.d("组菜界面", "测试点5"+"查询结果有"+object.size()+"个");
-                                    //toast("查询结果有"+object.size()+"个");
-                                    AllNU=object.size();
-                                    for (ZuCai identification : object) {
-                                        t=t+1;
-                                        final List<String> ids = new ArrayList<String>();
-                                        ids.add(identification.getId1());
-                                        ids.add(identification.getId2());
-                                        ids.add(identification.getId3());
-                                        ids.add(identification.getId4());
-                                        Log.d("组菜界面", "Array添加成功");
-                                        final String LinShi_s = identification.getObjectId();
-                                        new Thread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                //initWay(LinShi_s);
-                                                //mRecyclerView.setAdapter(new Adapter(wayList));
-                                                initWay(ids);
-                                            }
-                                        }).start();
-                                    }
-                                }else{
-                                    Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
-                                }
-                            }
-                        });
+                        urlget(5,85);
                     }
                 }
             });
@@ -881,7 +415,7 @@ public class CombinationFragment extends FragmentModule {
 
         private void bindView(String s, final int position) {
             mTextView.setText(s);
-            neirong= s;
+            neirong = s;
             mTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -889,230 +423,22 @@ public class CombinationFragment extends FragmentModule {
                     mHorizontalDropDownMenu.closeMenu();
                     if ((position == 0 ? mHeaders[0] : mTimes[position]).equals("时段")) {
                         mCblecList.clear();
-                        Log.d("组菜界面", "onClick: mTimes"+mTimes[position]);
-                        String str1 = "";
-                        String str2 = "";
-                        String str3 = "";
-                        str1 = "TRUE";
-                        str2 = "TRUE";
-                        str3 = "TRUE";
-                        BmobQuery<ZuCai> eq2 = new BmobQuery<ZuCai>();
-                        eq2.addWhereEqualTo("ZaoCan", str1);
-                        BmobQuery<ZuCai> eq1 = new BmobQuery<ZuCai>();
-                        eq1.addWhereEqualTo("WanCan", str2);
-                        BmobQuery<ZuCai> eq3 = new BmobQuery<ZuCai>();
-                        eq3.addWhereEqualTo("WuCan", str3);
-                        //eq2.addWhereContains("FenLei","不限");
-
-                        List<BmobQuery<ZuCai>> queries = new ArrayList<BmobQuery<ZuCai>>();
-                        queries.add(eq2);
-                        queries.add(eq1);
-                        queries.add(eq3);
-                        BmobQuery<ZuCai> mainQuery = new BmobQuery<ZuCai>();
-
-                        mainQuery.or(queries);
-                        //mainQuery.addWhereContains("FenLei","不限");
-                        mainQuery.findObjects(new FindListener<ZuCai>() {
-                            @Override
-                            public void done(List<ZuCai> object, BmobException e) {
-                                if(e==null){
-                                    Log.d("组菜界面", "测试点5"+"查询早成功");
-                                    Log.d("组菜界面", "测试点5"+"查询结果有"+object.size()+"个");
-                                    //toast("查询结果有"+object.size()+"个");
-                                    AllNU=object.size();
-                                    for (ZuCai identification : object) {
-                                        t=t+1;
-                                        final List<String> ids = new ArrayList<String>();
-                                        ids.add(identification.getId1());
-                                        ids.add(identification.getId2());
-                                        ids.add(identification.getId3());
-                                        ids.add(identification.getId4());
-                                        Log.d("组菜界面", "Array添加成功");
-                                        final String LinShi_s = identification.getObjectId();
-                                        new Thread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                //initWay(LinShi_s);
-                                                //mRecyclerView.setAdapter(new Adapter(wayList));
-                                                initWay(ids);
-                                            }
-                                        }).start();
-                                    }
-                                }else{
-                                    Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
-                                }
-                            }
-                        });
+                        ///all
+                        urlget(57,66);
                     }
                     if ((position == 0 ? mHeaders[0] : mTimes[position]).equals("早餐")) {
                         mCblecList.clear();
-                        Log.d("组菜界面", "onClick: mTimes"+mTimes[position]);
-                        String str1 = "";
-                        String str2 = "";
-                        String str3 = "";
-                        str1 = "TRUE";
-                        str2 = "11";
-                        str3 = "11";
-                        BmobQuery<ZuCai> eq2 = new BmobQuery<ZuCai>();
-                        eq2.addWhereEqualTo("ZaoCan", str1);
-                        BmobQuery<ZuCai> eq1 = new BmobQuery<ZuCai>();
-                        eq1.addWhereEqualTo("WanCan", str2);
-                        BmobQuery<ZuCai> eq3 = new BmobQuery<ZuCai>();
-                        eq3.addWhereEqualTo("WuCan", str3);
-                        //eq2.addWhereContains("FenLei","不限");
-
-                        List<BmobQuery<ZuCai>> queries = new ArrayList<BmobQuery<ZuCai>>();
-                        queries.add(eq2);
-                        queries.add(eq1);
-                        queries.add(eq3);
-                        BmobQuery<ZuCai> mainQuery = new BmobQuery<ZuCai>();
-
-                        mainQuery.or(queries);
-                        //mainQuery.addWhereContains("FenLei","不限");
-                        mainQuery.findObjects(new FindListener<ZuCai>() {
-                            @Override
-                            public void done(List<ZuCai> object, BmobException e) {
-                                if(e==null){
-                                    Log.d("组菜界面", "测试点5"+"查询早成功");
-                                    Log.d("组菜界面", "测试点5"+"查询结果有"+object.size()+"个");
-                                    //toast("查询结果有"+object.size()+"个");
-                                    AllNU=object.size();
-                                    for (ZuCai identification : object) {
-                                        t=t+1;
-                                        final List<String> ids = new ArrayList<String>();
-                                        ids.add(identification.getId1());
-                                        ids.add(identification.getId2());
-                                        ids.add(identification.getId3());
-                                        ids.add(identification.getId4());
-                                        Log.d("组菜界面", "Array添加成功");
-                                        final String LinShi_s = identification.getObjectId();
-                                        new Thread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                //initWay(LinShi_s);
-                                                //mRecyclerView.setAdapter(new Adapter(wayList));
-                                                initWay(ids);
-                                            }
-                                        }).start();
-                                    }
-                                }else{
-                                    Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
-                                }
-                            }
-                        });
+                        cid = 37;
+                        urlget(37,65);
                     }
                     if ((position == 0 ? mHeaders[0] : mTimes[position]).equals("午餐")) {
                         mCblecList.clear();
-                        Log.d("组菜界面", "onClick: mTimes"+mTimes[position]);
-                        String str1 = "";
-                        String str2 = "";
-                        String str3 = "";
-                        str1 = "11";
-                        str2 = "11";
-                        str3 = "TRUE";
-                        BmobQuery<ZuCai> eq2 = new BmobQuery<ZuCai>();
-                        eq2.addWhereEqualTo("ZaoCan", str1);
-                        BmobQuery<ZuCai> eq1 = new BmobQuery<ZuCai>();
-                        eq1.addWhereEqualTo("WanCan", str2);
-                        BmobQuery<ZuCai> eq3 = new BmobQuery<ZuCai>();
-                        eq3.addWhereEqualTo("WuCan", str3);
-                        //eq2.addWhereContains("FenLei","不限");
-
-                        List<BmobQuery<ZuCai>> queries = new ArrayList<BmobQuery<ZuCai>>();
-                        queries.add(eq2);
-                        queries.add(eq1);
-                        queries.add(eq3);
-                        BmobQuery<ZuCai> mainQuery = new BmobQuery<ZuCai>();
-
-                        mainQuery.or(queries);
-                        //mainQuery.addWhereContains("FenLei","不限");
-                        mainQuery.findObjects(new FindListener<ZuCai>() {
-                            @Override
-                            public void done(List<ZuCai> object, BmobException e) {
-                                if(e==null){
-                                    Log.d("组菜界面", "测试点5"+"查询早成功");
-                                    Log.d("组菜界面", "测试点5"+"查询结果有"+object.size()+"个");
-                                    //toast("查询结果有"+object.size()+"个");
-                                    AllNU=object.size();
-                                    for (ZuCai identification : object) {
-                                        t=t+1;
-                                        final List<String> ids = new ArrayList<String>();
-                                        ids.add(identification.getId1());
-                                        ids.add(identification.getId2());
-                                        ids.add(identification.getId3());
-                                        ids.add(identification.getId4());
-                                        Log.d("组菜界面", "Array添加成功");
-                                        final String LinShi_s = identification.getObjectId();
-                                        new Thread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                //initWay(LinShi_s);
-                                                //mRecyclerView.setAdapter(new Adapter(wayList));
-                                                initWay(ids);
-                                            }
-                                        }).start();
-                                    }
-                                }else{
-                                    Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
-                                }
-                            }
-                        });
+                        urlget(38,64);
                     }if ((position == 0 ? mHeaders[0] : mTimes[position]).equals("晚餐")) {
                         mCblecList.clear();
+                        urlget(40,70);
                         Log.d("组菜界面", "onClick: mTimes"+mTimes[position]);
-                        String str1 = "";
-                        String str2 = "";
-                        String str3 = "";
-                        str1 = "11";
-                        str2 = "TRUE";
-                        str3 = "11";
-                        BmobQuery<ZuCai> eq2 = new BmobQuery<ZuCai>();
-                        eq2.addWhereEqualTo("ZaoCan", str1);
-                        BmobQuery<ZuCai> eq1 = new BmobQuery<ZuCai>();
-                        eq1.addWhereEqualTo("WanCan", str2);
-                        BmobQuery<ZuCai> eq3 = new BmobQuery<ZuCai>();
-                        eq3.addWhereEqualTo("WuCan", str3);
-                        //eq2.addWhereContains("FenLei","不限");
 
-                        List<BmobQuery<ZuCai>> queries = new ArrayList<BmobQuery<ZuCai>>();
-                        queries.add(eq2);
-                        queries.add(eq1);
-                        queries.add(eq3);
-                        BmobQuery<ZuCai> mainQuery = new BmobQuery<ZuCai>();
-
-                        mainQuery.or(queries);
-                        //mainQuery.addWhereContains("FenLei","不限");
-                        mainQuery.findObjects(new FindListener<ZuCai>() {
-                            @Override
-                            public void done(List<ZuCai> object, BmobException e) {
-                                if(e==null){
-                                    Log.d("组菜界面", "测试点5"+"查询早成功");
-                                    Log.d("组菜界面", "测试点5"+"查询结果有"+object.size()+"个");
-                                    //toast("查询结果有"+object.size()+"个");
-                                    AllNU=object.size();
-                                    for (ZuCai identification : object) {
-                                        t=t+1;
-                                        final List<String> ids = new ArrayList<String>();
-                                        ids.add(identification.getId1());
-                                        ids.add(identification.getId2());
-                                        ids.add(identification.getId3());
-                                        ids.add(identification.getId4());
-                                        Log.d("组菜界面", "Array添加成功");
-                                        final String LinShi_s = identification.getObjectId();
-                                        new Thread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                //initWay(LinShi_s);
-                                                //mRecyclerView.setAdapter(new Adapter(wayList));
-                                                initWay(ids);
-                                            }
-                                        }).start();
-                                    }
-                                }else{
-                                    Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
-                                }
-                            }
-                        });
                     }
 
                 }
@@ -1170,227 +496,19 @@ public class CombinationFragment extends FragmentModule {
                     mHorizontalDropDownMenu.closeMenu();
                     if ((position == 0 ? mHeaders[0] : mTastes[position]).equals("口味")){
                         mCblecList.clear();
-                        String str1 = "";
-                        String str2 = "";
-                        String str3 = "";
-                        str1 = "清淡";
-                        str2 = "酸甜";
-                        str3 = "辛辣";
-                        BmobQuery<ZuCai> eq2 = new BmobQuery<ZuCai>();
-                        eq2.addWhereEqualTo("kouWei", str1);
-                        BmobQuery<ZuCai> eq1 = new BmobQuery<ZuCai>();
-                        eq1.addWhereEqualTo("kouWei", str2);
-                        BmobQuery<ZuCai> eq3 = new BmobQuery<ZuCai>();
-                        eq3.addWhereEqualTo("kouWei", str3);
-                        //eq2.addWhereContains("FenLei","不限");
-
-                        List<BmobQuery<ZuCai>> queries = new ArrayList<BmobQuery<ZuCai>>();
-                        queries.add(eq2);
-                        queries.add(eq1);
-                        queries.add(eq3);
-                        BmobQuery<ZuCai> mainQuery = new BmobQuery<ZuCai>();
-
-                        mainQuery.or(queries);
-                        //mainQuery.addWhereContains("FenLei","不限");
-                        mainQuery.findObjects(new FindListener<ZuCai>() {
-                            @Override
-                            public void done(List<ZuCai> object, BmobException e) {
-                                if(e==null){
-                                    Log.d("组菜界面", "测试点5"+"查询早成功");
-                                    Log.d("组菜界面", "测试点5"+"查询结果有"+object.size()+"个");
-                                    //toast("查询结果有"+object.size()+"个");
-                                    AllNU=object.size();
-                                    for (ZuCai identification : object) {
-                                        t=t+1;
-                                        final List<String> ids = new ArrayList<String>();
-                                        ids.add(identification.getId1());
-                                        ids.add(identification.getId2());
-                                        ids.add(identification.getId3());
-                                        ids.add(identification.getId4());
-                                        Log.d("组菜界面", "Array添加成功");
-                                        final String LinShi_s = identification.getObjectId();
-                                        new Thread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                //initWay(LinShi_s);
-                                                //mRecyclerView.setAdapter(new Adapter(wayList));
-                                                initWay(ids);
-                                            }
-                                        }).start();
-                                    }
-                                }else{
-                                    Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
-                                }
-                            }
-                        });
+                        urlget(84,67);
                     }
                     if ((position == 0 ? mHeaders[0] : mTastes[position]).equals("清淡")){
                         mCblecList.clear();
-                        String str1 = "";
-                        String str2 = "";
-                        String str3 = "";
-                        str1 = "清淡";
-                        str2 = "清淡";
-                        str3 = "11";
-                        BmobQuery<ZuCai> eq2 = new BmobQuery<ZuCai>();
-                        eq2.addWhereEqualTo("kouWei", str1);
-                        BmobQuery<ZuCai> eq1 = new BmobQuery<ZuCai>();
-                        eq1.addWhereEqualTo("kouWei", str2);
-                        BmobQuery<ZuCai> eq3 = new BmobQuery<ZuCai>();
-                        eq3.addWhereEqualTo("kouWei", str3);
-                        //eq2.addWhereContains("FenLei","不限");
-
-                        List<BmobQuery<ZuCai>> queries = new ArrayList<BmobQuery<ZuCai>>();
-                        queries.add(eq2);
-                        queries.add(eq1);
-                        queries.add(eq3);
-                        BmobQuery<ZuCai> mainQuery = new BmobQuery<ZuCai>();
-
-                        mainQuery.or(queries);
-                        //mainQuery.addWhereContains("FenLei","不限");
-                        mainQuery.findObjects(new FindListener<ZuCai>() {
-                            @Override
-                            public void done(List<ZuCai> object, BmobException e) {
-                                if(e==null){
-                                    Log.d("组菜界面", "测试点5"+"查询早成功");
-                                    Log.d("组菜界面", "测试点5"+"查询结果有"+object.size()+"个");
-                                    //toast("查询结果有"+object.size()+"个");
-                                    AllNU=object.size();
-                                    for (ZuCai identification : object) {
-                                        t=t+1;
-                                        final List<String> ids = new ArrayList<String>();
-                                        ids.add(identification.getId1());
-                                        ids.add(identification.getId2());
-                                        ids.add(identification.getId3());
-                                        ids.add(identification.getId4());
-                                        Log.d("组菜界面", "Array添加成功");
-                                        final String LinShi_s = identification.getObjectId();
-                                        new Thread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                //initWay(LinShi_s);
-                                                //mRecyclerView.setAdapter(new Adapter(wayList));
-                                                initWay(ids);
-                                            }
-                                        }).start();
-                                    }
-                                }else{
-                                    Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
-                                }
-                            }
-                        });
+                        urlget(83,85);
                     }
                     if ((position == 0 ? mHeaders[0] : mTastes[position]).equals("辛辣")){
                         mCblecList.clear();
-                        String str1 = "";
-                        String str2 = "";
-                        String str3 = "";
-                        str1 = "辛辣";
-                        str2 = "辛辣";
-                        str3 = "11";
-                        BmobQuery<ZuCai> eq2 = new BmobQuery<ZuCai>();
-                        eq2.addWhereEqualTo("kouWei", str1);
-                        BmobQuery<ZuCai> eq1 = new BmobQuery<ZuCai>();
-                        eq1.addWhereEqualTo("kouWei", str2);
-                        BmobQuery<ZuCai> eq3 = new BmobQuery<ZuCai>();
-                        eq3.addWhereEqualTo("kouWei", str3);
-                        //eq2.addWhereContains("FenLei","不限");
-
-                        List<BmobQuery<ZuCai>> queries = new ArrayList<BmobQuery<ZuCai>>();
-                        queries.add(eq2);
-                        queries.add(eq1);
-                        queries.add(eq3);
-                        BmobQuery<ZuCai> mainQuery = new BmobQuery<ZuCai>();
-
-                        mainQuery.or(queries);
-                        //mainQuery.addWhereContains("FenLei","不限");
-                        mainQuery.findObjects(new FindListener<ZuCai>() {
-                            @Override
-                            public void done(List<ZuCai> object, BmobException e) {
-                                if(e==null){
-                                    Log.d("组菜界面", "测试点5"+"查询早成功");
-                                    Log.d("组菜界面", "测试点5"+"查询结果有"+object.size()+"个");
-                                    //toast("查询结果有"+object.size()+"个");
-                                    AllNU=object.size();
-                                    for (ZuCai identification : object) {
-                                        t=t+1;
-                                        final List<String> ids = new ArrayList<String>();
-                                        ids.add(identification.getId1());
-                                        ids.add(identification.getId2());
-                                        ids.add(identification.getId3());
-                                        ids.add(identification.getId4());
-                                        Log.d("组菜界面", "Array添加成功");
-                                        final String LinShi_s = identification.getObjectId();
-                                        new Thread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                //initWay(LinShi_s);
-                                                //mRecyclerView.setAdapter(new Adapter(wayList));
-                                                initWay(ids);
-                                            }
-                                        }).start();
-                                    }
-                                }else{
-                                    Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
-                                }
-                            }
-                        });
+                        urlget(54,83);
                     }
                     if ((position == 0 ? mHeaders[0] : mTastes[position]).equals("酸甜")){
                         mCblecList.clear();
-                        String str1 = "";
-                        String str2 = "";
-                        String str3 = "";
-                        str1 = "酸甜";
-                        str2 = "酸甜";
-                        str3 = "11";
-                        BmobQuery<ZuCai> eq2 = new BmobQuery<ZuCai>();
-                        eq2.addWhereEqualTo("kouWei", str1);
-                        BmobQuery<ZuCai> eq1 = new BmobQuery<ZuCai>();
-                        eq1.addWhereEqualTo("kouWei", str2);
-                        BmobQuery<ZuCai> eq3 = new BmobQuery<ZuCai>();
-                        eq3.addWhereEqualTo("kouWei", str3);
-                        //eq2.addWhereContains("FenLei","不限");
-
-                        List<BmobQuery<ZuCai>> queries = new ArrayList<BmobQuery<ZuCai>>();
-                        queries.add(eq2);
-                        queries.add(eq1);
-                        queries.add(eq3);
-                        BmobQuery<ZuCai> mainQuery = new BmobQuery<ZuCai>();
-
-                        mainQuery.or(queries);
-                        //mainQuery.addWhereContains("FenLei","不限");
-                        mainQuery.findObjects(new FindListener<ZuCai>() {
-                            @Override
-                            public void done(List<ZuCai> object, BmobException e) {
-                                if(e==null){
-                                    Log.d("组菜界面", "测试点5"+"查询早成功");
-                                    Log.d("组菜界面", "测试点5"+"查询结果有"+object.size()+"个");
-                                    //toast("查询结果有"+object.size()+"个");
-                                    AllNU=object.size();
-                                    for (ZuCai identification : object) {
-                                        t=t+1;
-                                        final List<String> ids = new ArrayList<String>();
-                                        ids.add(identification.getId1());
-                                        ids.add(identification.getId2());
-                                        ids.add(identification.getId3());
-                                        ids.add(identification.getId4());
-                                        Log.d("组菜界面", "Array添加成功");
-                                        final String LinShi_s = identification.getObjectId();
-                                        new Thread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                //initWay(LinShi_s);
-                                                //mRecyclerView.setAdapter(new Adapter(wayList));
-                                                initWay(ids);
-                                            }
-                                        }).start();
-                                    }
-                                }else{
-                                    Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
-                                }
-                            }
-                        });
+                        urlget(52,53);
                     }
 
                 }
@@ -1403,15 +521,18 @@ public class CombinationFragment extends FragmentModule {
     /*---------------------------------------MenuAdapter----------------------------*/
     private class MenuAdapter extends RecyclerView.Adapter<MenuHolder> {
 
-        private List<CaiZuEC> mList;
+        private List<CaiZuEC_Gai> mList;
 
-        public MenuAdapter(List<CaiZuEC> l) {
+        public MenuAdapter(List<CaiZuEC_Gai> l) {
             super();
+            Log.d("组菜界面", "MenuAdapter");
             mList = l;
+            Log.d("组菜界面", "mList = l");
         }
 
         @Override
         public MenuHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            Log.d("组菜界面", "onCreateViewHolder");
             LayoutInflater layoutInflater = LayoutInflater.from(getContext());
             View v = layoutInflater.inflate(R.layout.combinstion_menu_recycler_view_item_change, parent, false);
             return new MenuHolder(v);
@@ -1419,11 +540,13 @@ public class CombinationFragment extends FragmentModule {
 
         @Override
         public void onBindViewHolder(MenuHolder holder, int position) {
+            Log.d("组菜界面", "onBindViewHolder");
             holder.bindView(mList.get(position));
         }
 
         @Override
         public int getItemCount() {
+            Log.d("组菜界面", "getItemCount");
             return mList.size();
         }
     }
@@ -1437,14 +560,16 @@ public class CombinationFragment extends FragmentModule {
         //private ImageView mImageView4;
         private TextView mNameTextView;
         private TextView mMatirialTextView;
-        private CaiZuEC a213;
+        private CaiZuEC_Gai a213;
         public MenuHolder(View itemView) {
             super(itemView);
+            Log.d("组菜界面", "MenuHolder");
             mImageView1 = (ImageView) itemView.findViewById(R.id.combination_item_image_view_1);
             mImageView2 = (ImageView) itemView.findViewById(R.id.combination_item_image_view_2);
             //mImageView3 = (ImageView) itemView.findViewById(R.id.combination_item_image_view_3);
             //mImageView4 = (ImageView) itemView.findViewById(R.id.combination_item_image_view_4);
             mNameTextView = (TextView) itemView.findViewById(R.id.combination_item_food_name_text_name);
+            Log.d("组菜界面", "检查点u");
             mMatirialTextView = (TextView) itemView.findViewById(R.id.combination_item_food_matirial_text_shicai);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -1459,7 +584,7 @@ public class CombinationFragment extends FragmentModule {
                 }
             });
         }
-        private void bindView(CaiZuEC mcblec){
+        private void bindView(CaiZuEC_Gai mcblec){
             Log.d("组菜界面", "bindView:准备添加 ");
             a213=mcblec;
             RequestOptions options = new RequestOptions()
@@ -1490,7 +615,7 @@ public class CombinationFragment extends FragmentModule {
 
             //mImageView.setImageResource(R.drawable.food_test_1);
             mNameTextView.setText(mcblec.getName());
-            mMatirialTextView.setText(mcblec.getShiCaiMing1()+mcblec.getShiCaiMing2()+mcblec.getShiCaiMing3()+mcblec.getShiCaiMing4()+mcblec.getShiCaiMing5()+mcblec.getShiCaiMing6()+mcblec.getShiCaiMing7()+mcblec.getShiCaiMing8()+mcblec.getShiCaiMing9());
+            mMatirialTextView.setText(mcblec.getShiCai1()+mcblec.getShiCai2());
         }
 
     }

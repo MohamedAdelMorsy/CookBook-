@@ -299,7 +299,7 @@ public class MyDynamicActivity extends AppCompatActivity {
                                                             @Override
                                                             public void run() {
                                                                 Log.d("分享界面initWay", "测试点5"+"图片加载成功");
-                                                                mList.add(new CBLEC(ZuoFaMing, finalZuoFaTu, "这里是介绍", yongliao[0], yongliao[1], yongliao[2], yongliao[3], yongliao[4], yongliao[5], yongliao[6], yongliao[7], yongliao[8], yongliaoliang[0], yongliaoliang[1], yongliaoliang[2], yongliaoliang[3], yongliaoliang[4], yongliaoliang[5], yongliaoliang[6], yongliaoliang[7], yongliaoliang[8],Way_objectID,FromUser,mssec));
+                                                                mList.add(new CBLEC(ZuoFaMing, finalZuoFaTu, "这里是介绍",Way_objectID,FromUser,mssec));
                                                                 //*/
                                                                 Log.d("分享界面initWay", "测试点5"+"放入对象成功");
                                                                 mRecyclerView.post(new Runnable() {

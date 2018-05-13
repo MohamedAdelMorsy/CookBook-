@@ -24,6 +24,15 @@ import android.widget.Toast;
 import com.scorpiomiku.cookbook.R;
 import com.scorpiomiku.cookbook.classifierresultactivity.ClassifierResultActivity;
 import com.scorpiomiku.cookbook.tensorflow.Classifier;
+import com.scorpiomiku.cookbook.tensorflow.Face_test;
+import com.youdao.sdk.app.Language;
+import com.youdao.sdk.app.LanguageUtils;
+import com.youdao.sdk.app.YouDaoApplication;
+import com.youdao.sdk.ydonlinetranslate.Translator;
+import com.youdao.sdk.ydtranslate.Translate;
+import com.youdao.sdk.ydtranslate.TranslateErrorCode;
+import com.youdao.sdk.ydtranslate.TranslateListener;
+import com.youdao.sdk.ydtranslate.TranslateParameters;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,9 +50,10 @@ public class MoreCameraActivity extends AppCompatActivity {
     private static final int MSG_WHAT_TIME_IS_UP = 1;//时间到了
     private static final int MSG_WHAT_TIME_IS_TICK = 2;//时间减少中
     private String mPicturePath;
-    public static final String APP_ID = "10248328";
-    public static final String API_KEY = "7Wdkd5GkbFEsZ3284movvU8f";
-    public static final String SECRET_KEY = "afPh1ig2SQKYQ13tSxtrGq6CNsengFqN";
+
+    public static final String APP_ID = "11194410";
+    public static final String API_KEY = "41yx7SNyudF0u1y7Vrvoain0";
+    public static final String SECRET_KEY = "muddna10dlYBQFx5lyNKy9pSezdNatl5";
     private static final String TAG = "CameraActivity";
     private Camera mCamera;
     private int mLabel = 1;
@@ -57,7 +67,7 @@ public class MoreCameraActivity extends AppCompatActivity {
     private ImageView mTakePhotoOk;
     private FrameLayout mCoverFrameLayout;
     private Timer timer = new Timer();
-    private TextView mTextView ;
+    private TextView mTextView;
     public static List<String> moreResults = new ArrayList<>();
     private HashMap<String, String> options = new HashMap<String, String>();
 
@@ -66,7 +76,7 @@ public class MoreCameraActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //设置无标题
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-
+        YouDaoApplication.init(this, "0bc38eee2baaf2f8");
         //设置全屏
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -93,15 +103,9 @@ public class MoreCameraActivity extends AppCompatActivity {
         mTakePhotoOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String text = "";
-                for (int item = 0 ;item < moreResults.size();item++ ){
-                    text = text +moreResults.get(item);
-                    Log.d(TAG, moreResults.get(item));
-                }
-                mTextView.setText(text);
+//                sdasd
             }
         });
-
 
 
         mCoverFrameLayout = (FrameLayout) findViewById(R.id.more_camera_cover_linearlayout);
@@ -160,15 +164,6 @@ public class MoreCameraActivity extends AppCompatActivity {
         }
     }
 
-    //释放相机
-    public void releaseCamera() {
-        if (mCamera != null) {
-            mCamera.setPreviewCallback(null);
-            mCamera.stopPreview();
-            mCamera.release();
-            mCamera = null;
-        }
-    }
 
     private Handler handler = new Handler() {
         @Override
@@ -177,6 +172,12 @@ public class MoreCameraActivity extends AppCompatActivity {
             switch (msg.what) {
                 case MSG_WHAT_TIME_IS_UP:
                     mCoverFrameLayout.setVisibility(View.INVISIBLE);
+                    String text = "";
+                    for (int item = 0; item < moreResults.size(); item++) {
+                        text = text + moreResults.get(item)+" ";
+                        Log.d(TAG, moreResults.get(item));
+                    }
+                    mTextView.setText(text);
                     break;
                 case MSG_WHAT_TIME_IS_TICK://显示动态时间
                     break;
@@ -209,23 +210,46 @@ public class MoreCameraActivity extends AppCompatActivity {
                         }
                     }
                 };
-                timer.schedule(mTimerTask,300, 300);
+                timer.schedule(mTimerTask, 300, 300);
             }
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     File file = new File(picturePath);
-                    JSONObject res = mClassifier.plantDetect(data, options);
+                    Face_test face_test = new Face_test();
+                    JSONObject res = face_test.plantDetect(data);
+                    String str = null;
                     try {
-                        if (res.getJSONArray("result").getJSONObject(0).getString("name").equals("洋柿子")) {
-                            moreResults.add("番茄");
-                        } else {
-                            moreResults.add(res.getJSONArray("result").getJSONObject(0).getString("name"));
-                        }
+                        str = res.getJSONArray("objects").getJSONObject(0).getString("value");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    Log.d(TAG, "run: " + res.toString());
+                    Log.d(TAG, "run: more:" + str);
+                    Language langFrom = LanguageUtils.getLangByName("英文");
+                    Language langTo = LanguageUtils.getLangByName("中文");
+                    TranslateParameters tps = new TranslateParameters.Builder()
+                            .source("识菜帮")
+                            .from(langFrom).to(langTo).build();
+                    Translator translator = Translator.getInstance(tps);
+                    translator.lookup(str, "5a6d7b852ba9ea34", new TranslateListener() {
+                        @Override
+                        public void onError(TranslateErrorCode translateErrorCode, String s) {
+                            Log.e(TAG, "onError: " + translateErrorCode.toString() + ";" + s);
+                        }
+
+                        @Override
+                        public void onResult(Translate translate, String s, String s1) {
+                            moreResults.add(translate.getTranslations().get(0));
+                            Log.d(TAG, "run: more:" + translate.getTranslations().get(0));
+                            Log.d(TAG, "onResult: " + ClassifierResultActivity.mPictureResult);
+                        }
+
+                        @Override
+                        public void onResult(List<Translate> list, List<String> list1, List<TranslateErrorCode> list2, String s) {
+
+                        }
+                    });
+
                 }
             }).start();
             mCamera.startPreview();
@@ -269,14 +293,9 @@ public class MoreCameraActivity extends AppCompatActivity {
         camera.setDisplayOrientation(result);
     }
 
-    /*
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-    */
 
     private void stopTimer() {
+
         mTimerTask.cancel();
         mTimerTask = null;
     }

@@ -134,7 +134,7 @@ public class ContainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contain);
-        Bmob.initialize(this, "3bfd53d40a453ea66ce653ab658582d1");
+        Bmob.initialize(this, "accfd3a92dc224c9369613948c03c014");
         fm.beginTransaction()
                 .add(R.id.fragment_container, TakePhotoMainFragment.newInstance())
                 .commit();

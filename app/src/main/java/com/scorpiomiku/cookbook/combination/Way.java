@@ -11,6 +11,7 @@ public class Way extends BmobObject {
     private String FenLei;
     private String zuoFaMing;
     private String zuoFaTu;
+    private String id;
     private BmobFile zuoFaTuUser;
     private boolean FromUser;
     private String objid;

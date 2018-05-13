@@ -203,4 +203,10 @@ public class MyInformationFragment extends FragmentModule {
             mTimerTask = null;
         }
     }
+    @Override
+    public void onResume(){
+        super.onResume();
+        mAccountNameTextView.setText(pref.getString("username","您还没有登录"));
+        SetSculpture();
+    }
 }

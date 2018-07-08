@@ -86,6 +86,7 @@
         <activity android:name=".combination.ZuCaiJieMian" />
         <activity android:name=".sign.ForgetPasswordActivity" />
         <activity android:name=".takephoto.MoreCameraActivity"></activity>
+
     </application>
 
 </manifest>

@@ -16,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import cn.bmob.v3.AsyncCustomEndpoints;
+import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
@@ -37,6 +38,7 @@ public class SignUpActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bmob.initialize(this, "accfd3a92dc224c9369613948c03c014");
         setContentView(R.layout.activity_sign_up);
         register = (Button)findViewById(R.id.register_send);
         accountNumber = (EditText)findViewById(R.id.register_username);
@@ -51,6 +53,7 @@ public class SignUpActivity extends AppCompatActivity {
                 final String useremail = emailAdrss.getText().toString();
                 Person bu = new Person();
                 bu.setUsername(username);
+                bu.setName(username);
                 bu.setPassword(userpassword);
                 bu.setEmail(useremail);
                 bu.setSex("未填写");

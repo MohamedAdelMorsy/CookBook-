@@ -26,6 +26,7 @@ import com.scorpiomiku.cookbook.bean.Collection;
 import com.scorpiomiku.cookbook.combination.Way;
 import com.scorpiomiku.cookbook.menuactivity.MenuActivity;
 import com.scorpiomiku.cookbook.module.FragmentModule;
+import com.scorpiomiku.cookbook.recommend.RecommendDefultFragment;
 import com.yanzhenjie.recyclerview.swipe.Closeable;
 import com.yanzhenjie.recyclerview.swipe.OnSwipeMenuItemClickListener;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenu;
@@ -37,6 +38,7 @@ import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,6 +51,11 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.CloudCodeListener;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.UpdateListener;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+import static com.scorpiomiku.cookbook.recommend.BreakFastFragment.APPKEY;
 
 /**
  * Created by Administrator on 2017/6/14.
@@ -77,219 +84,6 @@ public class MyCollectionFragment extends FragmentModule {
         super.onCreate(savedInstanceState);
 
     }
-    private void initWay(String objId){
-        final JSONObject jas = new JSONObject();
-        final AsyncCustomEndpoints ace1 = new AsyncCustomEndpoints();
-        try {
-            jas.put("objectId",objId);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        Log.d("收藏界面", "测试点5"+"存储objectId成功");
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                ace1.callEndpoint("get_way_fromShiCai", jas, new CloudCodeListener() {
-                    public static final String TAG = "thing";
-                    @Override
-                    public void done(Object object, BmobException e) {
-                        if (e == null) {
-                            String result = object.toString();
-                            Log.d(TAG, "收藏界面: result："+result);
-                            JsonParser parser = new JsonParser();  //创建JSON解析器
-                            JsonObject ssobject = (JsonObject) parser.parse(result);  //创建JsonObject对象//将json数据转为为boolean型的数据
-                            JsonArray array = ssobject.get("results").getAsJsonArray();    //得到为json的数组
-                            Log.d("收藏界面", "测试点5"+"查询Way成功");
-                            for (int i = 0; i <= array.size(); i++) {
-                                final JsonObject subObject = array.get(i).getAsJsonObject();
-                                try{
-                                    panduan = subObject.get("FromUser").getAsBoolean();
-                                }catch (Exception a){
-                                    panduan = false;
-                                }
-                                String ZuoFaTu;
-                                try{
-                                    JsonObject ZuoFaTuyuan = subObject.get("zuoFaTuUser").getAsJsonObject();
-                                    ZuoFaTu=ZuoFaTuyuan.get("url").getAsString();
-                                    final String ZuoFaTuname = ZuoFaTuyuan.get("filename").getAsString();
-                                }catch (Exception e1213){
-                                    ZuoFaTu = subObject.get("zuoFaTu").getAsString();
-                                }
-
-                                //获取做法的图片url
-
-                                final String Way_objectID = subObject.get("objectId").getAsString();
-                                try {
-                                    int cishu = subObject.get("cishu").getAsInt();
-                                }catch (Exception d){
-                                    int cishu=0;
-                                }
-                                //int cishu = subObject.get("cishu").getAsInt();
-                                final String ZuoFaMing = subObject.get("zuoFaMing").getAsString();
-                                final String finalZuoFaTu = ZuoFaTu;
-                                new Thread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        //identification
-                                        try {
-                                            jas.put("identification",Way_objectID);
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                        Log.d("收藏界面", "测试点5"+"开始查询食材部分");
-                                        ace1.callEndpoint("get_shicai", jas, new CloudCodeListener() {
-                                            public static final String TAG = "thing";
-
-                                            @Override
-                                            public void done(Object object, BmobException e) {
-                                                if (e == null) {
-                                                    final String result = object.toString();
-                                                    Log.d("收藏界面", "测试点5"+"开始查询食材部分result = "+result);
-                                                    JsonParser parser = new JsonParser();  //创建JSON解析器
-                                                    JsonObject ssobject = (JsonObject) parser.parse(result);  //创建JsonObject对象//将json数据转为为boolean型的数据
-                                                    JsonArray array = ssobject.get("results").getAsJsonArray();    //得到为json的数组
-                                                    for (int i = 0; i <= array.size(); i++) {
-                                                        final JsonObject subObject = array.get(i).getAsJsonObject();
-                                                        final String yongliao[] = new String[10];
-                                                        final String yongliaoliang[] = new String[10];
-
-                                                               /*{"results":
-                                                                    [{"createdAt":"2017-07-10 16:11:26",
-                                                                        "identification":"49b2867f32","objectId":"65149c467e",
-                                                                        "updatedAt":"2017-07-10 16:11:26",
-                                                                        "yongLiao1":"","yongLiao2":"",
-                                                                        "yongLiao3":"",
-                                                                        "yongLiao4":"",
-                                                                        "yongLiao5":"","yongLiao6":"","yongLiao7":"","yongLiao8":"","yongLiao9":"","yongLiaoLiang1":"","yongLiaoLiang2":"","yongLiaoLiang3":"","yongLiaoLiang4":"","yongLiaoLiang5":"","yongLiaoLiang6":"","yongLiaoLiang7":"","yongLiaoLiang8":"","yongLiaoLiang9":""}]}
-                                                                        "ShiCaiLiang":7,
-                                                                        */
-                                                        int ShiCaiLiang = 0;
-                                                        ShiCaiLiang = 9;
-                                                        int ls_panding = 0;
-                                                        for (int k = 0; k < ShiCaiLiang; k++) {
-                                                            if (k == 0) {
-                                                                yongliao[ls_panding] = subObject.get("yongLiao1").getAsString();
-                                                                yongliaoliang[ls_panding] = subObject.get("yongLiaoLiang1").getAsString();
-                                                                if(yongliao[ls_panding]!=""){
-                                                                    yongliao[ls_panding] = yongliao[ls_panding]+",";
-                                                                    yongliaoliang[ls_panding] = yongliaoliang[ls_panding]+";";
-                                                                    ls_panding= ls_panding+1;
-                                                                }
-                                                            } else if (k == 1) {
-                                                                yongliao[ls_panding] = subObject.get("yongLiao2").getAsString();
-                                                                yongliaoliang[ls_panding] = subObject.get("yongLiaoLiang2").getAsString();
-                                                                if(yongliao[ls_panding]!=""){
-                                                                    yongliao[ls_panding] = yongliao[ls_panding]+",";
-                                                                    yongliaoliang[ls_panding] = yongliaoliang[ls_panding]+";";
-                                                                    ls_panding= ls_panding+1;
-                                                                }
-                                                            } else if (k == 2) {
-                                                                yongliao[ls_panding] = subObject.get("yongLiao3").getAsString();
-                                                                yongliaoliang[ls_panding] = subObject.get("yongLiaoLiang3").getAsString();
-                                                                if(yongliao[ls_panding]!=""){
-                                                                    yongliao[ls_panding] = yongliao[ls_panding]+",";
-                                                                    yongliaoliang[ls_panding] = yongliaoliang[ls_panding]+";";
-                                                                    ls_panding= ls_panding+1;
-                                                                }
-                                                            } else if (k == 3) {
-                                                                yongliao[ls_panding] = subObject.get("yongLiao4").getAsString();
-                                                                yongliaoliang[ls_panding] = subObject.get("yongLiaoLiang4").getAsString();
-                                                                if(yongliao[ls_panding]!=""){
-                                                                    yongliao[ls_panding] = yongliao[ls_panding]+",";
-                                                                    yongliaoliang[ls_panding] = yongliaoliang[ls_panding]+";";
-                                                                    ls_panding= ls_panding+1;
-                                                                }
-                                                            } else if (k == 4) {
-                                                                yongliao[ls_panding] = subObject.get("yongLiao5").getAsString();
-                                                                yongliaoliang[ls_panding] = subObject.get("yongLiaoLiang5").getAsString();
-                                                                if(yongliao[ls_panding]!=""){
-                                                                    yongliao[ls_panding] = yongliao[ls_panding]+",";
-                                                                    yongliaoliang[ls_panding] = yongliaoliang[ls_panding]+";";
-                                                                    ls_panding= ls_panding+1;
-                                                                }
-                                                            } else if (k == 5) {
-                                                                yongliao[ls_panding] = subObject.get("yongLiao6").getAsString();
-                                                                yongliaoliang[ls_panding] = subObject.get("yongLiaoLiang6").getAsString();
-                                                                if(yongliao[ls_panding]!=""){
-                                                                    yongliao[ls_panding] = yongliao[ls_panding]+",";
-                                                                    yongliaoliang[ls_panding] = yongliaoliang[ls_panding]+";";
-                                                                    ls_panding= ls_panding+1;
-                                                                }
-                                                            } else if (k == 6) {
-                                                                yongliao[ls_panding] = subObject.get("yongLiao7").getAsString();
-                                                                yongliaoliang[ls_panding] = subObject.get("yongLiaoLiang7").getAsString();
-                                                                if(yongliao[ls_panding]!=""){
-                                                                    yongliao[ls_panding] = yongliao[ls_panding]+",";
-                                                                    yongliaoliang[ls_panding] = yongliaoliang[ls_panding]+";";
-                                                                    ls_panding= ls_panding+1;
-                                                                }
-                                                            } else if (k == 7) {
-                                                                yongliao[ls_panding] = subObject.get("yongLiao8").getAsString();
-                                                                yongliaoliang[ls_panding] = subObject.get("yongLiaoLiang8").getAsString();
-                                                                if(yongliao[ls_panding]!=""){
-                                                                    yongliao[ls_panding] = yongliao[ls_panding]+",";
-                                                                    yongliaoliang[ls_panding] = yongliaoliang[ls_panding]+";";
-                                                                    ls_panding= ls_panding+1;
-                                                                }
-                                                            } else if (k == 8) {
-                                                                yongliao[ls_panding] = subObject.get("yongLiao9").getAsString();
-                                                                yongliaoliang[ls_panding] = subObject.get("yongLiaoLiang9").getAsString();
-                                                                if(yongliao[ls_panding]!=""){
-                                                                    yongliao[ls_panding] = yongliao[ls_panding]+",";
-                                                                    yongliaoliang[ls_panding] = yongliaoliang[ls_panding]+";";
-                                                                    ls_panding= ls_panding+1;
-                                                                }
-                                                            } else if (k == 9) {
-                                                                yongliao[ls_panding] = subObject.get("yongLiao10").getAsString();
-                                                                yongliaoliang[ls_panding] = subObject.get("yongLiaoLiang10").getAsString();
-                                                                if(yongliao[ls_panding]!=""){
-                                                                    yongliao[ls_panding] = yongliao[ls_panding]+",";
-                                                                    yongliaoliang[ls_panding] = yongliaoliang[ls_panding]+";";
-                                                                    ls_panding= ls_panding+1;
-                                                                }
-                                                            }
-                                                        }
-
-                                                        Log.d("收藏界面", "测试点5"+"图片加载成功");
-                                                        mCblecList.add(new CBLEC(ZuoFaMing, finalZuoFaTu, "这里是介绍", yongliao[0], yongliao[1], yongliao[2], yongliao[3], yongliao[4], yongliao[5], yongliao[6], yongliao[7], yongliao[8], yongliaoliang[0], yongliaoliang[1], yongliaoliang[2], yongliaoliang[3], yongliaoliang[4], yongliaoliang[5], yongliaoliang[6], yongliaoliang[7], yongliaoliang[8],Way_objectID,panduan));
-                                                        //*/
-                                                        Log.d("收藏界面", "测试点5"+"放入对象成功");
-                                                        mSwipeMenuRecyclerView.post(new Runnable() {
-                                                            @Override
-                                                            public void run() {
-                                                                mAdapter = new Adapter(mCblecList);
-                                                                Log.d("收藏界面", "测试点5"+"ada创建成功" );
-                                                                mAdapter.notifyDataSetChanged();
-                                                                mSwipeMenuRecyclerView.setAdapter(mAdapter);
-                                                                //recyclerView.refreshComplete();
-                                                                //System.out.println("Runnable thread id " + Thread.currentThread().getId());
-                                                                mAdapter.notifyDataSetChanged();
-                                                                //adapter.notifyDataSetChanged();
-                                                                //recyclerView.notifyAll();
-                                                            }
-                                                        });
-
-
-
-
-
-                                                    }
-                                                }
-                                            }
-                                        });
-                                    }
-
-                                }).start();
-                            }
-
-                        }
-                    }
-                });
-            }
-        }).start();
-
-
-    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -301,7 +95,7 @@ public class MyCollectionFragment extends FragmentModule {
         mSwipeMenuRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         editor = pref.edit();
-        Bmob.initialize(getActivity(), "3bfd53d40a453ea66ce653ab658582d1");
+        Bmob.initialize(getActivity(), "accfd3a92dc224c9369613948c03c014");
         mSwipeMenuRecyclerView.setSwipeMenuCreator(mSwipeMenuCreator);
         mSwipeMenuRecyclerView.setNestedScrollingEnabled(false);
         mSwipeMenuRecyclerView.setSwipeMenuItemClickListener(menuItemClickLinstener);
@@ -313,13 +107,15 @@ public class MyCollectionFragment extends FragmentModule {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        Log.d("收藏返回信息界面", "pref.getString(\"user_objId\",\"\")"+pref.getString("user_objId",""));
         AsyncCustomEndpoints ace = new AsyncCustomEndpoints();
         ace.callEndpoint("get_commentByUserobjid", jsonObj, new CloudCodeListener() {
-            public static final String TAG = "thing";
+            public static final String TAG = "收藏返回信息界面";
             @Override
             public void done(Object object, BmobException e) {
                 if (e == null) {
                     String result =object.toString();
+                    Log.d(TAG, "done: result："+result);
                     if (object.toString().equals("{\"results\":[]}")){
                         toast("收藏为空");
                     }
@@ -345,7 +141,10 @@ public class MyCollectionFragment extends FragmentModule {
                                         new Thread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                initWay(way.getObjectId());
+                                                //initWay(way.getObjectId());
+                                                urlget(way.getObjid());
+                                                Log.d("收藏返回信息界面", "way.getObjid()："+way.getObjid());
+       /******************************************************************************************/
                                             }
                                         }).start();
                                     }
@@ -364,7 +163,81 @@ public class MyCollectionFragment extends FragmentModule {
         });
         return v;
     }
+    private void urlget(final String Way_objectID){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String url = null;
 
+                url = "http://apis.juhe.cn/cook/queryid?key="+  APPKEY+"&id=" +Way_objectID;
+
+
+
+                //url = URL + "?keyword=" + URLEncoder.encode(keyword, "utf-8") + "&num=" + num + "&appkey=" + APPKEY;
+                OkHttpClient okHttpClient=new OkHttpClient();
+                //服务器返回的地址
+                Request request=new Request.Builder()
+                        .url(url).build();
+                String date = null;
+                try {
+                    Response response=okHttpClient.newCall(request).execute();
+                    //获取到数据
+                    date=response.body().string();
+                    //把数据传入解析josn数据方法
+                    // jsonJX(date);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Log.d("收藏返回信息界面", "done: data："+date);
+                GetSorce(date);
+
+            }
+        }).start();
+    }
+    private void  GetSorce(String date){
+        JsonParser parser = new JsonParser();  //创建JSON解析器
+        JsonObject ssobject = (JsonObject) parser.parse(date);  //创建JsonObject对象//将json数据转为为boolean型的数据
+        // ********************************************************************************
+        JsonObject nei1 = ssobject.get("result").getAsJsonObject();
+        final JsonArray array = nei1.get("data").getAsJsonArray();    //得到为json的数组
+        for (int i = 0; i < array.size(); i++) {
+            Log.d("数据显示", "***********array.size(): "+array.size());
+            final int finalI = i;
+            String ZuoFaTu= null;
+            final JsonObject subObject = array.get(finalI).getAsJsonObject();
+            try{
+                ZuoFaTu = subObject.get("albums").getAsString();
+            }catch (Exception e1213){
+            }
+
+            //int cishu = subObject.get("cishu").getAsInt();
+            final String ZuoFaMing = subObject.get("title").getAsString();
+            Log.d("收藏返回信息界面", "title添加成功");
+            // final CBLEC cblec = new CBLEC(ZuoFaMing,ZuoFaTu,subObject.get("ingredients").getAsString()+subObject.get("burden").getAsString(),subObject.get("id").getAsString(),false);
+            mCblecList.add(new CBLEC(ZuoFaMing,ZuoFaTu,subObject.get("ingredients").getAsString()+subObject.get("burden").getAsString(),subObject.get("id").getAsString(),false));
+           /* mRecyclerView.post(new Runnable() {
+                @Override
+                public void run() {
+                    mRecyclerView.setAdapter(new RecommendDefultFragment.Adapter(mCblecList));
+                }
+            });*/
+            Log.d("收藏返回信息界面", "mCblecList添加成功");
+            mSwipeMenuRecyclerView.post(new Runnable() {
+                @Override
+                public void run() {
+                    mAdapter = new Adapter(mCblecList);
+                    Log.d("收藏界面", "测试点5"+"ada创建成功" );
+                    mAdapter.notifyDataSetChanged();
+                    mSwipeMenuRecyclerView.setAdapter(mAdapter);
+                    //recyclerView.refreshComplete();
+                    //System.out.println("Runnable thread id " + Thread.currentThread().getId());
+                    mAdapter.notifyDataSetChanged();
+                    //adapter.notifyDataSetChanged();
+                    //recyclerView.notifyAll();
+                }
+            });
+        }
+    }
     /*---------------------------------Holder------------------------------*/
     private class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -396,7 +269,7 @@ public class MyCollectionFragment extends FragmentModule {
                     .into(mItemImageView);
             Log.d("收藏界面", "bindView: 加载图片完成");
             mItemNameTextView.setText(mcblec.getName());
-            mItemMatirialTextView.setText(mcblec.getShiCaiMing1()+mcblec.getShiCaiMing2()+mcblec.getShiCaiMing3()+mcblec.getShiCaiMing4()+mcblec.getShiCaiMing5()+mcblec.getShiCaiMing6()+mcblec.getShiCaiMing7()+mcblec.getShiCaiMing8()+mcblec.getShiCaiMing9());
+            mItemMatirialTextView.setText(mcblec.getShiCaiMing());
             itemView.setOnClickListener(this);
         }
 

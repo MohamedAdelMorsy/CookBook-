@@ -81,26 +81,26 @@ public class SSAdapter extends RecyclerView.Adapter<SSAdapter.MyViewHolder> {
                 .apply(options)
                 .into(holder.CaiPuNameView);
 
-        holder.NeirongView.setText(cblec.getIntroduce());
-        holder.ShiCaiMing1View.setText(cblec.getShiCaiMing1());
+        holder.NeirongView.setText("");
+        holder.ShiCaiMing1View.setText("");
         holder.ShiCaiMing1View.setTag(cblec.getFromUser());
-        holder.ShiCaiMing2View.setText(cblec.getShiCaiMing2());
-        holder.ShiCaiMing3View.setText(cblec.getShiCaiMing3());
-        holder.ShiCaiMing4View.setText(cblec.getShiCaiMing4());
-        holder.ShiCaiMing5View.setText(cblec.getShiCaiMing5());
-        holder.ShiCaiMing6View.setText(cblec.getShiCaiMing6());
-        holder.ShiCaiMing7View.setText(cblec.getShiCaiMing7());
-        holder.ShiCaiMing8View.setText(cblec.getShiCaiMing8());
-        holder.ShiCaiMing9View.setText(cblec.getShiCaiMing9());
-        holder.ShiCaiLiang1View.setText(cblec.getShiCaiLiang1());
-        holder.ShiCaiLiang2View.setText(cblec.getShiCaiLiang2());
-        holder.ShiCaiLiang3View.setText(cblec.getShiCaiLiang3());
-        holder.ShiCaiLiang4View.setText(cblec.getShiCaiLiang4());
-        holder.ShiCaiLiang5View.setText(cblec.getShiCaiLiang5());
-        holder.ShiCaiLiang6View.setText(cblec.getShiCaiLiang6());
-        holder.ShiCaiLiang7View.setText(cblec.getShiCaiLiang7());
-        holder.ShiCaiLiang8View.setText(cblec.getShiCaiLiang8());
-        holder.ShiCaiLiang9View.setText(cblec.getShiCaiLiang9());
+        holder.ShiCaiMing2View.setText("");
+        holder.ShiCaiMing3View.setText("");
+        holder.ShiCaiMing4View.setText("");
+        holder.ShiCaiMing5View.setText("");
+        holder.ShiCaiMing6View.setText("");
+        holder.ShiCaiMing7View.setText("");
+        holder.ShiCaiMing8View.setText("");
+        holder.ShiCaiMing9View.setText("");
+        holder.ShiCaiLiang1View.setText("");
+        holder.ShiCaiLiang2View.setText("");
+        holder.ShiCaiLiang3View.setText("");
+        holder.ShiCaiLiang4View.setText("");
+        holder.ShiCaiLiang5View.setText("");
+        holder.ShiCaiLiang6View.setText("");
+        holder.ShiCaiLiang7View.setText("");
+        holder.ShiCaiLiang8View.setText("");
+        holder.ShiCaiLiang9View.setText("");
 
 
         PLAdapter pLAdapter = new PLAdapter(mContext, cblec.getSsec());

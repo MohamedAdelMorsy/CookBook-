@@ -15,10 +15,12 @@ import com.scorpiomiku.cookbook.R;
 import com.scorpiomiku.cookbook.bean.CBLEC;
 import com.scorpiomiku.cookbook.bean.Post;
 import com.scorpiomiku.cookbook.bean.SSEC;
+import com.scorpiomiku.cookbook.recommend.RecommendDefultFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +30,11 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.CloudCodeListener;
 import cn.bmob.v3.listener.FindListener;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+import static com.scorpiomiku.cookbook.recommend.BreakFastFragment.APPKEY;
 
 public class DynamicActivity extends AppCompatActivity {
 
@@ -51,7 +58,7 @@ public class DynamicActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         pref = PreferenceManager.getDefaultSharedPreferences(this);
         editor = pref.edit();
-        Bmob.initialize(this, "3bfd53d40a453ea66ce653ab658582d1");
+        Bmob.initialize(this, "accfd3a92dc224c9369613948c03c014");
         BmobQuery<Post> ssecCL  = new BmobQuery<Post>();
         ssecCL.addWhereExists("author");
         ssecCL.findObjects(new FindListener<Post>() {
@@ -64,7 +71,8 @@ public class DynamicActivity extends AppCompatActivity {
                         Log.d("分享界面另，成功", "普通模式：测试点:i设置成功");
                         final Post rt = object.get(i);
                         List<SSEC> mssec = new ArrayList<SSEC>();
-                        initWay(rt.getObjID(), rt.getObjectId(), mssec, rt.getGeshu());
+                        Log.d("分享界面另，成功", "done: "+rt.getObjID() + "  rt.getObjectId:   "+rt.getObjectId() +"   mssec:   "+ mssec + "  rt.getGeshu:   "+rt.getGeshu());
+                        init(rt.getObjID(), rt.getObjectId(), mssec, rt.getGeshu());
                     }
                 }
             }
@@ -78,6 +86,71 @@ public class DynamicActivity extends AppCompatActivity {
         DynamicAdapter dynamicAdapter = new DynamicAdapter(mList, this);
         mRecyclerView.setAdapter(dynamicAdapter);
         mRecyclerView.setNestedScrollingEnabled(false);
+    }
+    private void urlget(final String Way_objectID, final String postid, final List<SSEC> mssec, final int geshu){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String url = null;
+
+                url = "http://apis.juhe.cn/cook/queryid?key="+  APPKEY+"&id=" +Way_objectID;
+
+
+
+                //url = URL + "?keyword=" + URLEncoder.encode(keyword, "utf-8") + "&num=" + num + "&appkey=" + APPKEY;
+                OkHttpClient okHttpClient=new OkHttpClient();
+                //服务器返回的地址
+                Request request=new Request.Builder()
+                        .url(url).build();
+                String date = null;
+                try {
+                    Response response=okHttpClient.newCall(request).execute();
+                    //获取到数据
+                    date=response.body().string();
+                    //把数据传入解析josn数据方法
+                    // jsonJX(date);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                GetSorce(date,postid,mssec,geshu);
+
+            }
+        }).start();
+    }
+    private void  GetSorce(String date, final String postid, final List<SSEC> mssec, final int geshu){
+        JsonParser parser = new JsonParser();  //创建JSON解析器
+        JsonObject ssobject = (JsonObject) parser.parse(date);  //创建JsonObject对象//将json数据转为为boolean型的数据
+        // ********************************************************************************
+        JsonObject nei1 = ssobject.get("result").getAsJsonObject();
+        final JsonArray array = nei1.get("data").getAsJsonArray();    //得到为json的数组
+        for (int i = 0; i < array.size(); i++) {
+            Log.d("数据显示", "***********array.size(): "+array.size());
+            final int finalI = i;
+
+            final JsonObject subObject = array.get(finalI).getAsJsonObject();
+            try{
+                ZuoFaTu = subObject.get("albums").getAsString();
+            }catch (Exception e1213){
+            }
+
+            //int cishu = subObject.get("cishu").getAsInt();
+            final String ZuoFaMing = subObject.get("title").getAsString();
+            // final CBLEC cblec = new CBLEC(ZuoFaMing,ZuoFaTu,subObject.get("ingredients").getAsString()+subObject.get("burden").getAsString(),subObject.get("id").getAsString(),false);
+            mList.add(new CBLEC(ZuoFaMing, ZuoFaTu, subObject.get("ingredients").getAsString()+subObject.get("burden").getAsString(),subObject.get("id").getAsString(),FromUser,mssec,postid,geshu,"url"));
+          //  mList.add(new CBLEC(ZuoFaMing,ZuoFaTu,subObject.get("ingredients").getAsString()+subObject.get("burden").getAsString(),subObject.get("id").getAsString(),false));
+            mRecyclerView.post(new Runnable() {
+                @Override
+                public void run() {
+                    DynamicAdapter as =new DynamicAdapter(mList,DynamicActivity.this);
+                    Log.d("分享界面initWay", "测试点5"+"准备放入adapter");
+                    mRecyclerView.setAdapter(as);
+                }
+            });
+        }
+    }
+    private void  init(final String objId, final String postid, final List<SSEC> mssec, final int geshu){
+
+        urlget(objId,postid,mssec,geshu);
     }
     private void initWay(String objId, final String postid, final List<SSEC> mssec, final int geshu){
         final JSONObject jas = new JSONObject();
@@ -249,7 +322,7 @@ public class DynamicActivity extends AppCompatActivity {
                                                             @Override
                                                             public void run() {
                                                                 Log.d("分享界面initWay", "测试点5"+"图片加载成功");
-                                                                mList.add(new CBLEC(ZuoFaMing, ZuoFaTu, "这里是介绍", yongliao[0], yongliao[1], yongliao[2], yongliao[3], yongliao[4], yongliao[5], yongliao[6], yongliao[7], yongliao[8], yongliaoliang[0], yongliaoliang[1], yongliaoliang[2], yongliaoliang[3], yongliaoliang[4], yongliaoliang[5], yongliaoliang[6], yongliaoliang[7], yongliaoliang[8],Way_objectID,FromUser,mssec,postid,geshu,"url"));
+                                                                mList.add(new CBLEC(ZuoFaMing, ZuoFaTu, "这里是介绍",Way_objectID,FromUser,mssec,postid,geshu,"url"));
                                                                 //*/
                                                                 Log.d("分享界面initWay", "测试点5"+"放入对象成功");
                                                                 mRecyclerView.post(new Runnable() {

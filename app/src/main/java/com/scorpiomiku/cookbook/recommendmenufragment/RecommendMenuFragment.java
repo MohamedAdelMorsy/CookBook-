@@ -42,7 +42,7 @@ public class RecommendMenuFragment extends FragmentModule {
 
     private String[] mTastes = {"酸", "甜", "辣", "酸辣", "酸甜", "微苦"};
     private String[] mKinds = {"素菜", "荤菜", "甜品", "汤粥类", "水果类", "腌制类", "面食", "水产", "豆类"};
-    private String[] mPlaces = {"家常", "聚会", "宿舍", "野餐", "宵夜", "生日"};
+    private String[] mPlaces = {"家常", "聚会", "宿舍", "约会", "宵夜", "春节"};
 
     public static RecommendMenuFragment newInstance() {
         return new RecommendMenuFragment();

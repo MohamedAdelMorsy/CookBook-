@@ -68,7 +68,7 @@ public class DynamicHolder extends RecyclerView.ViewHolder {
         mAccountImageView.setImageResource(R.drawable.backtest);
         mAccountTextView.setText(cblec.getName());
         mTimeTextView.setText("当前"+cblec1.getGeshu()+"人点赞" );
-        mDescribtionTextView.setText(cblec.getIntroduce());
+        mDescribtionTextView.setText("cblec.getIntroduce()");
         //mPhotoImageView.setImageResource(R.drawable.food_test_1);
         mPraiseImageView.setOnClickListener(new View.OnClickListener() {
             @Override

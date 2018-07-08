@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.Point;
 import android.hardware.Camera;
 import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.CameraInfo;
@@ -27,61 +29,36 @@ import android.widget.Toast;
 import com.scorpiomiku.cookbook.R;
 import com.scorpiomiku.cookbook.classifierresultactivity.ClassifierResultActivity;
 import com.scorpiomiku.cookbook.tensorflow.Classifier;
-import com.scorpiomiku.cookbook.tensorflow.Face_test;
-import com.youdao.sdk.app.Language;
-import com.youdao.sdk.app.LanguageUtils;
-import com.youdao.sdk.app.YouDaoApplication;
-import com.youdao.sdk.ydonlinetranslate.Translator;
-import com.youdao.sdk.ydtranslate.EnWordTranslator;
-import com.youdao.sdk.ydtranslate.Translate;
-import com.youdao.sdk.ydtranslate.TranslateErrorCode;
-import com.youdao.sdk.ydtranslate.TranslateListener;
-import com.youdao.sdk.ydtranslate.TranslateParameters;
-import com.youdao.sdk.ydtranslate.TranslatorOffline;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
+
+import static com.scorpiomiku.cookbook.takephoto.FindSize.findBestPreviewSizeValue;
 
 
 public class CameraActivity extends AppCompatActivity {
 
     private String mPicturePath;
 
-    private String mPictureResult;
-
-    public static final String APP_ID = "11194410";
-    public static final String API_KEY = "41yx7SNyudF0u1y7Vrvoain0";
-    public static final String SECRET_KEY = "muddna10dlYBQFx5lyNKy9pSezdNatl5";
-
-
     private static final String TAG = "CameraActivity";
     private Camera mCamera;
     private CameraPreview mPreview;
     private FrameLayout mCameraLayout;
     private ImageView mTakePictureButton;
-    private static int[] results = new int[2];
+
     private int mCameraId = CameraInfo.CAMERA_FACING_BACK;
     private TimerTask mTimerTask = null;
     private int mTimeCount = 0;
-    private Classifier mClassifier;
+    private Classifier classifier;
+
     private FrameLayout mCoverFrameLayout;
     private Timer timer = new Timer();
-    private HashMap<String, String> options = new HashMap<String, String>();
-
-    private Executor mExecutor = Executors.newSingleThreadExecutor();
-    private TranslatorOffline translatorOffline;
+//    private HashMap<String, String> options = new HashMap<String, String>();
 
 
     @Override
@@ -89,19 +66,17 @@ public class CameraActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
 
-        YouDaoApplication.init(this, "0bc38eee2baaf2f8");
-
+//        YouDaoApplication.init(this, "0bc38eee2baaf2f8");
 
         //设置无标题
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-
+//        options.put("top_num", "3");
+        classifier = new Classifier(this);
         //设置全屏
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         //注意：上面两个设置必须写在setContentView前面
         setContentView(R.layout.camera_activity_layout);
-        options.put("top_num", "3");
-        mClassifier = new Classifier(APP_ID, API_KEY, SECRET_KEY);
         if (!checkCameraHardware(this)) {
             Toast.makeText(CameraActivity.this, "相机不支持", Toast.LENGTH_SHORT).show();
         } else {
@@ -185,7 +160,6 @@ public class CameraActivity extends AppCompatActivity {
         public void onPictureTaken(final byte[] data, Camera camera) {
 
             mCoverFrameLayout.setVisibility(View.VISIBLE);
-
             if (mTimerTask == null) {
                 mTimeCount = 3;
                 mTimerTask = new TimerTask() {
@@ -197,9 +171,9 @@ public class CameraActivity extends AppCompatActivity {
                         }
                     }
                 };
-                timer.schedule(mTimerTask, 300);
-
+                timer.schedule(mTimerTask, 400);
             }
+
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -223,58 +197,7 @@ public class CameraActivity extends AppCompatActivity {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    Face_test face_test = new Face_test();
-                    JSONObject res = face_test.plantDetect(data);
-                    String str = null;
-                    try {
-                        str = res.getJSONArray("objects").getJSONObject(0).getString("value");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    Log.d(TAG, "onResult: "+str);
-                    //JSONObject res = mClassifier.plantDetect(data, options);
-                    //JSONObject res = mClassifier.dishDetect(data, options);
-//                    try {
-//                        if (res.getJSONArray("result").getJSONObject(0).getString("name").equals("洋柿子")) {
-//                            ClassifierResultActivity.mPictureResult = "番茄";
-//                        } else {
-//                            ClassifierResultActivity.mPictureResult = res.getJSONArray("result").getJSONObject(0).getString("name");
-//                        }
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                    try {
-//                        Log.d(TAG, "run: " + res.getJSONArray("result").getJSONObject(0).getString("name"));
-//                    } catch (JSONException e) {
-//                        Log.d(TAG, "---------------------------");
-//                        e.printStackTrace();
-//                        Log.d(TAG, "---------------------------");
-//                    }
-
-                    Language langFrom = LanguageUtils.getLangByName("英文");
-                    Language langTo = LanguageUtils.getLangByName("中文");
-                    TranslateParameters tps = new TranslateParameters.Builder()
-                            .source("识菜帮")
-                            .from(langFrom).to(langTo).build();
-                    Translator translator = Translator.getInstance(tps);
-                    translator.lookup(str, "5a6d7b852ba9ea34", new TranslateListener() {
-                        @Override
-                        public void onError(TranslateErrorCode translateErrorCode, String s) {
-                            Log.e(TAG, "onError: " + translateErrorCode.toString() + ";" + s);
-                        }
-
-                        @Override
-                        public void onResult(Translate translate, String s, String s1) {
-                            ClassifierResultActivity.mPictureResult = translate.getTranslations().get(0);
-                            Log.d(TAG, "onResult: " + ClassifierResultActivity.mPictureResult);
-                        }
-
-                        @Override
-                        public void onResult(List<Translate> list, List<String> list1, List<TranslateErrorCode> list2, String s) {
-
-                        }
-                    });
-
+                    classifier.classifierSingle(data);
                     finish();
                 }
             }).start();
@@ -284,7 +207,7 @@ public class CameraActivity extends AppCompatActivity {
 
 
     //将相机设置成竖屏
-    public static void setCameraDisplayOrientation(Activity activity, int cameraId, Camera camera) {
+    public  void setCameraDisplayOrientation(Activity activity, int cameraId, Camera camera) {
 
         int degrees = 0;
 
@@ -317,6 +240,23 @@ public class CameraActivity extends AppCompatActivity {
             result = (info.orientation - degrees + 360) % 360;
         }
         camera.setDisplayOrientation(result);
+        //为了适配部分手机setparams失败的问题，失败则不设置
+        try {
+            Camera.Parameters parameters = camera.getParameters();
+            Point bestPreviewSizeValue1 = findBestPreviewSizeValue(parameters.getSupportedPreviewSizes());
+            parameters.setPreviewSize(bestPreviewSizeValue1.x, bestPreviewSizeValue1.y);
+            camera.setParameters(parameters);
+        } catch (Exception e) {
+            Log.d(TAG, "set parameters fail");
+        }
+
+        //进行横竖屏判断然后对图像进行校正
+        //如果是竖屏
+        if (getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE) {
+            camera.setDisplayOrientation(90);
+        } else {//如果是横屏
+            camera.setDisplayOrientation(0);
+        }
     }
 
     //修改图片保存方向

@@ -2,7 +2,6 @@ package com.scorpiomiku.cookbook.takephoto;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.os.Environment;
@@ -22,17 +21,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.scorpiomiku.cookbook.R;
-import com.scorpiomiku.cookbook.classifierresultactivity.ClassifierResultActivity;
 import com.scorpiomiku.cookbook.tensorflow.Classifier;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -41,25 +34,23 @@ public class MoreCameraActivity extends AppCompatActivity {
     private static final int MSG_WHAT_TIME_IS_UP = 1;//时间到了
     private static final int MSG_WHAT_TIME_IS_TICK = 2;//时间减少中
     private String mPicturePath;
-    public static final String APP_ID = "10248328";
-    public static final String API_KEY = "7Wdkd5GkbFEsZ3284movvU8f";
-    public static final String SECRET_KEY = "afPh1ig2SQKYQ13tSxtrGq6CNsengFqN";
+
     private static final String TAG = "CameraActivity";
     private Camera mCamera;
-    private int mLabel = 1;
+
     private CameraPreview mPreview;
     private FrameLayout mCameraLayout;
     private ImageView mTakePictureButton;
     private int mCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
     private TimerTask mTimerTask = null;
     private int mTimeCount = 0;
-    private Classifier mClassifier;
     private ImageView mTakePhotoOk;
     private FrameLayout mCoverFrameLayout;
     private Timer timer = new Timer();
-    private TextView mTextView ;
+    private TextView mTextView;
     public static List<String> moreResults = new ArrayList<>();
-    private HashMap<String, String> options = new HashMap<String, String>();
+
+    private Classifier classifier;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,13 +58,14 @@ public class MoreCameraActivity extends AppCompatActivity {
         //设置无标题
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
+        classifier = new Classifier(this);
         //设置全屏
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         //注意：上面两个设置必须写在setContentView前面
         setContentView(R.layout.camera_more_take_activity_layout);
-        options.put("top_num", "3");
-        mClassifier = new Classifier(APP_ID, API_KEY, SECRET_KEY);
+
+
         if (!checkCameraHardware(this)) {
             Toast.makeText(MoreCameraActivity.this, "相机不支持", Toast.LENGTH_SHORT).show();
         } else {
@@ -94,16 +86,13 @@ public class MoreCameraActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String text = "";
-                for (int item = 0 ;item < moreResults.size();item++ ){
-                    text = text +moreResults.get(item);
+                for (int item = 0; item < moreResults.size(); item++) {
+                    text = text + moreResults.get(item);
                     Log.d(TAG, moreResults.get(item));
                 }
                 mTextView.setText(text);
             }
         });
-
-
-
         mCoverFrameLayout = (FrameLayout) findViewById(R.id.more_camera_cover_linearlayout);
         setCameraDisplayOrientation(this, mCameraId, mCamera);
     }
@@ -186,16 +175,14 @@ public class MoreCameraActivity extends AppCompatActivity {
     private Camera.PictureCallback mPictureCallback = new Camera.PictureCallback() {
         @Override
         public void onPictureTaken(final byte[] data, Camera camera) {
-
-            //开辟线程来处理图片
-            final File pictureDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-            final String pictureName = System.currentTimeMillis() + ".jpg";
-            final String picturePath = pictureDir + File.separator + pictureName;
-
-            mPicturePath = picturePath;
-            Log.d(TAG, mPicturePath);
             mCoverFrameLayout.setVisibility(View.VISIBLE);
-
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    //识别
+                    classifier.classifierMore(data);
+                }
+            }).start();
             if (mTimerTask == null) {
                 mTimeCount = 3;
                 mTimerTask = new TimerTask() {
@@ -204,30 +191,14 @@ public class MoreCameraActivity extends AppCompatActivity {
                         mTimeCount--;
                         handler.sendEmptyMessage(MSG_WHAT_TIME_IS_TICK);
                         if (mTimeCount <= 0) {   //时间到了就弹出对话框
-                            handler.sendEmptyMessage(MSG_WHAT_TIME_IS_UP);
                             stopTimer();
+                            handler.sendEmptyMessage(MSG_WHAT_TIME_IS_UP);
                         }
                     }
                 };
-                timer.schedule(mTimerTask,300, 300);
+                timer.schedule(mTimerTask, 600, 600);
             }
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    File file = new File(picturePath);
-                    JSONObject res = mClassifier.plantDetect(data, options);
-                    try {
-                        if (res.getJSONArray("result").getJSONObject(0).getString("name").equals("洋柿子")) {
-                            moreResults.add("番茄");
-                        } else {
-                            moreResults.add(res.getJSONArray("result").getJSONObject(0).getString("name"));
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    Log.d(TAG, "run: " + res.toString());
-                }
-            }).start();
+
             mCamera.startPreview();
         }
     };
@@ -279,6 +250,17 @@ public class MoreCameraActivity extends AppCompatActivity {
     private void stopTimer() {
         mTimerTask.cancel();
         mTimerTask = null;
+        mTextView.post(new Runnable() {
+            @Override
+            public void run() {
+                String text = "";
+                for (int item = 0; item < moreResults.size(); item++) {
+                    text = text + moreResults.get(item) + "、";
+                    Log.d(TAG, moreResults.get(item));
+                }
+                mTextView.setText(text);
+            }
+        });
     }
 
 }

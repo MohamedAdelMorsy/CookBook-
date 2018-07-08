@@ -1,102 +1,117 @@
 package com.scorpiomiku.cookbook.tensorflow;
 
-import com.baidu.aip.client.BaseClient;
-import com.baidu.aip.error.AipError;
-import com.baidu.aip.http.AipRequest;
-import com.baidu.aip.util.Base64Util;
-import com.baidu.aip.util.Util;
+import android.content.Context;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
+import com.scorpiomiku.cookbook.classifierresultactivity.ClassifierResultActivity;
+import com.scorpiomiku.cookbook.takephoto.MoreCameraActivity;
+import com.youdao.sdk.app.Language;
+import com.youdao.sdk.app.LanguageUtils;
+import com.youdao.sdk.app.YouDaoApplication;
+import com.youdao.sdk.ydonlinetranslate.Translator;
+import com.youdao.sdk.ydtranslate.Translate;
+import com.youdao.sdk.ydtranslate.TranslateErrorCode;
+import com.youdao.sdk.ydtranslate.TranslateListener;
+import com.youdao.sdk.ydtranslate.TranslateParameters;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 
 /**
- * Created by Administrator on 2017/10/17.
+ * Created by ScorpioMiku on 2018/7/8.
  */
 
-public class Classifier extends BaseClient {
-    public Classifier(String appId, String apiKey, String secretKey) {
-        super(appId, apiKey, secretKey);
+public class Classifier {
+    private String TAG = "Classifier";
+    private HashMap<String, String> options = new HashMap<String, String>();
+    private Context mContext;
+    private String result = " ";
+
+    public Classifier(Context context) {
+        mContext = context;
+        YouDaoApplication.init(mContext, "0bc38eee2baaf2f8");
+        options.put("top_num", "3");
     }
 
-    public JSONObject dishDetect(byte[] image, HashMap<String, String> options) {
-        AipRequest request = new AipRequest();
-        preOperation(request);
-
-        String base64Content = Base64Util.encode(image);
-
-        request.addBody("image", base64Content);
-
-        if (options != null) {
-            request.addBody(options);
-        }
-        request.setUri(ImageClassifyConsts.DISH_DETECT);
-        postOperation(request);
-        return requestServer(request);
-    }
-
-    /**
-     * 菜品识别接口
-     * 该请求用于菜品识别。即对于输入的一张图片（可正常解码，且长宽比适宜），输出图片的菜品名称、卡路里信息、置信度。
-     *
-     * @param image   - 本地图片路径
-     * @param options - 可选参数对象，key: value都为string类型
-     *                options - options列表:
-     *                top_num 返回预测得分top结果数，默认为5
-     * @return JSONObject
-     */
-    public JSONObject dishDetect(String image, HashMap<String, String> options) {
+    public String classifierSingle(byte[] data) {
+        Face_test face_test = new Face_test();
+        JSONObject res = face_test.plantDetect(data);
+        String str = "";
         try {
-            byte[] imgData = Util.readFileByBytes(image);
-            return dishDetect(imgData, options);
-        } catch (IOException e) {
+            str = res.getJSONArray("objects").getJSONObject(0).getString("value");
+        } catch (JSONException e) {
             e.printStackTrace();
-            return AipError.IMAGE_READ_ERROR.toJsonResult();
         }
+        Log.d(TAG, "onResult: " + str);
+
+        Language langFrom = LanguageUtils.getLangByName("英文");
+        Language langTo = LanguageUtils.getLangByName("中文");
+        TranslateParameters tps = new TranslateParameters.Builder()
+                .source("识菜帮")
+                .from(langFrom).to(langTo).build();
+        Translator translator = Translator.getInstance(tps);
+        translator.lookup(str, "5a6d7b852ba9ea34", new TranslateListener() {
+            @Override
+            public void onError(TranslateErrorCode translateErrorCode, String s) {
+                Log.e(TAG, "onError: " + translateErrorCode.toString() + ";" + s);
+            }
+
+            @Override
+            public void onResult(Translate translate, String s, String s1) {
+                ClassifierResultActivity.mPictureResult = translate.getTranslations().get(0);
+                Log.d(TAG, "onResult: " + ClassifierResultActivity.mPictureResult);
+            }
+
+            @Override
+            public void onResult(List<Translate> list, List<String> list1, List<TranslateErrorCode> list2, String s) {
+
+            }
+        });
+        return str;
     }
 
-    /**
-     * 植物识别接口
-     * 该请求用于识别一张图片。即对于输入的一张图片（可正常解码，且长宽比适宜），输出植物识别结果。
-     *
-     * @param image   - 二进制图像数据
-     * @param options - 可选参数对象，key: value都为string类型
-     *                options - options列表:
-     * @return JSONObject
-     */
-    public JSONObject plantDetect(byte[] image, HashMap<String, String> options) {
-        AipRequest request = new AipRequest();
-        preOperation(request);
-
-        String base64Content = Base64Util.encode(image);
-
-        request.addBody("image", base64Content);
-
-        if (options != null) {
-            request.addBody(options);
-        }
-        request.setUri(ImageClassifyConsts.PLANT_DETECT);
-        postOperation(request);
-        return requestServer(request);
-    }
-
-    /**
-     * 植物识别接口
-     * 该请求用于识别一张图片。即对于输入的一张图片（可正常解码，且长宽比适宜），输出植物识别结果。
-     *
-     * @param image   - 本地图片路径
-     * @param options - 可选参数对象，key: value都为string类型
-     *                options - options列表:
-     * @return JSONObject
-     */
-    public JSONObject plantDetect(String image, HashMap<String, String> options) {
+    public void classifierMore(byte[] data) {
+        Face_test face_test = new Face_test();
+        JSONObject res = face_test.plantDetect(data);
         try {
-            byte[] imgData = Util.readFileByBytes(image);
-            return plantDetect(imgData, options);
-        } catch (IOException e) {
+            result = res.getJSONArray("objects").getJSONObject(0).getString("value");
+        } catch (JSONException e) {
             e.printStackTrace();
-            return AipError.IMAGE_READ_ERROR.toJsonResult();
+        }
+        Log.d(TAG, "onResult: " + result);
+
+        Language langFrom = LanguageUtils.getLangByName("英文");
+        Language langTo = LanguageUtils.getLangByName("中文");
+        TranslateParameters tps = new TranslateParameters.Builder()
+                .source("识菜帮")
+                .from(langFrom).to(langTo).build();
+        Translator translator = Translator.getInstance(tps);
+        MyTranslateListener translateListener = new MyTranslateListener();
+        translator.lookup(result, "5a6d7b852ba9ea34", translateListener);
+
+    }
+
+    public class MyTranslateListener implements TranslateListener {
+        @Override
+        public void onError(TranslateErrorCode translateErrorCode, String s) {
+            Log.e(TAG, "onError: " + translateErrorCode.toString() + ";" + s);
+        }
+
+        @Override
+        public void onResult(Translate translate, String s, String s1) {
+            result = translate.getTranslations().get(0);
+            MoreCameraActivity.moreResults.add(result);
+            Log.d(TAG, "onResult: " + result);
+        }
+
+        @Override
+        public void onResult(List<Translate> list, List<String> list1, List<TranslateErrorCode> list2, String s) {
+
         }
     }
 }
+

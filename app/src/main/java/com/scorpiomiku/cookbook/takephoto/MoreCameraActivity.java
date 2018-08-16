@@ -2,6 +2,7 @@ package com.scorpiomiku.cookbook.takephoto;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.os.Environment;
@@ -101,12 +102,22 @@ public class MoreCameraActivity extends AppCompatActivity {
         mTakePhotoOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                String text = "";
+//                for (int item = 0; item < moreResults.size(); item++) {
+//                    text = text + moreResults.get(item);
+//                    Log.d(TAG, moreResults.get(item));
+//                }
+//                mTextView.setText(text);
+
                 String text = "";
                 for (int item = 0; item < moreResults.size(); item++) {
                     text = text + moreResults.get(item);
                     Log.d(TAG, moreResults.get(item));
                 }
-                mTextView.setText(text);
+                Intent i = new Intent(MoreCameraActivity.this, MorePhotoAct.class);
+                i.putExtra("FragmentSendMessage", "MoreCameraActivity");
+                startActivity(i);
+                finish();
             }
         });
 

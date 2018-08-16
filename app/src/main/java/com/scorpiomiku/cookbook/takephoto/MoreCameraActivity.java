@@ -110,7 +110,11 @@ public class MoreCameraActivity extends AppCompatActivity {
 //                mTextView.setText(text);
 
                 String text = "";
+                if(moreResults == null){
+                    Log.d(TAG, "onClick: moreResults == null");
+                }else
                 for (int item = 0; item < moreResults.size(); item++) {
+                    Log.d(TAG, "onClick: moreResults != null  moreResults :" +moreResults.get(item) +"item = "+item);
                     text = text + moreResults.get(item);
                     Log.d(TAG, moreResults.get(item));
                 }
@@ -209,7 +213,7 @@ public class MoreCameraActivity extends AppCompatActivity {
                 }
             }).start();
             if (mTimerTask == null) {
-                mTimeCount = 3;
+                mTimeCount = 4;
                 mTimerTask = new TimerTask() {
                     @Override
                     public void run() {

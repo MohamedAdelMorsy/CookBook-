@@ -123,7 +123,8 @@ public class MenuActivity extends AppCompatActivity {
             return false;
         }
     }
-    private void adasda(){
+
+    private void adasda() {
 //    private void initWay(){
 //        JSONObject jas = new JSONObject();
 //        try {
@@ -544,16 +545,16 @@ public class MenuActivity extends AppCompatActivity {
 //            }
 //        });
 //    }
-}
+    }
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu_activity_layout);
-        mCaiLanZi = (ImageView)findViewById(R.id.menu_cailanzi) ;
-        mShouCang=(ImageView)findViewById(R.id.menu_shoucang) ;
-        mZhuanFa = (ImageView)findViewById(R.id.menu_zhuanfa) ;
+        mCaiLanZi = (ImageView) findViewById(R.id.menu_cailanzi);
+        mShouCang = (ImageView) findViewById(R.id.menu_shoucang);
+        mZhuanFa = (ImageView) findViewById(R.id.menu_zhuanfa);
         mDishImageView = (ImageView) findViewById(R.id.menu_fragment_image_view_dish_images);
         mDishNameTextView = (TextView) findViewById(R.id.menu_fragment_text_view_dish_name);
         mDishMaterialsTextView = (TextView) findViewById(R.id.menu_fragment_text_view_dish_materials);
@@ -562,21 +563,20 @@ public class MenuActivity extends AppCompatActivity {
 
         pref = PreferenceManager.getDefaultSharedPreferences(this);
         editor = pref.edit();
-        try{
-            Intent intent =getIntent();
-            Way_objectID=intent.getStringExtra("Way_objectID");
-            charge=intent.getStringExtra("charge").toString();
-        }catch (Exception e){
-            Intent intent =getIntent();
-            Way_objectID=intent.getStringExtra("Way_objectID");
+        try {
+            Intent intent = getIntent();
+            Way_objectID = intent.getStringExtra("Way_objectID");
+            charge = intent.getStringExtra("charge").toString();
+        } catch (Exception e) {
+            Intent intent = getIntent();
+            Way_objectID = intent.getStringExtra("Way_objectID");
         }
         //charge =charge.toString();
         String a = "1";
-        if (charge.equals(a)){
+        if (charge.equals(a)) {
 
-        }else sqldata(Way_objectID);
-        Log.d("显示菜谱界面", "onCreate: Way_objectID="+Way_objectID);
-
+        } else sqldata(Way_objectID);
+        Log.d("显示菜谱界面", "onCreate: Way_objectID=" + Way_objectID);
 
 
         fm = getSupportFragmentManager();
@@ -592,26 +592,25 @@ public class MenuActivity extends AppCompatActivity {
 
     }
 
-    private void urlget(){
+    private void urlget() {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 String url = null;
 
-                    url = "http://apis.juhe.cn/cook/queryid?key="+  APPKEY+"&id=" +Way_objectID;
-
+                url = "http://apis.juhe.cn/cook/queryid?key=" + APPKEY + "&id=" + Way_objectID;
 
 
                 //url = URL + "?keyword=" + URLEncoder.encode(keyword, "utf-8") + "&num=" + num + "&appkey=" + APPKEY;
-                OkHttpClient okHttpClient=new OkHttpClient();
+                OkHttpClient okHttpClient = new OkHttpClient();
                 //服务器返回的地址
-                Request request=new Request.Builder()
+                Request request = new Request.Builder()
                         .url(url).build();
                 String date = null;
                 try {
-                    Response response=okHttpClient.newCall(request).execute();
+                    Response response = okHttpClient.newCall(request).execute();
                     //获取到数据
-                     date=response.body().string();
+                    date = response.body().string();
                     //把数据传入解析josn数据方法
                     // jsonJX(date);
                 } catch (IOException e) {
@@ -622,26 +621,32 @@ public class MenuActivity extends AppCompatActivity {
             }
         }).start();
     }
-    private void ShowTitle(String data){
+
+    private void ShowTitle(String data) {
         JsonParser parser = new JsonParser();  //创建JSON解析器
         JsonObject ssobject = (JsonObject) parser.parse(data);  //创建JsonObject对象//将json数据转为为boolean型的数据
         // ********************************************************************************
         JsonObject nei1 = ssobject.get("result").getAsJsonObject();
         final JsonArray array = nei1.get("data").getAsJsonArray();    //得到为json的数组
         for (int i = 0; i < array.size(); i++) {
-            Log.d("数据显示", "***********array.size(): "+array.size());
+            Log.d("数据显示", "***********array.size(): " + array.size());
             final int finalI = i;
 
             final JsonObject subObject = array.get(finalI).getAsJsonObject();
-            try{
+            try {
                 ZuoFaTu = subObject.get("albums").getAsString();
-            }catch (Exception e1213){
+            } catch (Exception e1213) {
             }
             Log.d("显示菜谱界面", "检查点1");
             //int cishu = subObject.get("cishu").getAsInt();
             final String ZuoFaMing = subObject.get("title").getAsString();
-            name_basket=ZuoFaMing;
-            mDishNameTextView.setText(ZuoFaMing);
+            name_basket = ZuoFaMing;
+            mDishNameTextView.post(new Runnable() {
+                @Override
+                public void run() {
+                    mDishNameTextView.setText(ZuoFaMing);
+                }
+            });
             Log.d("显示菜谱界面", "检查点2");
             mDishImageView.post(new Runnable() {
                 @Override
@@ -656,9 +661,14 @@ public class MenuActivity extends AppCompatActivity {
                 }
             });
             Log.d("显示菜谱界面", "检查点3");
-            mDishMaterialsTextView.setText(subObject.get("ingredients").getAsString()+subObject.get("burden").getAsString());
-            shicai_basket = subObject.get("ingredients").getAsString()+subObject.get("burden").getAsString();
-            editor.putString("data",data);
+            mDishMaterialsTextView.post(new Runnable() {
+                @Override
+                public void run() {
+                    mDishMaterialsTextView.setText(subObject.get("ingredients").getAsString() + subObject.get("burden").getAsString());
+                }
+            });
+            shicai_basket = subObject.get("ingredients").getAsString() + subObject.get("burden").getAsString();
+            editor.putString("data", data);
             editor.apply();
             Log.d("显示菜谱界面", "检查点4");
             fm.beginTransaction()
@@ -669,12 +679,13 @@ public class MenuActivity extends AppCompatActivity {
             Log.d("显示菜谱界面", "检查点5");
         }
     }
-    private void AllListener(){
+
+    private void AllListener() {
         //菜篮子
         mCaiLanZi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mBasketDataHelper = new BasketDataHelper(MenuActivity.this,"BasketStore.db",null,1);
+                mBasketDataHelper = new BasketDataHelper(MenuActivity.this, "BasketStore.db", null, 1);
                 SQLiteDatabase db = mBasketDataHelper.getWritableDatabase();
                 ContentValues values = new ContentValues();
                 values.put("foodname", name_basket);
@@ -704,44 +715,44 @@ public class MenuActivity extends AppCompatActivity {
                     public void done(Object object, BmobException e) {
                         if (e == null) {
 
-                                    Log.d("收藏部错误 == null", "done: 返回objid "+object.toString());
-                            if (object.toString().equals("{\"results\":[]}")){
-                                Log.d("收藏部分","需要创建Way");
+                            Log.d("收藏部错误 == null", "done: 返回objid " + object.toString());
+                            if (object.toString().equals("{\"results\":[]}")) {
+                                Log.d("收藏部分", "需要创建Way");
                                 Way p2 = new Way();
                                 p2.setObjid(Way_objectID);
                                 p2.save(new SaveListener<String>() {
                                     @Override
-                                    public void done(String objectId,BmobException e) {
-                                        if(e==null){
-                                           // toast("添加数据成功，返回objectId为："+objectId);
-                                        }else{
-                                           // toast("创建数据失败：" + e.getMessage());
+                                    public void done(String objectId, BmobException e) {
+                                        if (e == null) {
+                                            // toast("添加数据成功，返回objectId为："+objectId);
+                                        } else {
+                                            // toast("创建数据失败：" + e.getMessage());
                                         }
                                     }
                                 });
-                                Log.d("收藏部分","创建成工开始查询");
-                                String result =object.toString();
+                                Log.d("收藏部分", "创建成工开始查询");
+                                String result = object.toString();
                                 JsonParser parser = new JsonParser();  //创建JSON解析器
                                 JsonObject ssobject = (JsonObject) parser.parse(result);  //创建JsonObject对象//将json数据转为为boolean型的数据
                                 JsonArray array = ssobject.get("results").getAsJsonArray();
                                 //得到为json的数组
                                 for (int i = 0; i < array.size(); i++) {
                                     JsonObject subObject = array.get(i).getAsJsonObject();
-                                     WayOBjID[0] = subObject.get("objectId").getAsString();
-                                    Log.d("主函数", "检查点"+"数据加载完成");
+                                    WayOBjID[0] = subObject.get("objectId").getAsString();
+                                    Log.d("主函数", "检查点" + "数据加载完成");
                                 }
 
-                            }else{
-                                Log.d("收藏部分","已有直接查询");
-                                String result =object.toString();
+                            } else {
+                                Log.d("收藏部分", "已有直接查询");
+                                String result = object.toString();
                                 JsonParser parser = new JsonParser();  //创建JSON解析器
                                 JsonObject ssobject = (JsonObject) parser.parse(result);  //创建JsonObject对象//将json数据转为为boolean型的数据
                                 JsonArray array = ssobject.get("results").getAsJsonArray();
                                 //得到为json的数组
                                 for (int i = 0; i < array.size(); i++) {
                                     JsonObject subObject = array.get(i).getAsJsonObject();
-                                     WayOBjID[0] = subObject.get("objectId").getAsString();
-                                    Log.d("主函数", "检查点"+"数据加载完成");
+                                    WayOBjID[0] = subObject.get("objectId").getAsString();
+                                    Log.d("主函数", "检查点" + "数据加载完成");
                                 }
                             }
                         } else {
@@ -751,10 +762,9 @@ public class MenuActivity extends AppCompatActivity {
                 });
 
 
-
                 JSONObject jsonObj = new JSONObject();
                 try {
-                    jsonObj.put("user_objId", pref.getString("user_objId",""));
+                    jsonObj.put("user_objId", pref.getString("user_objId", ""));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -765,30 +775,30 @@ public class MenuActivity extends AppCompatActivity {
                     @Override
                     public void done(Object object, BmobException e) {
                         if (e == null) {
-                            Log.d("收藏部分e == null", "done: "+object.toString());
-                            if (object.toString().equals("{\"results\":[]}")){
+                            Log.d("收藏部分e == null", "done: " + object.toString());
+                            if (object.toString().equals("{\"results\":[]}")) {
                                 //即表是空的
-                                Log.d("收藏部分e == null", "done: "+object.toString()+"str2是空的");
+                                Log.d("收藏部分e == null", "done: " + object.toString() + "str2是空的");
                                 Collection comment = new Collection();
                                 BmobRelation relation = new BmobRelation();
-                                comment.setObjectId(pref.getString("user_objId",""));
+                                comment.setObjectId(pref.getString("user_objId", ""));
                                 Way way = new Way();
                                 way.setObjectId(WayOBjID[0]);
                                 relation.add(way);
-                                comment.setUserObjID(pref.getString("user_objId",""));
+                                comment.setUserObjID(pref.getString("user_objId", ""));
                                 comment.setComment(relation);
                                 comment.save(new SaveListener<String>() {
                                     @Override
                                     public void done(String objectId, BmobException e) {
-                                        if(e==null){
+                                        if (e == null) {
                                             toast("创建数据成功：" + objectId);
-                                        }else{
-                                            Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
+                                        } else {
+                                            Log.i("bmob", "失败：" + e.getMessage() + "," + e.getErrorCode());
                                         }
                                     }
                                 });
-                            }else{
-                                String result =object.toString();
+                            } else {
+                                String result = object.toString();
                                 JsonParser parser = new JsonParser();  //创建JSON解析器
                                 JsonObject ssobject = (JsonObject) parser.parse(result);  //创建JsonObject对象//将json数据转为为boolean型的数据
                                 JsonArray array = ssobject.get("results").getAsJsonArray();
@@ -796,7 +806,7 @@ public class MenuActivity extends AppCompatActivity {
                                 for (int i = 0; i < array.size(); i++) {
                                     JsonObject subObject = array.get(i).getAsJsonObject();
                                     String CommentId = subObject.get("objectId").getAsString();
-                                    Log.d("主函数", "检查点"+"数据加载完成");
+                                    Log.d("主函数", "检查点" + "数据加载完成");
                                     Collection comment = new Collection();
                                     BmobRelation relation = new BmobRelation();
                                     comment.setObjectId(CommentId);
@@ -808,12 +818,12 @@ public class MenuActivity extends AppCompatActivity {
                                     comment.update(new UpdateListener() {
                                         @Override
                                         public void done(BmobException e) {
-                                            if(e==null){
+                                            if (e == null) {
                                                 toast("成功");
-                                                Log.i("bmob","多对多关联添加成功");
-                                            }else{
-                                                Log.i("bmob","失败："+e.getMessage());
-                                                toast("失败："+e.getMessage());
+                                                Log.i("bmob", "多对多关联添加成功");
+                                            } else {
+                                                Log.i("bmob", "失败：" + e.getMessage());
+                                                toast("失败：" + e.getMessage());
                                             }
                                         }
 
@@ -833,17 +843,18 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MenuActivity.this, ShareActivity.class);
-                intent.putExtra("user_objId",pref.getString("user_objId",""));
-                intent.putExtra("WayObjId",Way_objectID);
+                intent.putExtra("user_objId", pref.getString("user_objId", ""));
+                intent.putExtra("WayObjId", Way_objectID);
                 startActivity(intent);
             }
         });
     }
-    private void sqldata(String way_objectID){
+
+    private void sqldata(String way_objectID) {
         Way_datahelper dbHelper = new Way_datahelper(this, "way_objectIDStore.db", null, 1);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("Way_objectID",way_objectID );
+        values.put("Way_objectID", way_objectID);
         db.insert("Way_objectID", null, values);
         values.clear();
     }

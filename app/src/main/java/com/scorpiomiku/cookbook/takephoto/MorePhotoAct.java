@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -39,6 +40,8 @@ import okhttp3.Response;
 import static com.scorpiomiku.cookbook.recommend.BreakFastFragment.APPKEY;
 
 public class MorePhotoAct extends AppCompatActivity {
+    private int allshicai = 0;
+    private int okshicai = 0;
     private List<CBLEC> testList = new ArrayList<>();
     private int AllNU;
     private int t = 0;
@@ -68,7 +71,6 @@ public class MorePhotoAct extends AppCompatActivity {
                 case 1:
                     //TODO
             }
-
         }
     };
 
@@ -83,15 +85,28 @@ public class MorePhotoAct extends AppCompatActivity {
         pref = PreferenceManager.getDefaultSharedPreferences(this);
         editor = pref.edit();
         moreResults = MoreCameraActivity.moreResults;
-        try {
-            initYuanliao();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+//        moreResults.clear();;
+//        moreResults.add("黄瓜");
+//        moreResults.add("胡萝卜");
+        if (moreResults.size() == 1) {
+            try {
+                urlget2("http://apis.juhe.cn/cook/query?key=" + APPKEY + "&menu=" + URLEncoder.encode(moreResults.get(0), "utf-8") + "&rn=20" + "&pn=" + 0);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+
+        }else {
+            try {
+                initYuanliao(allshicai);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
         }
+
     }
 
 
-    public void initYuanliao() throws UnsupportedEncodingException {
+    public void initYuanliao(int pn) throws UnsupportedEncodingException {
         Log.d("bug在这", "12233321");
         Log.d("test", "initYuanliao: " + moreResults.size());
         if (moreResults == null) {
@@ -101,7 +116,7 @@ public class MorePhotoAct extends AppCompatActivity {
             if (moreResults.get(0) == null) {
                 toast("结果为空");
             } else {
-                String url = "http://apis.juhe.cn/cook/query?key=" + APPKEY + "&menu=" + URLEncoder.encode(moreResults.get(0), "utf-8") + "&rn=20" + "&pn=" + 0;
+                String url = "http://apis.juhe.cn/cook/query?key=" + APPKEY + "&menu=" + URLEncoder.encode(moreResults.get(0), "utf-8") + "&rn=20" + "&pn=" + pn;
                 urlget(url);
                 Log.d("bug在这", "moreResults.get(0)：" + moreResults.get(0));
             }
@@ -112,7 +127,120 @@ public class MorePhotoAct extends AppCompatActivity {
 
     }
 
+    private void jiexiurljiansuo(String data) throws UnsupportedEncodingException {
+        String ZuoFaTu = null;
+        JsonParser parser = new JsonParser();  //创建JSON解析器
+        JsonObject ssobject = (JsonObject) parser.parse(data);  //创建JsonObject对象//将json数据转为为boolean型的数据
+        // ********************************************************************************
+        JsonObject nei1 = ssobject.get("result").getAsJsonObject();
+        final JsonArray array = nei1.get("data").getAsJsonArray();    //得到为json的数组
+        for (int i = 0; i < array.size(); i++) {
+            Log.d("bug在这", "***********array.size(): " + array.size());
+            final int finalI = i;
+
+            final JsonObject subObject = array.get(finalI).getAsJsonObject();
+            String shicai = subObject.get("burden").getAsString();
+            allshicai = allshicai + 1;
+            for (int k = 1; k < moreResults.size(); k++) {
+
+                Log.d("jiexiurljiansuo", "jiexiurljiansuo: +" + moreResults.size() + "   k =" + k);
+                if (shicai.indexOf(moreResults.get(k)) == -1) {
+                    Log.d("jiexiurljiansuo", "jiexiurljiansuo: break");
+                    break;
+                } else if (k == moreResults.size() - 1) {
+                    okshicai = okshicai + 1;
+                    try {
+                        ZuoFaTu = subObject.get("albums").getAsString();
+                    } catch (Exception e1213) {
+                    }
+                    //int cishu = subObject.get("cishu").getAsInt();
+                    final String ZuoFaMing = subObject.get("title").getAsString();
+                    // final CBLEC cblec = new CBLEC(ZuoFaMing,ZuoFaTu,subObject.get("ingredients").getAsString()+subObject.get("burden").getAsString(),subObject.get("id").getAsString(),false);
+                    testList.add(new CBLEC(ZuoFaMing, ZuoFaTu, subObject.get("ingredients").getAsString() + subObject.get("burden").getAsString(), subObject.get("id").getAsString(), false));
+                    Log.d("bug在这", "GetSorce: ID：" + subObject.get("id").getAsString());
+                    Log.d("bug在这", "GetSorce: imtro：" + subObject.get("imtro").getAsString());
+                    Log.d("bug在这", "GetSorce: tags：" + subObject.get("tags").getAsString());
+
+                    if (i == 0) {
+                        jieshao = subObject.get("imtro").getAsString();
+                        yingyang = subObject.get("tags").getAsString();
+
+                    }
+
+                    Log.d("bug在这", "GetSorce: ：mRecyclerView");
+                    mRecyclerView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mRecyclerView.setAdapter(new Adapter(testList));
+                            Log.d("标签界面", "全部结束");
+
+                        }
+                    });
+
+                }
+            }
+
+
+
+            //mContextView.setAdapter(new MenuAdapter(mCblecList));
+
+        }
+        if (okshicai < 10 && allshicai < 100) {
+            try {
+                initYuanliao(allshicai);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        } else {
+//            Looper.prepare();
+//            toast("没有找到合适的搭配");
+            urlget2("http://apis.juhe.cn/cook/query?key=" + APPKEY + "&menu=" + URLEncoder.encode(moreResults.get(0), "utf-8") + "&rn=20" + "&pn=" + 0);
+
+        }
+
+
+    }
+
     private void urlget(final String url) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+
+                //url = URL + "?keyword=" + URLEncoder.encode(keyword, "utf-8") + "&num=" + num + "&appkey=" + APPKEY;
+                OkHttpClient okHttpClient = new OkHttpClient();
+                //服务器返回的地址
+                Request request = null;
+                try {
+                    request = new Request.Builder()
+                            .url(url).build();
+                } catch (Exception e) {
+
+                }
+
+                String date = null;
+                try {
+                    Response response = okHttpClient.newCall(request).execute();
+                    //获取到数据
+                    date = response.body().string();
+                    //把数据传入解析josn数据方法
+                    // jsonJX(date);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    jiexiurljiansuo(date);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+                Message msg = new Message();
+                msg.arg1 = 1;
+                handler.sendMessage(msg);
+            }
+        }).start();
+    }
+
+    private void urlget2(final String url) {
         new Thread(new Runnable() {
             @Override
             public void run() {

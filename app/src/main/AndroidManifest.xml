@@ -72,6 +72,7 @@
             android:name="cn.bmob.v3.update.UpdateDialogActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity android:name=".basket.BasketActivity" />
+        <activity android:name=".takephoto.MorePhotoAct" />
         <activity android:name=".takephoto.CameraActivity" />
         <activity android:name=".dynamic.DynamicActivity" />
         <activity android:name=".dynamic.MyDynamicActivity" />

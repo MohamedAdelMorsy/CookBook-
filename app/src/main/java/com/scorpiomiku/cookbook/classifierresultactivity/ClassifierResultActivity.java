@@ -28,6 +28,8 @@ import com.scorpiomiku.cookbook.bean.CBLEC;
 import com.scorpiomiku.cookbook.bean.Way_ShiCai;
 import com.scorpiomiku.cookbook.menuactivity.MenuActivity;
 import com.scorpiomiku.cookbook.recommendmenufragment.RecommendMenuItemClickFragment;
+import com.scorpiomiku.cookbook.takephoto.CameraActivity;
+import com.scorpiomiku.cookbook.tensorflow.Classifier;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,7 +54,7 @@ import static com.scorpiomiku.cookbook.recommend.BreakFastFragment.APPKEY;
 
 public class ClassifierResultActivity extends AppCompatActivity {
     public static String mPicturePath;
-    public static String mPictureResult;
+//    public static String mPictureResult;
     private List<CBLEC> mCblecList = new ArrayList<>();
     private ImageView mImageView;
     private TextView mDescribeTextView;
@@ -101,7 +103,7 @@ public class ClassifierResultActivity extends AppCompatActivity {
         pref = PreferenceManager.getDefaultSharedPreferences(this);
         editor = pref.edit();
         mImageView.setImageBitmap(BitmapFactory.decodeFile(mPicturePath));
-        mFoodNameTextView.setText(mPictureResult);
+        mFoodNameTextView.setText(CameraActivity.mPictureResult);
 
         try {
             initYuanliao();
@@ -110,16 +112,17 @@ public class ClassifierResultActivity extends AppCompatActivity {
         }
 
 
-        Log.d(TAG, "onCreate: " + mPicturePath + "    " + mPictureResult);
+        Log.d(TAG, "onCreate: " + mPicturePath + "    " + CameraActivity.mPictureResult);
 
     }
     public void initYuanliao() throws UnsupportedEncodingException {
         Log.d("bug在这","1111111");
-        Log.d("bug在这","mPictureResult："+mPictureResult);
-        if(mPictureResult==null||mPictureResult.equals(" ")||mPictureResult.equals("")){
+        Log.d("bug在这","mPictureResult："+CameraActivity.mPictureResult);
+        Log.d(TAG, "initYuanliao: "+CameraActivity.mPictureResult);
+        if(CameraActivity.mPictureResult==null||CameraActivity.mPictureResult.equals(" ")||CameraActivity.mPictureResult.equals("")){
             toast("请正确拍摄哦");
         }else {
-            String url = "http://apis.juhe.cn/cook/query?key=" + APPKEY + "&menu=" + URLEncoder.encode(mPictureResult, "utf-8") + "&rn=20" + "&pn=" + pn;
+            String url = "http://apis.juhe.cn/cook/query?key=" + APPKEY + "&menu=" + URLEncoder.encode(CameraActivity.mPictureResult, "utf-8") + "&rn=20" + "&pn=" + pn;
             urlget(url);
         }
     }

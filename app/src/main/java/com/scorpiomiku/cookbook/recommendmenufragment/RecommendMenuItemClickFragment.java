@@ -168,7 +168,7 @@ public class RecommendMenuItemClickFragment extends FragmentModule {
                 String url = "http://apis.juhe.cn/cook/index?key="+APPKEY+"&cid="+id;
                 urlget(url);
             }
-        } else if (s == "素菜" || s == "荤菜" || s == "甜品" || s == "汤粥类" || s == "水果类" || s == "腌制类" || s == "面食" || s == "水产" || s == "豆类") {
+         else if (s == "素菜" || s == "荤菜" || s == "甜品" || s == "汤粥类" || s == "水果类" || s == "腌制类" || s == "面食" || s == "水产" || s == "豆类") {
             if(s=="素菜"){
                 id = 61;
             }if(s=="荤菜"){
@@ -191,7 +191,8 @@ public class RecommendMenuItemClickFragment extends FragmentModule {
             }
             String url = "http://apis.juhe.cn/cook/index?key="+APPKEY+"&cid="+id;
             urlget(url);
-        } else if (s == "家常" || s == "聚会" || s == "宿舍" || s == "约会" || s == "宵夜" || s == "" || s == "春节") {
+         }
+         else if (s == "家常" || s == "聚会" || s == "宿舍" || s == "约会" || s == "宵夜" || s == "" || s == "春节") {
             if(s=="家常"){
                 id = 1;
             }if(s=="聚会"){
@@ -207,6 +208,7 @@ public class RecommendMenuItemClickFragment extends FragmentModule {
             }
             String url = "http://apis.juhe.cn/cook/index?key="+APPKEY+"&cid="+id;
             urlget(url);
+         }
         }else{
             CombinationFragment.SouSuoNeiRong="2948692387";
             String str = s;  /*为传入的要搜索的食材名*/

@@ -58,6 +58,9 @@ public class CameraActivity extends AppCompatActivity {
 
     private FrameLayout mCoverFrameLayout;
     private Timer timer = new Timer();
+
+    public static String mPictureResult;
+
 //    private HashMap<String, String> options = new HashMap<String, String>();
 
 
@@ -91,6 +94,7 @@ public class CameraActivity extends AppCompatActivity {
         });
         mCoverFrameLayout = (FrameLayout) findViewById(R.id.camera_cover_linearlayout);
         setCameraDisplayOrientation(this, mCameraId, mCamera);
+
     }
 
 
@@ -118,7 +122,7 @@ public class CameraActivity extends AppCompatActivity {
         try {
             c = Camera.open();
             Camera.Parameters mParameters = c.getParameters();
-            mParameters.setPictureSize(224, 224);
+            mParameters.setPictureSize(720, 1280);
             c.setParameters(mParameters);
         } catch (Exception e) {
             e.printStackTrace();
@@ -158,7 +162,7 @@ public class CameraActivity extends AppCompatActivity {
     private PictureCallback mPictureCallback = new PictureCallback() {
         @Override
         public void onPictureTaken(final byte[] data, Camera camera) {
-            ClassifierResultActivity.mPictureResult = "";
+//            Classifier.mPictureResult = "";
 
             mCoverFrameLayout.setVisibility(View.VISIBLE);
             if (mTimerTask == null) {
@@ -167,12 +171,14 @@ public class CameraActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         mTimeCount--;
+                        Log.d(TAG, "timer" + mTimeCount);
                         if (mTimeCount <= 0) {   //时间到了就弹出对话框
                             stopTimer();
+
                         }
                     }
                 };
-                timer.schedule(mTimerTask, 400);
+                timer.schedule(mTimerTask, 600, 600);
             }
 
             new Thread(new Runnable() {
@@ -198,8 +204,10 @@ public class CameraActivity extends AppCompatActivity {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                    Log.d(TAG, "run: 206" + CameraActivity.mPictureResult);
                     classifier.classifierSingle(data);
-                    finish();
+                    Log.d(TAG, "run: 207" + CameraActivity.mPictureResult);
+
                 }
             }).start();
             mCamera.startPreview();
@@ -288,6 +296,7 @@ public class CameraActivity extends AppCompatActivity {
         Intent i = new Intent(CameraActivity.this, ClassifierResultActivity.class);
         ClassifierResultActivity.mPicturePath = mPicturePath;
         startActivity(i);
+        Log.d(TAG, "onPause: test" + CameraActivity.mPictureResult);
         super.onPause();
     }
 
@@ -295,6 +304,7 @@ public class CameraActivity extends AppCompatActivity {
     private void stopTimer() {
         finish();
         releaseCamera();
+        mTimerTask.cancel();
         Log.d(TAG, "stopTimer: ");
     }
 

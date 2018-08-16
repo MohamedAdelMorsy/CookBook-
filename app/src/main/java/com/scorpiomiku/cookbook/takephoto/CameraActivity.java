@@ -158,6 +158,7 @@ public class CameraActivity extends AppCompatActivity {
     private PictureCallback mPictureCallback = new PictureCallback() {
         @Override
         public void onPictureTaken(final byte[] data, Camera camera) {
+            ClassifierResultActivity.mPictureResult = "";
 
             mCoverFrameLayout.setVisibility(View.VISIBLE);
             if (mTimerTask == null) {
@@ -207,7 +208,7 @@ public class CameraActivity extends AppCompatActivity {
 
 
     //将相机设置成竖屏
-    public  void setCameraDisplayOrientation(Activity activity, int cameraId, Camera camera) {
+    public void setCameraDisplayOrientation(Activity activity, int cameraId, Camera camera) {
 
         int degrees = 0;
 

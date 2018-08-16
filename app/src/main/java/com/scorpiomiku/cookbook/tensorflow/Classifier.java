@@ -63,6 +63,9 @@ public class Classifier {
             @Override
             public void onResult(Translate translate, String s, String s1) {
                 ClassifierResultActivity.mPictureResult = translate.getTranslations().get(0);
+                if (ClassifierResultActivity.mPictureResult.equals(" ")) {
+
+                }
                 Log.d(TAG, "onResult: " + ClassifierResultActivity.mPictureResult);
             }
 

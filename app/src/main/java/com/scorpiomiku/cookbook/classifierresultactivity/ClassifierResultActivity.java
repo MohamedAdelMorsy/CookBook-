@@ -116,7 +116,7 @@ public class ClassifierResultActivity extends AppCompatActivity {
     public void initYuanliao() throws UnsupportedEncodingException {
         Log.d("bug在这","1111111");
         Log.d("bug在这","mPictureResult："+mPictureResult);
-        if(mPictureResult==null){
+        if(mPictureResult==null||mPictureResult.equals(" ")||mPictureResult.equals("")){
             toast("请正确拍摄哦");
         }else {
             String url = "http://apis.juhe.cn/cook/query?key=" + APPKEY + "&menu=" + URLEncoder.encode(mPictureResult, "utf-8") + "&rn=20" + "&pn=" + pn;
@@ -127,7 +127,6 @@ public class ClassifierResultActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-
 
                 //url = URL + "?keyword=" + URLEncoder.encode(keyword, "utf-8") + "&num=" + num + "&appkey=" + APPKEY;
                 OkHttpClient okHttpClient=new OkHttpClient();

@@ -77,7 +77,8 @@ public class CombinationFragment extends FragmentModule {
     private String mFoodName;
     private EditText mSearchEditView;
 
-    public static final String APPKEY = "0d6cb9431d04bba78300b0227867d48c";// 你的appkey
+//    public static final String APPKEY = "0d6cb9431d04bba78300b0227867d48c";// 你的appkey
+    public static final String APPKEY = "ab2bca01d0bce2ce2be8bbf93b54caa1";// 你的appkey
      static int cid = 37;
     private int tpyecid = 0;
     private SharedPreferences pref;

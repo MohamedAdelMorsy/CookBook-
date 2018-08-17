@@ -66,7 +66,8 @@ public class BreakFastFragment extends FragmentModule {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-    public static final String APPKEY = "0d6cb9431d04bba78300b0227867d48c";// 你的appkey
+//    public static final String APPKEY = "0d6cb9431d04bba78300b0227867d48c";// 你的appkey
+    public static final String APPKEY = "ab2bca01d0bce2ce2be8bbf93b54caa1";// 你的appkey
     public static final String URL = "http://apis.juhe.cn/cook/index?key=";
     public static final int cid = 37;
     private int tpyecid = 0;

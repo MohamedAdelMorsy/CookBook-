@@ -166,7 +166,7 @@ public class CameraActivity extends AppCompatActivity {
 
             mCoverFrameLayout.setVisibility(View.VISIBLE);
             if (mTimerTask == null) {
-                mTimeCount = 3;
+                mTimeCount = 5;
                 mTimerTask = new TimerTask() {
                     @Override
                     public void run() {

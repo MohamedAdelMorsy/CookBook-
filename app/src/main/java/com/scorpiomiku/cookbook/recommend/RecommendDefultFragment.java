@@ -56,7 +56,8 @@ public class RecommendDefultFragment extends FragmentModule {
     private RecyclerView mRecyclerView;
 
     private List<CBLEC> mCblecList = new ArrayList<>();
-    public static final String APPKEY = "0d6cb9431d04bba78300b0227867d48c";// 你的appkey
+//    public static final String APPKEY = "0d6cb9431d04bba78300b0227867d48c";// 你的appkey
+    public static final String APPKEY = "ab2bca01d0bce2ce2be8bbf93b54caa1";// 你的appkey
     public static final int cid = 39;
     private int tpyecid = 0;
     public   int pn = 0;

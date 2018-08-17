@@ -23,6 +23,7 @@ import com.scorpiomiku.cookbook.R;
 import com.scorpiomiku.cookbook.combination.Way;
 import com.scorpiomiku.cookbook.menuactivity.MenuActivity;
 import com.scorpiomiku.cookbook.module.FragmentModule;
+import com.scorpiomiku.cookbook.tensorflow.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -57,7 +58,7 @@ public class DinnerFragment extends FragmentModule {
         return new DinnerFragment();
     }
 //    public static final String APPKEY = "0d6cb9431d04bba78300b0227867d48c";// 你的appkey
-    public static final String APPKEY = "ab2bca01d0bce2ce2be8bbf93b54caa1";// 你的appkey
+    public static final String APPKEY = Utils.APPKEY;// 你的appkey
     public static final int cid = 40;
     private int tpyecid = 0;
     public static final int num = 100;

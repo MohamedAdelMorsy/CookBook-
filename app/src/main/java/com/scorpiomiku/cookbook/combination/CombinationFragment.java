@@ -34,6 +34,7 @@ import com.scorpiomiku.cookbook.menuactivity.MenuActivity;
 import com.scorpiomiku.cookbook.module.FragmentModule;
 import com.scorpiomiku.cookbook.recommend.BreakFastFragment;
 import com.scorpiomiku.cookbook.recommendmenufragment.RecommendMenuItemClickFragment;
+import com.scorpiomiku.cookbook.tensorflow.Utils;
 import com.yyydjk.library.HorizontalDropDownMenu;
 
 import org.json.JSONException;
@@ -78,7 +79,7 @@ public class CombinationFragment extends FragmentModule {
     private EditText mSearchEditView;
 
 //    public static final String APPKEY = "0d6cb9431d04bba78300b0227867d48c";// 你的appkey
-    public static final String APPKEY = "ab2bca01d0bce2ce2be8bbf93b54caa1";// 你的appkey
+    public static final String APPKEY = Utils.APPKEY;// 你的appkey
      static int cid = 37;
     private int tpyecid = 0;
     private SharedPreferences pref;
